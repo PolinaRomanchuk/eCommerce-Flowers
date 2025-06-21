@@ -1,0 +1,4 @@
+# 2️⃣ Check formatting; fail if any file is unformatted
+./node_modules/.bin/prettier --write "src/**/*.{ts,tsx,js,jsx,json,css,scss,md}" || exit 1
+# 1️⃣ Lint & auto‑fix, but fail on any remaining errors or warnings
+./node_modules/.bin/eslint --fix . --max-warnings=0 || exit 1

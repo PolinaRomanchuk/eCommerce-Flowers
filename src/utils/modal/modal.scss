@@ -1,0 +1,38 @@
+@use '../../styles/variables' as *;
+
+.modal-overlay {
+  height: 100vh;
+  width: 100vw;
+  background-color: $overlay-background;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  &.active {
+    opacity: 1;
+  }
+
+  .modal-container {
+    background-color: $color-window-background;
+    min-width: 300px;
+    min-height: 100px;
+    padding: 10px;
+
+    .close-window-button-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+
+      .close-window-button {
+        display: flex;
+        cursor: pointer;
+        background-color: unset;
+        color: black;
+        padding: 2px;
+      }
+    }
+  }
+}
