@@ -1,13 +1,13 @@
+@use '../../styles/variables' as *;
+
 .header {
-  padding: 20px 0 15px 0;
-  background-color: rgb(156, 96, 247);
-  color: rgb(255, 255, 255);
-  font-size: 18px;
+  padding: 20px 0 20px 0;
+  color: $color-dark-green;
+  height: 80px;
 
   &__menu {
     display: flex;
     align-items: center;
-    column-gap: 20px;
 
     @media (max-width: 511px) {
       justify-content: space-between;
@@ -17,11 +17,9 @@
       display: flex;
       align-items: center;
       column-gap: 5px;
-      font-size: 25px;
-      padding: 5px;
 
       &__img {
-        background-color: white;
+        background-color: $color-white;
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -45,29 +43,12 @@
         cursor: pointer;
         align-self: start;
         height: 40px;
-        width: 150px;
         position: relative;
-
-        img {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 18px;
-        }
-      }
-
-      &__cart {
-        width: 25px;
-        height: 25px;
-        transition: all 0.5s ease 0s;
-        cursor: pointer;
-
-        @media (any-hover: hover) {
+        display: flex;
+        align-items: center;
+        h3 {
           &:hover {
-            fill: white;
+            color: $color-primary-pink;
           }
         }
       }
@@ -86,10 +67,9 @@
         top: 0;
         right: 100%;
         overflow: auto;
-        transition: all 0.8s ease 0s;
         padding-bottom: 25px;
         z-index: 10;
-        background: rgba(0, 0, 0, 0.75);
+        background: $overlay-background;
       }
 
       .menu-open & {
@@ -113,12 +93,10 @@
         top: 0;
         right: 0;
         opacity: 1;
-        background: #454354;
+        background: $color-dark-green;
         padding: 30px 0 20px 30px;
-
-        li {
-          text-decoration: underline;
-        }
+        align-items: center;
+        justify-content: center;
       }
 
       @media (max-width: 640px) {
@@ -133,6 +111,7 @@
           display: flex;
           flex-direction: column;
           row-gap: 15px;
+          align-items: center;
         }
       }
 
@@ -140,14 +119,17 @@
         display: inline-block;
         position: relative;
         text-decoration: none;
-        color: #fbfafa;
+        color: $color-dark-green;
+
+        @media (max-width: 880px) {
+          color: $color-white;
+          text-decoration: unset;
+        }
       }
 
       &__link {
-        transition: color 0.3s ease;
-        
         &:hover {
-          color: #000000;
+          color: $color-primary-pink;
         }
       }
     }
@@ -156,6 +138,7 @@
       display: flex;
       column-gap: 15px;
       justify-content: end;
+      align-items: center;
 
       @media (max-width: 880px) {
         flex: 1 1 auto;
@@ -167,108 +150,143 @@
         justify-content: start;
       }
 
-      &__profile {
+      &__cart {
         width: 25px;
         height: 25px;
-        transition: all 0.5s ease 0s;
         cursor: pointer;
-        fill: black;
+        position: relative;
+
+        svg {
+          width: 100%;
+          height: 100%;
+          fill: $color-dark-green;
+        }
 
         @media (any-hover: hover) {
           &:hover {
-            fill: white;
-          }     
+            svg {
+              fill: $color-primary-pink;
+            }
+          }
+        }
+        .cart-counter-container {
+          background-color: $color-dark-green;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: -8px;
+          right: -10px;
+
+          .cart-counter {
+            font-size: 10px;
+            color: $color-white;
+            text-align: center;
+          }
+        }
+      }
+
+      &__profile {
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+
+        svg {
+          width: 100%;
+          height: 100%;
+          fill: $color-dark-green;
         }
 
-        &__link {
-          color: #fff;
-          text-decoration: none;
-          font-weight: 600;
-          cursor: pointer;
+        @media (any-hover: hover) {
+          &:hover {
+            svg {
+              fill: $color-primary-pink;
+            }
+          }
         }
       }
 
       &__login {
         padding: 10px;
-        border-radius: 12px;
-        background-color: rgb(60, 70, 255);
         max-height: 60px;
 
-        &__link {
+        :hover {
+          color: $color-primary-pink;
         }
       }
 
       &__registration {
         padding: 10px;
-        border-radius: 12px;
-        background-color: rgb(0, 115, 6);
         max-height: 60px;
 
-        &__link {
+        :hover {
+          color: $color-primary-pink;
         }
       }
     }
   }
 }
 
-.icon-menu {
-  display: none;
-  background-color: unset;
+.button-menu-container {
+  .icon-menu {
+    display: none;
+    background-color: unset;
 
-  @media (max-width: 880px) {
-    display: block;
-    position: relative;
-    width: 20px;
-    height: 10px;
-    cursor: pointer;
-    z-index: 10;
+    @media (max-width: 880px) {
+      display: block;
+      position: relative;
+      width: 20px;
+      height: 10px;
+      cursor: pointer;
+      z-index: 10;
 
-    span,
-    &::before,
-    &::after {
-      content: '';
-      transition: all 0.3s ease 0s;
-      right: 0;
-      position: absolute;
-      width: 100%;
-      height: 2px;
-      background-color: #ffffff;
-    }
-
-    &::before {
-      top: 0;
-    }
-
-    &::after {
-      bottom: 0;
-    }
-
-    span {
-      top: calc(50% - 1px);
-    }
-
-    .menu-open & {
-      span {
-        width: 0;
-      }
-
+      span,
       &::before,
       &::after {
+        content: '';
+        transition: all 0.3s ease 0s;
+        right: 0;
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: $color-dark-green;
       }
 
       &::before {
-        top: calc(50% - 1px);
-        transform: rotate(-45deg);
+        top: 0;
       }
 
       &::after {
-        bottom: calc(50% - 1px);
-        transform: rotate(45deg);
+        bottom: 0;
+      }
+
+      span {
+        top: calc(50% - 1px);
+      }
+
+      .menu-open & {
+        span {
+          width: 0;
+        }
+
+        &::before {
+          top: calc(50% - 1px);
+          transform: rotate(-45deg);
+        }
+
+        &::after {
+          bottom: calc(50% - 1px);
+          transform: rotate(45deg);
+        }
+        span,
+        &::before,
+        &::after {
+          background-color: $color-white;
+        }
       }
     }
   }
-}
-
-.cart-counter{
-  font-size: 10px;
 }

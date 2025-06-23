@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState, type ReactElement } from 'react';
-import Logo from './../../assets/Header/header__logo.png';
-import Icon from './../../assets/favicon.png';
-import { ReactComponent as Cart } from './../../assets/Header/header__cart.svg';
-import { ReactComponent as ProfileIcon } from './../../assets/Header/header__user.svg';
+import Logo from './../../assets/Header/logo.png';
+import { ReactComponent as Cart } from './../../assets/Header/cart.svg';
+import { ReactComponent as ProfileIcon } from './../../assets/Header/user.svg';
 import './Header.scss';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
@@ -30,7 +29,7 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
             const cartResult = (await getCart()).data;
             if (cartResult) {
               setCartCounter(cartResult.totalLineItemQuantity);
-            }else{
+            } else {
               setCartCounter(0);
             }
           }
@@ -43,6 +42,22 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
 
   let access = (
     <div className='header__menu__access'>
+      <div
+        onClick={() => navigate('/cart')}
+        className='header__menu__access__cart'
+      >
+        <Cart />
+        {cartCounter ? (
+          <div className='cart-counter-container'>
+            <span className='cart-counter'>
+              {cartCounter > 1000 ? '999+' : cartCounter}
+            </span>
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+
       {auth?.isLogin && (
         <div className='header__menu__access__profile'>
           <a
@@ -58,6 +73,7 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
           </a>
         </div>
       )}
+      <div>|</div>
       <div className='header__menu__access__login'>
         <a
           onClick={(event) => {
@@ -67,25 +83,28 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
             event.preventDefault();
           }}
           href=''
-          className='header__menu__access__login__link'
+          className='header__menu__access__login__link medium'
         >
-          {auth?.isLogin ? 'log out' : 'log in'}
+          {auth?.isLogin ? 'Log out' : 'Log in'}
         </a>
       </div>
       {!auth?.isLogin && (
-        <div className='header__menu__access__registration'>
-          <a
-            onClick={(event): void => {
-              document.documentElement.classList.remove('menu-open');
-              navigate('/registration');
-              event.preventDefault();
-            }}
-            href=''
-            className='header__menu__access__registration__link'
-          >
-            Registration
-          </a>
-        </div>
+        <>
+          <div>/</div>
+          <div className='header__menu__access__registration'>
+            <a
+              onClick={(event): void => {
+                document.documentElement.classList.remove('menu-open');
+                event.preventDefault();
+                navigate('/registration');
+              }}
+              href=''
+              className='header__menu__access__registration__link medium'
+            >
+              Registration
+            </a>
+          </div>
+        </>
       )}
     </div>
   );
@@ -98,25 +117,14 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
               onClick={() => navigate('/')}
               className='header__menu__logo__img'
             >
-              <img src={Icon} alt='' />
+              <img src={Logo} alt='logo' />
             </div>
             <div
               onClick={() => navigate('/')}
               className='header__menu__logo__text'
             >
-              <img src={Logo} alt='' />
+              <h3>FloralMuse</h3>
             </div>
-            <div
-              onClick={() => navigate('/cart')}
-              className='header__menu__logo__cart'
-            >
-              <Cart />
-            </div>
-            {cartCounter ? (
-              <span className='cart-counter'>{cartCounter}</span>
-            ) : (
-              <></>
-            )}
           </div>
           <nav className='header__menu__body'>
             <div className='header__menu__list'>
@@ -125,13 +133,26 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
                   <a
                     onClick={(event) => {
                       document.documentElement.classList.remove('menu-open');
+                      event.preventDefault();
+                      navigate('/');
+                    }}
+                    href=''
+                    className='header__menu__list__link medium'
+                  >
+                    Home
+                  </a>
+                </li>
+                <li className='header__menu__list__item'>
+                  <a
+                    onClick={(event) => {
+                      document.documentElement.classList.remove('menu-open');
                       navigate('/catalog');
                       event.preventDefault();
                     }}
                     href=''
-                    className='header__menu__list__link'
+                    className='header__menu__list__link medium'
                   >
-                    catalog
+                    Products
                   </a>
                 </li>
                 <li className='header__menu__list__item'>
@@ -142,9 +163,9 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
                       navigate('/about');
                     }}
                     href=''
-                    className='header__menu__list__link'
+                    className='header__menu__list__link medium'
                   >
-                    about
+                    About
                   </a>
                 </li>
               </ul>
@@ -152,15 +173,17 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
             </div>
           </nav>
           {size > 510 && access}
-          <button
-            onClick={() =>
-              document.documentElement.classList.toggle('menu-open')
-            }
-            type='button'
-            className='menu__icon icon-menu'
-          >
-            <span></span>
-          </button>
+          <div className='button-menu-container'> 
+            <button
+              onClick={() =>
+                document.documentElement.classList.toggle('menu-open')
+              }
+              type='button'
+              className='menu__icon icon-menu'
+            >
+              <span></span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,12 +1,15 @@
-$color-font-main: #000000 !default;
-$color-window-background: #fff !default;
-$color-button-background: #fff !default;
-$color-button-in-focus-background: #6582a4 !default;
-$color-button-border: #6582a4 !default;
-$color-accent: rgb(0, 255, 166) !default;
-$color-wrong-action: red !default;
+$color-primary-pink: rgba(244, 158, 160, 0.5);
+$color-primary-green: #47624d;
+$color-dark-green: #46544f;
+$color-white: #fff;
+$color-color-wrong: #ffd1d2;
 
 $overlay-background: rgba(0, 0, 0, 0.4) !default;
 $shadow:
   0 0 20px 0 rgba(0, 0, 0, 0.2),
   0 5px 5px 0 rgba(0, 0, 0, 0.24) !default;
+
+
+  $font-family: "Poppins", sans-serif;
+  $second-family: "SF Pro", sans-serif;
+  $third-family: "Montserrat", sans-serif;

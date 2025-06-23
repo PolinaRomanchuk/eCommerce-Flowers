@@ -1,5 +1,9 @@
+* {
+  transition: all 0.5s ease 0s;
+}
+
 html {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 button,
 select,
@@ -12,4 +16,22 @@ input {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 0.95rem;
+}
+
+h1 {
+  font-weight: 500;
+  font-size: 50px;
+  line-height: 140%;
+  text-align: justify;
+}
+
+h3 {
+  font-weight: 500;
+  font-size: 30px;
+}
+
+p.medium,
+a.medium {
+  font-weight: 500;
+  font-size: 18px;
 }

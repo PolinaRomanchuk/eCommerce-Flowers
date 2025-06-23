@@ -12,7 +12,7 @@
   justify-content: center;
 
   .login-content {
-    background: $color-window-background;
+    background: $color-white;
     width: 300px;
     height: 400px;
     padding: 20px;
@@ -88,7 +88,7 @@
       .login-input-validation-span,
       .password-input-validation-span {
         font-size: 13px;
-        color: $color-wrong-action;
+        color: $color-color-wrong;
       }
 
       .login-button {
