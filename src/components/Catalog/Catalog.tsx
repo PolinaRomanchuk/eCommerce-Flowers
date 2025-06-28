@@ -25,6 +25,18 @@ import {
 import type { CartInfo } from '../../types/cart';
 import Spinner from '../../assets/spinner.gif';
 import Footer from '../Footer/Footer';
+import ShopNavigation from './ShopNavigation';
+
+import { ReactComponent as FiltersIcon } from './../../assets/Catalog/settings-sliders.svg';
+import { ReactComponent as SearchIcon } from './../../assets/Catalog/search.svg';
+import { ReactComponent as SortIcon } from './../../assets/Catalog/sort-alt.svg';
+
+import { ReactComponent as Left } from './../../assets/Catalog/angle-small-left.svg';
+import { ReactComponent as Right } from './../../assets/Catalog/angle-small-right.svg';
+
+import { ReactComponent as BagPlus } from './../../assets/Catalog/shopping-bag-add.svg';
+import { ReactComponent as BagMinus } from './../../assets/Catalog/bag-shopping-minus.svg';
+import { ReactComponent as Eye } from './../../assets/Catalog/eye-icon.svg';
 
 export type CatalogProps = HeaderProps & {};
 
@@ -208,63 +220,67 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
       >
         <div className='catalog__card__img'>
           <img src={item.image} alt='' />
-        </div>
-        <div className='catalog__card__name'>{item.name}</div>
-        <div className='catalog__card__price'>
-          <div className='catalog__card__price__title'>Price:</div>
-          <div className='catalog__card__price__amount'>
-            <div
-              className={`catalog__card__price__amount__original ${item.discountedPrice ? 'shadow' : ''}`}
-            >
-              {item.prices}
-            </div>
-            {item.discountedPrice ? (
-              <div className='catalog__card__price__amount__discount'>
-                {item.discountedPrice}
-              </div>
+          <div className='sale-tag_container'>
+            <span>sale</span>
+          </div>
+
+          <div className='show-cart_container'>
+            <Eye />
+            <span className='separator' />
+            {checkIfCurrentProductInCart(item.id, item.masterVariantId) ? (
+              <button
+                className='add-to-cart-button-in-catalog added'
+                onClick={(event) => {
+                  event.stopPropagation();
+                  if (item.masterVariantId) {
+                    handleRemoveFromCart(item.id, item.masterVariantId);
+                  }
+                }}
+                disabled={loadingProductId === item.id}
+              >
+                {loadingProductId === item.id ? (
+                  <img src={Spinner} alt='spinner' />
+                ) : (
+                  <BagMinus />
+                )}
+              </button>
             ) : (
-              ''
+              <button
+                className='add-to-cart-button-in-catalog'
+                onClick={(event) => {
+                  event.stopPropagation();
+                  if (item.masterVariantId) {
+                    handleAddToCart(item.id, item.masterVariantId);
+                  }
+                }}
+                disabled={loadingProductId === item.id}
+              >
+                {loadingProductId === item.id ? (
+                  <img src={Spinner} alt='spinner' />
+                ) : (
+                  <BagPlus />
+                )}
+              </button>
             )}
           </div>
         </div>
-        <div className='catalog__card__description'>{item.description}</div>
-
-        <div className='add-to-cart-button-container'>
-          {checkIfCurrentProductInCart(item.id, item.masterVariantId) ? (
-            <button
-              className='add-to-cart-button-in-catalog added'
-              onClick={(event) => {
-                event.stopPropagation();
-                if (item.masterVariantId) {
-                  handleRemoveFromCart(item.id, item.masterVariantId);
-                }
-              }}
-              disabled={loadingProductId === item.id}
-            >
-              {loadingProductId === item.id ? (
-                <img src={Spinner} alt='spinner' />
-              ) : (
-                <img src={Remove} alt='remove from cart' />
-              )}
-            </button>
-          ) : (
-            <button
-              className='add-to-cart-button-in-catalog'
-              onClick={(event) => {
-                event.stopPropagation();
-                if (item.masterVariantId) {
-                  handleAddToCart(item.id, item.masterVariantId);
-                }
-              }}
-              disabled={loadingProductId === item.id}
-            >
-              {loadingProductId === item.id ? (
-                <img src={Spinner} alt='spinner' />
-              ) : (
-                <img src={Add} alt='add to cart' />
-              )}
-            </button>
+        <div className='catalog__card__name'>
+          <p className='regular'>{item.name}</p>
+        </div>
+        <div className='catalog__card__price'>
+          <div
+            className={`catalog__card__price__original ${item.discountedPrice ? 'shadow' : ''}`}
+          >
+            <p className='extra-light'> {item.prices}</p>
+          </div>
+          {item.discountedPrice && (
+            <div className='catalog__card__price__discount'>
+              <p className='medium'> {item.discountedPrice}</p>
+            </div>
           )}
+        </div>
+        <div className='catalog__card__description'>
+          <p className='extra-light'>{item.description}</p>
         </div>
       </div>
     );
@@ -281,38 +297,62 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
       ) : (
         <Header size={size} />
       )}
+      <ShopNavigation />
       <section className='catalog'>
         <div className='_container'>
           {category.length <= 0 ? (
             <>
-              <FilterCatalog
-                filterAttributes={filterAttributes}
-                setFilterAttributes={setFilterAttributes}
-                token={token}
-                setProducts={setProducts}
-              />
-              <SortCatalog
-                sortAttributes={sortAttributes}
-                setSortAttributes={setSortAttributes}
-                token={token}
-                setProducts={setProducts}
-                filterAttributes={filterAttributes}
-                search={search}
-              />
-              <SearchCatalog
-                search={search}
-                setSearch={setSearch}
-                token={token}
-                setProducts={setProducts}
-                filterAttributes={filterAttributes}
-                sortAttributes={sortAttributes}
-              />
-              <button
-                onClick={loadFilteredProducts}
-                className='catalog__filter__search'
-              >
-                search
-              </button>
+              <div className='configur_container'>
+                <div className='first'>
+                  <button>
+                    <span>
+                      <FiltersIcon className='conf-icon' />
+                      hide filters
+                    </span>
+                  </button>
+                  <div className='search-container'>
+                    <SearchCatalog
+                      search={search}
+                      setSearch={setSearch}
+                      token={token}
+                      setProducts={setProducts}
+                      filterAttributes={filterAttributes}
+                      sortAttributes={sortAttributes}
+                    />
+                    <button
+                      className='search-button'
+                      onClick={loadFilteredProducts}
+                    >
+                      <SearchIcon className='conf-icon' />
+                    </button>
+                  </div>
+                </div>
+                <button>
+                  <span>
+                    <SortIcon className='conf-icon' />
+                    sort
+                  </span>
+                  <SortCatalog
+                    sortAttributes={sortAttributes}
+                    setSortAttributes={setSortAttributes}
+                    token={token}
+                    setProducts={setProducts}
+                    filterAttributes={filterAttributes}
+                    search={search}
+                  />
+                </button>
+              </div>
+
+              <div className='categories-container'>
+                <h3>Current category</h3>
+                <div className='sub-categories-list'>
+                  <p className='extra-light'>subcategory</p>
+                  <p className='extra-light'>subcategory</p>
+                  <p className='extra-light'>subcategory</p>
+                  <p className='extra-light'>subcategory</p>
+                  <p className='extra-light'>subcategory</p>
+                </div>
+              </div>
             </>
           ) : (
             ''
@@ -325,35 +365,46 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             setSubcategory={setSubcategory}
             setIsCategoried={setIsCategoried}
           />
-          <div className='catalog__cards'>{cards}</div>
 
+          <div className='cards_with_filtres_pagination_container'>
+            <FilterCatalog
+              filterAttributes={filterAttributes}
+              setFilterAttributes={setFilterAttributes}
+              token={token}
+              setProducts={setProducts}
+            />
+
+            <div className='catalog__cards'>{cards}</div>
+          </div>
           <div className='pagination-container'>
             <button
+              className='pagination-button'
               onClick={() =>
                 setCurrentPage((previous) => Math.max(previous - 1, 1))
               }
               disabled={currentPage === 1}
             >
-              ←
+              <Left />
             </button>
 
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={page === currentPage ? 'active-page' : ''}
+                className={page === currentPage ? 'active-page' : 'page'}
               >
                 {page}
               </button>
             ))}
 
             <button
+              className='pagination-button'
               onClick={() =>
                 setCurrentPage((previous) => Math.min(previous + 1, totalPages))
               }
               disabled={currentPage === totalPages}
             >
-              →
+              <Right />
             </button>
           </div>
         </div>
