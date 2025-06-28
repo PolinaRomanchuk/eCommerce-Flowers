@@ -3,7 +3,7 @@ import './shop-nav.scss';
 import type { ReactElement } from 'react';
 import Photo from '../../assets/Catalog/shop.png';
 
-export const Error = (): ReactElement => {
+export const ShopNavigation = (): ReactElement => {
   let navigate = useNavigate();
   return (
     <>
@@ -27,4 +27,4 @@ export const Error = (): ReactElement => {
   );
 };
 
-export default Error;
+export default ShopNavigation;

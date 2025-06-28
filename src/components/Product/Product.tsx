@@ -20,6 +20,7 @@ import {
 import type { ProductInfo } from '../../types/product';
 import type { CartInfo } from '../../types/cart';
 import Footer from '../Footer/Footer';
+import ShopNavigation from '../Catalog/ShopNavigation';
 
 export const Product = ({ size }: ProductProps): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -28,16 +29,13 @@ export const Product = ({ size }: ProductProps): ReactElement => {
   const swiperLargeReference = useRef<SwiperClass | null>(null);
   const [modalActive, setModalActive] = useState(false);
   const [largePhotoIndex, setLargePhotoIndex] = useState(0);
-  const [selectedClothingSize, setSelectedClothingSize] = useState('S');
 
   const [price, setPrice] = useState('');
   const [priceWithDiscount, setPriceWithDiscount] = useState('');
   const [procent, setProcent] = useState('');
   const [currency, setCurrency] = useState('');
   const [images, setImages] = useState<string[]>([]);
-  const [color, setColor] = useState('');
-  const [model, setModel] = useState('');
-  const [clothingSizes, setClothingSizes] = useState<string[]>([]);
+  const [color, setColor] = useState('white');
   const [currentVariantId, setCurrentVariantId] = useState(0);
   const navigate = useNavigate();
 
@@ -69,7 +67,6 @@ export const Product = ({ size }: ProductProps): ReactElement => {
           if (productData.data.imageUrls) {
             setImages(productData.data?.imageUrls);
           }
-          setClothingSizes(productData.data?.sizes);
           if (
             productData.data.priceWithDiscount &&
             productData.data.discountProcent
@@ -80,9 +77,7 @@ export const Product = ({ size }: ProductProps): ReactElement => {
           if (productData.data.colorAttribute) {
             setColor(productData.data.colorAttribute);
           }
-          if (productData.data.modelAttribute) {
-            setModel(productData.data.modelAttribute);
-          }
+
           setCurrentVariantId(productData.data.masterVariant.id);
         }
       }
@@ -202,112 +197,111 @@ export const Product = ({ size }: ProductProps): ReactElement => {
       ) : (
         <Header size={size}></Header>
       )}
+      <ShopNavigation />
       <div className='product-container'>
-        <div className='product-content'>
-          <div className='product-photo-container'>
-            <div className='product-pictures-container'>
-              {images.map((img, index) => (
-                <div
-                  key={index}
-                  className='product-picture-container'
-                  onClick={() => swiperReference.current?.slideTo(index)}
-                >
-                  <img src={img} alt='photo' />
-                </div>
-              ))}
-            </div>
-            <Swiper
-              rewind={true}
-              navigation={true}
-              modules={[Navigation]}
-              onSwiper={(swiper) => (swiperReference.current = swiper)}
-              className='product-current-photo-container'
-            >
-              {images.map((img, index) => (
-                <SwiperSlide
-                  key={index}
-                  onClick={() => {
-                    setLargePhotoIndex(index);
-                    setModalActive(true);
-                  }}
-                >
-                  <img src={img} alt='photo' />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-          <div className='product-info-container'>
-            <div className='product-name'>
-              {productData ? productData.name : ''}
-            </div>
-            <div className='product-description'>
-              {productData ? productData.description : ''}
-            </div>
-            {priceWithDiscount && (
-              <div className='product-discount-container'>
-                <div className='product-old-price'>
-                  {' '}
-                  {priceWithDiscount ? `${price} ${currency}` : ''}
-                </div>
-                <div className='product-discount'>{procent}</div>
+        <div className='_container'>
+          <div className='product-content'>
+            <div className='product-photo-container'>
+              <div className='product-pictures-container'>
+                {images.map((img, index) => (
+                  <div
+                    key={index}
+                    className='product-picture-container'
+                    onClick={() => swiperReference.current?.slideTo(index)}
+                  >
+                    <img src={img} alt='photo' />
+                  </div>
+                ))}
               </div>
-            )}
-            <div className='product-full-price'>
-              {priceWithDiscount
-                ? `${priceWithDiscount} ${currency}`
-                : `${price} ${currency}`}
-            </div>
-            {color && (
-              <div className='product-color-container'>
-                <span className='product-color'> Color:</span>
-                <span className='product-current-color'>{color}</span>
-              </div>
-            )}
-            {model && (
-              <div className='product-model-container'>
-                <span className='product-model'> Model:</span>
-                <span className='product-current-model'>{model}</span>
-              </div>
-            )}
-
-            <div className='product-size'> Size: </div>
-            <div className='size-options'>
-              {clothingSizes.map((clothSize) => (
-                <label
-                  key={clothSize}
-                  className={`size-option-button ${selectedClothingSize === clothSize ? 'active' : ''}`}
-                >
-                  <input
-                    type='radio'
-                    name='clothSize'
-                    value={clothSize}
-                    checked={selectedClothingSize === clothSize}
-                    onChange={() => {
-                      setSelectedClothingSize(clothSize);
-                      handleVariant(clothSize);
+              <Swiper
+                rewind={true}
+                navigation={true}
+                modules={[Navigation]}
+                onSwiper={(swiper) => (swiperReference.current = swiper)}
+                className='product-current-photo-container'
+              >
+                {images.map((img, index) => (
+                  <SwiperSlide
+                    key={index}
+                    onClick={() => {
+                      setLargePhotoIndex(index);
+                      setModalActive(true);
                     }}
-                    className='size-radio'
-                  ></input>
-                  {clothSize}
-                </label>
-              ))}
+                  >
+                    <img src={img} alt='photo' />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
-            <div className='cart-configs-container'>
-              {!isInCart ? (
-                <button
-                  className='add-to-cart-button'
-                  onClick={handleAddToCart}
-                >
-                  Add to cart
-                </button>
-              ) : (
-                <button
-                  className='add-to-cart-button'
-                  onClick={handleRemoveFromCart}
-                >
-                  Remove from cart
-                </button>
+            <div className='product-info-container'>
+              <div className='product-name'>
+                <h2>{productData ? productData.name : ''}</h2>
+              </div>
+
+              {priceWithDiscount && (
+                <div className='product-discount-container'>
+                  <div className='product-old-price'>
+                    <p className='extra-light'>
+                      {priceWithDiscount ? `${price} ${currency}` : ''}
+                    </p>
+                  </div>
+                  <div className='product-discount'>{procent}</div>
+                </div>
               )}
+              <div className='product-full-price'>
+                <h2>
+                  {priceWithDiscount
+                    ? `${priceWithDiscount} ${currency}`
+                    : `${price} ${currency}`}
+                </h2>
+              </div>
+              <div className='product-description'>
+                <p className='extra-light'>
+                  123 {productData ? productData.description : ''}
+                </p>
+              </div>
+
+              <div className='extra-description'>
+                <h3>Product information:</h3>
+                <div className='product-attributes-container'>
+                  {color && (
+                    <div className='product-attribute-container'>
+                      <p className='extra-light'> Color:</p>
+                      <p className='extra-light'>{color}</p>
+                    </div>
+                  )}
+                  {color && (
+                    <div className='product-attribute-container'>
+                      <p className='extra-light'> Color:</p>
+                      <p className='extra-light'>{color}</p>
+                    </div>
+                  )}
+                  {color && (
+                    <div className='product-attribute-container'>
+                      <p className='extra-light'> Color:</p>
+                      <p className='extra-light'>{color}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className='cart-configs-container'>
+                {!isInCart ? (
+                  <button
+                    className='add-to-cart-button'
+                    onClick={handleAddToCart}
+                  >
+                    Add to cart
+                  </button>
+                ) : (
+                  <button
+                    className='add-to-cart-button'
+                    onClick={handleRemoveFromCart}
+                  >
+                    Remove from cart
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
