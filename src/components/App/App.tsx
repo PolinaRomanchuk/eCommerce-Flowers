@@ -47,7 +47,7 @@ export const App = (): ReactElement => {
             <Route path='/catalog' element={<Catalog size={size} />} />
             <Route path='/product/:id' element={<Product size={size} />} />
             <Route path='/' element={<MainPage size={size} />} />
-            <Route path='*' element={<Error />} />
+            <Route path='*' element={<Error size={size} />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
