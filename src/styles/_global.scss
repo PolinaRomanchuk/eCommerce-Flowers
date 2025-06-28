@@ -1,3 +1,4 @@
+@use './variables' as *;
 * {
   transition: all 0.5s ease 0s;
 }
@@ -18,11 +19,39 @@ input {
   font-size: 0.95rem;
 }
 
+button {
+  border-radius: 12px;
+  width: 220px;
+  height: 60px;
+  background-color: unset;
+  border: 1px $color-dark-green solid;
+  color: $color-dark-green;
+
+  span {
+    font-weight: 275;
+    font-size: 18px;
+    text-align: center;
+  }
+
+  &:hover {
+    background-color: $color-dark-green;
+    color: $color-white;
+  }
+}
+
 h1 {
   font-weight: 500;
   font-size: 50px;
   line-height: 140%;
   text-align: justify;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 36px;
+  font-style: normal;
+
+  text-align: center;
 }
 
 h3 {
@@ -34,4 +63,21 @@ p.medium,
 a.medium {
   font-weight: 500;
   font-size: 18px;
+}
+
+p.light {
+  font-weight: 300;
+  font-size: 32px;
+}
+
+p.extra-light,
+span.extra-light {
+  font-weight: 275;
+  font-size: 16px;
+  text-align: center;
+}
+
+p.regular {
+  font-weight: 400;
+  font-size: 16px;
 }

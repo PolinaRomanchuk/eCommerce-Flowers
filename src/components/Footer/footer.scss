@@ -1,0 +1,86 @@
+@use '../../styles/variables' as *;
+
+.footer {
+  min-height: 500px;
+  display: flex;
+  background-color: $color-primary-pink;
+  color: $color-dark-green;
+
+  .footer_content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    .sections-container {
+      display: flex;
+      min-height: 300px;
+
+      h3 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $color-white;
+        height: 50px;
+      }
+
+      .footer_contacts {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .footer-icon {
+          width: 48px;
+          height: 48px;
+        }
+        .icons-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+        }
+      }
+
+      .footer_about {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .footer_about_header {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .footer_logo-container {
+            width: 50px;
+            height: 50px;
+            background-color: $color-white;
+            border-radius: 5px;
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+        }
+        .icons-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          svg {
+            width: 48px;
+            height: 48px;
+          }
+        }
+      }
+
+      .footer_pages {
+        display: flex;
+        flex-direction: column;
+        .footer_pages_header {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+}
