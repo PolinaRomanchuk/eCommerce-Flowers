@@ -18,7 +18,6 @@ export const UserMainInfo = ({
   userData,
   setProfile,
 }: UserMainInfoProps): ReactElement => {
-
   const [modalActive, setModalActive] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalContent, setModalContent] = useState<
@@ -111,28 +110,31 @@ export const UserMainInfo = ({
 
   return (
     <>
-      <h1>User Profile</h1>
-      <button
-        type='button'
-        className='edit-profile-btn'
-        onClick={() => openModal('profile')}
-      >
-        Edit Profile
-      </button>
+      <h2>Main info</h2>
 
       <div className='profile-summary'>
-        <p>
-          <strong>Name:</strong> {userData.firstName} {userData.lastName}
-        </p>
-        <p>
-          <strong>Email:</strong> {userData.email}
-        </p>
-        <p>
-          <strong>Date of Birth:</strong>{' '}
-          {userData.dateOfBirth
-            ? new Date(userData.dateOfBirth).toLocaleDateString()
-            : '-'}
-        </p>
+        <div className='user_info'>
+          <p className='medium'>
+            Name: {userData.firstName} {userData.lastName}
+          </p>
+        </div>
+        <div className='user_info'>
+          <p className='medium'>Email: {userData.email}</p>
+        </div>
+        <div className='user_info'>
+          <p className='medium'>
+            Date of Birth:
+            {userData.dateOfBirth
+              ? new Date(userData.dateOfBirth).toLocaleDateString()
+              : '-'}
+          </p>
+        </div>
+      </div>
+
+      <div className='button_container'>
+        <button type='button' onClick={() => openModal('profile')}>
+          Edit Profile
+        </button>
       </div>
 
       {modalActive && (

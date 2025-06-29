@@ -16,6 +16,9 @@ import {
   validateStreet,
 } from '../../utils/validate';
 
+import { ReactComponent as Trash } from './../../assets/User/trash.svg';
+import { ReactComponent as Pencil } from './../../assets/User/pencil.svg';
+
 type UserAddressesInfoProps = {
   userData: UserProfile;
   setProfile: (profile: UserProfile) => void;
@@ -255,134 +258,20 @@ export const UserAddressesInfo = ({
     <>
       <div className='address-management'>
         <h2>Manage Addresses</h2>
-        <button
-          type='button'
-          className='address-management__add-btn'
-          onClick={() => setShowAddForm(true)}
-        >
-          + Add Address
-        </button>
-
-        {showAddForm && (
-          <form className='address-form add' onSubmit={handleAddFormSubmit}>
-            <fieldset>
-              <legend>New Address</legend>
-              <label className='address-form__label'>
-                Street
-                <input
-                  name='streetName'
-                  value={newAddress.streetName}
-                  onChange={(event) => {
-                    handleAddFormChange(event);
-                    setStreetValidError(validateStreet(event.target.value));
-                  }}
-                  required
-                />
-                {streetValidError && (
-                  <span className='street input-validation-span'>
-                    {streetValidError}
-                  </span>
-                )}
-              </label>
-              <label className='address-form__label'>
-                City
-                <input
-                  name='city'
-                  value={newAddress.city}
-                  onChange={(event) => {
-                    handleAddFormChange(event);
-                    setCityValidError(validateCity(event.target.value));
-                  }}
-                  required
-                />
-                {cityValidError && (
-                  <span className='city input-validation-span'>
-                    {cityValidError}
-                  </span>
-                )}
-              </label>
-              <label className='address-form__label'>
-                Postal Code
-                <input
-                  name='postalCode'
-                  value={newAddress.postalCode}
-                  onChange={(event) => {
-                    handleAddFormChange(event);
-                    setPostValidError(
-                      validatePostalCode(
-                        event.target.value,
-                        newAddress.country,
-                      ),
-                    );
-                  }}
-                  required
-                />
-                {postValidError && (
-                  <span className='postalCode input-validation-span'>
-                    {postValidError}v
-                  </span>
-                )}
-              </label>
-              <label className='address-form__label'>
-                Country
-                <input
-                  name='country'
-                  value={newAddress.country}
-                  onChange={(event) => {
-                    handleAddFormChange(event);
-                    setCountryValidError(validateCountry(event.target.value));
-                  }}
-                  required
-                />
-                {countryValidError && (
-                  <span className='country input-validation-span'>
-                    {countryValidError}
-                  </span>
-                )}
-              </label>
-              <label className='address-form__label'>
-                <input
-                  type='checkbox'
-                  name='isDefaultShipping'
-                  checked={newAddress.isDefaultShipping}
-                  onChange={handleAddFormChange}
-                />
-                Default Shipping
-              </label>
-              <label className='address-form__label'>
-                <input
-                  type='checkbox'
-                  name='isDefaultBilling'
-                  checked={newAddress.isDefaultBilling}
-                  onChange={handleAddFormChange}
-                />
-                Default Billing
-              </label>
-            </fieldset>
-            <div className='add-new-address-button-container'>
-              <button className='add-new-address-button' type='submit'>
-                Add
-              </button>
-              <button type='button' onClick={handleReset}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        )}
 
         <ul className='address-management__list'>
           {userData.addresses.map((addr) => (
             <li key={addr.id} className='address-management__item'>
               <div className='address-management__details'>
-                <p>
-                  {addr.streetName}, {addr.city}, {addr.postalCode},{' '}
+                <div className='address'>
+                  {addr.streetName}, {addr.city}, {addr.postalCode},
                   {addr.country}
-                </p>
+                </div>
                 {userData.defaultShippingAddressId === addr.id && (
-                  <span className='tag'>Default Shipping</span>
+                  <p className='tag extra-light'>Default Shipping</p>
                 )}
                 {userData.defaultBillingAddressId === addr.id && (
-                  <span className='tag'>Default Billing</span>
+                  <p className='tag extra-light'>Default Billing</p>
                 )}
               </div>
               <div className='address-management__actions'>
@@ -394,19 +283,25 @@ export const UserAddressesInfo = ({
                     handleEditClick(addr);
                   }}
                 >
-                  ✏️
+                  <Pencil className='icon' />
                 </button>
                 <button
                   type='button'
                   className='action-btn'
                   onClick={() => handleRemoveAddress(addr.id)}
                 >
-                  ❌
+                  <Trash className='icon'/>
                 </button>
               </div>
             </li>
           ))}
         </ul>
+
+        <div className='button_container'>
+          <button type='button' onClick={() => setShowAddForm(true)}>
+            <span>Add Address</span>
+          </button>
+        </div>
       </div>
       {modalActive && (
         <Modal

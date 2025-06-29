@@ -12,6 +12,10 @@ import UserMainInfo from './UserMainInfo';
 import UserAddressesInfo from './UserAddresses';
 import UserPassword from './UserPassword';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../Footer/Footer';
+
+import { ReactComponent as Branch } from './../../assets/Main/branch3.svg';
+
 
 export const UserProfilePage = ({ size }: UserProps): ReactElement => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -66,10 +70,29 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
     <>
       <Header size={size} />
       <div className='user-profile-page'>
-        <UserMainInfo userData={profile} setProfile={setProfile} />
-        <UserAddressesInfo userData={profile} setProfile={setProfile} />
-        <UserPassword userData={profile} setProfile={setProfile} />
+        <div className='_container'>
+          <div className='user-profile-page_content'>
+            <div className='menu'>
+              <button>
+                <p className='medium'>Main</p>
+              </button>
+              <button>
+                <p className='medium'>Addresses</p>
+              </button>
+
+              <p className='medium'>
+                <UserPassword userData={profile} setProfile={setProfile} />
+              </p>
+              <Branch className='branch'/>
+            </div>
+            <div className='data_container'>
+              <UserAddressesInfo userData={profile} setProfile={setProfile} />
+              {/* <UserMainInfo userData={profile} setProfile={setProfile} /> */}
+            </div>
+          </div>
+        </div>
       </div>
+      <Footer />
     </>
   );
 };
