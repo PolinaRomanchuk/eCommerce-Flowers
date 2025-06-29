@@ -39,7 +39,7 @@ export const App = (): ReactElement => {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path='/login' element={<Login />} />
+            <Route path='/login' element={<Login size={size} />} />
             <Route path='/registration' element={<Registration />} />
             <Route path='/cart' element={<Cart size={size} />} />
             <Route path='/profile' element={<UserProfilePage size={size} />} />
