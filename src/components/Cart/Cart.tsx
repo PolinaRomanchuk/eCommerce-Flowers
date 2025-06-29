@@ -123,8 +123,8 @@ export const Cart = ({ size }: CartProps): ReactElement => {
   return (
     <>
       <Header size={size} newCounter={cart?.totalLineItemQuantity} />
-      <main className='main'>
-        <div className='cart-container'>
+      <div className='cart-container'>
+        <div className='_container'>
           <div className='cart-content'>
             {cartIsEmpty ? (
               <EmptyCart />
@@ -148,10 +148,6 @@ export const Cart = ({ size }: CartProps): ReactElement => {
                             item.variant.attributes,
                             'color',
                           )}
-                          size={formatAttribute(
-                            item.variant.attributes,
-                            'size',
-                          )}
                           version={cartVersion}
                           setCartVersion={setCartVersion}
                           productId={item.id}
@@ -169,7 +165,7 @@ export const Cart = ({ size }: CartProps): ReactElement => {
                             <div className='promo-tag-container'>
                               <div className='promo-name'>{promoName}</div>
                               <button
-                                className='remove-promo-button'
+                                className='remove-promo-button icon'
                                 onClick={handleRemovePromo}
                               >
                                 x
@@ -184,7 +180,7 @@ export const Cart = ({ size }: CartProps): ReactElement => {
                       )}
 
                       <button className='place-order-button'>
-                        Place order
+                        <span>Place order</span>
                       </button>
                     </div>
 
@@ -201,7 +197,9 @@ export const Cart = ({ size }: CartProps): ReactElement => {
                           }}
                         />
                         <span className='valid-promo-error'>{promoError}</span>
-                        <button onClick={handleAddPromo}>Apply</button>
+                        <button onClick={handleAddPromo}>
+                          <span>Apply</span>
+                        </button>
                       </div>
                     ) : (
                       <></>
@@ -212,13 +210,13 @@ export const Cart = ({ size }: CartProps): ReactElement => {
                   className='remove-all-items-button'
                   onClick={() => setModalActive(true)}
                 >
-                  Clear Shopping Cart
+                  <span>Clear Shopping Cart</span>
                 </button>
               </>
             )}
           </div>
         </div>
-      </main>
+      </div>
 
       <Footer />
       {modalActive && (
@@ -229,7 +227,7 @@ export const Cart = ({ size }: CartProps): ReactElement => {
             </div>
             <div className='clear-cart-button-container'>
               <button className='clear-cart-button' onClick={handleRemoveCart}>
-                Yes
+                <span>Yes</span>
               </button>
             </div>
           </div>

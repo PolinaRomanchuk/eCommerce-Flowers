@@ -19,20 +19,15 @@
     background-color: $color-white;
     min-width: 300px;
     min-height: 100px;
-    padding: 10px;
+    padding: 30px;
+    position: relative;
+    color: $color-dark-green;
 
-    .close-window-button-container {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 10px;
-
-      .close-window-button {
-        display: flex;
-        cursor: pointer;
-        background-color: unset;
-        color: black;
-        padding: 2px;
-      }
+    .close-window-button {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      right: 0;
     }
   }
 }

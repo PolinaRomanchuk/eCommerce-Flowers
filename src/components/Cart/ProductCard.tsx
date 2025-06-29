@@ -1,14 +1,10 @@
 import { useEffect, useState, type ReactElement } from 'react';
 import './product-card.scss';
-import {
-  removeProduct,
-  updateProductCount,
-} from '../../services/cart/cart';
+import { removeProduct, updateProductCount } from '../../services/cart/cart';
 
 type ProductCardProps = {
   img: string;
   name: string;
-  size?: string;
   color?: string;
   price: string;
   discountedPrice?: string;
@@ -22,7 +18,6 @@ type ProductCardProps = {
 export const ProductCard = ({
   img,
   name,
-  size,
   color,
   price,
   discountedPrice,
@@ -52,12 +47,7 @@ export const ProductCard = ({
     } else if (operation === 'minus') {
       newCount = count - 1;
     }
-    const data = await updateProductCount(
-      cartId,
-      version,
-      newCount,
-      productId,
-    );
+    const data = await updateProductCount(cartId, version, newCount, productId);
     if (data.data) {
       setCartVersion(data.data.version);
     }
@@ -74,30 +64,39 @@ export const ProductCard = ({
     <>
       <div className='product-card-container'>
         <div className='product-card-content'>
-          <button className='close-button' onClick={handleRemoveProduct}>
+          <button className='close-button icon' onClick={handleRemoveProduct}>
             x
           </button>
           <div className='product-card-image-container'>
             <img className='product-card-image' src={img} alt='photo' />
           </div>
           <div className='product-card-info-container'>
-            <div className='product-desc'>{name}</div>
-            {size && <div className='product-size'>Size: {size}</div>}
-            {color && <div className='product-color'>Color: {color}</div>}
+            <div className='medium'>{name}</div>
+            {color && (
+              <div className='product-color'>
+                <p className='extra-light'>Color:</p> {color}
+              </div>
+            )}
           </div>
           <div className='product-price-container'>
             {discountedPrice ? (
               <>
-                <div className='old-price-for-item'>{price}</div>
-                <div className='final-price-for-item'>{discountedPrice}</div>
+                <div className='old-price-for-item'>
+                  <p className='extra-light'>{price}</p>
+                </div>
+                <div className='final-price-for-item'>
+                  <p className='extra-light'>{discountedPrice}</p>
+                </div>
               </>
             ) : (
-              <div className='final-price-for-item'>{price}</div>
+              <div className='final-price-for-item'>
+                <p className='regular'>{price}</p>
+              </div>
             )}
           </div>
           <div className='product-counter-container'>
             <button
-              className='minus-button'
+              className='minus-button icon'
               onClick={() => {
                 if (count > 1) {
                   setCount(count - 1);
@@ -109,7 +108,7 @@ export const ProductCard = ({
             </button>
             <span className='current-product-count'>{count}</span>
             <button
-              className='plus-button'
+              className='plus-button icon'
               onClick={() => {
                 setCount(count + 1);
                 handleCount('plus');
