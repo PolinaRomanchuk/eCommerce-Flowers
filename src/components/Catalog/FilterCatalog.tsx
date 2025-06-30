@@ -1,19 +1,26 @@
-import { type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import type { Product } from '../../types/catalog';
+import type { ProductType, Category } from '../../types/categories';
+import {
+  fetchCategories,
+  fetchColors,
+  fetchOccasions,
+  fetchTypes,
+} from '../../services/categories/categories';
 
 type FilterCatalogProps = {
   token: string | null;
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   filterAttributes: {
     color: string;
-    size: string;
+    occasion: string;
     price: string;
     type: string;
   };
   setFilterAttributes: React.Dispatch<
     React.SetStateAction<{
       color: string;
-      size: string;
+      occasion: string;
       price: string;
       type: string;
     }>
@@ -23,10 +30,34 @@ export const FilterCatalog = ({
   filterAttributes,
   setFilterAttributes,
 }: FilterCatalogProps): ReactElement => {
-  /*useEffect(() => {
-         //console.log(filterAttributes);
-   
-      }, [filterAttributes])*/
+  const [categories, setCategories] = useState<Category[]>();
+  const [types, setTypes] = useState<ProductType[]>();
+  const [colors, setcolors] = useState<string[]>();
+
+  const [occasions, setOccasions] = useState<string[]>();
+
+  useEffect(() => {
+    async function fetchData(): Promise<void> {
+      const data = await fetchCategories();
+      const types = await fetchTypes();
+      const  colors = await fetchColors();
+      const occasions = await fetchOccasions();
+
+      if (data && types) {
+        setCategories(data.data);
+        setTypes(types.data);
+      }
+
+      if (colors) {
+        setcolors(colors);
+      }
+      if (occasions) {
+        setOccasions(occasions);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className='catalog__filter'>
       <div className='catalog__filter__properties'>
@@ -44,10 +75,9 @@ export const FilterCatalog = ({
             }
           >
             <option value=''>All</option>
-            <option value='0-150'>{'<150$'}</option>
-            <option value='150-300'>{'150$ - 300$'}</option>
-            <option value='500-1000'>{'500$ - 1000$'}</option>
-            <option value='1000-999999'>{'>1000$'}</option>
+            <option value='0-50'>{'<50$'}</option>
+            <option value='50-100'>{'50$ - 100$'}</option>
+            <option value='100-1000'>{'>100$'}</option>
           </select>
         </div>
 
@@ -65,15 +95,12 @@ export const FilterCatalog = ({
             }
           >
             <option value=''>All</option>
-            <option value='black'>Black</option>
-            <option value='gray'>Gray</option>
-            <option value='white'>White</option>
-            <option value='pink'>Pink</option>
-            <option value='green'>Green</option>
-            <option value='brown'>Brown</option>
+            {colors?.map((color) => (
+              <option value={color}>{color}</option>
+            ))}
           </select>
         </div>
-       
+
         <div className='catalog__filter__type'>
           <label className='catalog__filter__type__label' htmlFor=''>
             Type:
@@ -88,45 +115,30 @@ export const FilterCatalog = ({
             }
           >
             <option value=''>All</option>
-            <option value='b6ac86b1-9e9a-4a8d-8161-4709a4a1ac55'>Jeans</option>
-            <option value='7062c3a3-1388-4466-ac0a-a65a9d57a4e3'>Shorts</option>
-            <option value='9b77015b-2da2-4241-8984-61120e660b8b'>Suits</option>
-            <option value='09211447-5c09-4ea0-8aef-a440fbc128cd'>Skirt</option>
-            <option value='ca1a7d34-092e-4d2e-904d-1b603fb72685'>
-              T-shirt
-            </option>
-            <option value='b424371e-ba03-40d8-8d77-345a3f169aa0'>Dress</option>
-            <option value='ce059c1f-ddf9-4252-aa1e-8a4023684cbf'>Hoody</option>
+            {types?.map((type) => <option key={type.name} value={type.id}>{type.name}</option>)}
             <option value=''></option>
           </select>
         </div>
-         <div className='catalog__filter__occasions'>
+        <div className='catalog__filter__occasions'>
           <label className='catalog__filter__type__label' htmlFor=''>
-           Occasions:
+            Occasions:
           </label>
           <select
-            value={filterAttributes.type}
+            value={filterAttributes.occasion}
             onChange={(event) =>
               setFilterAttributes((previous) => ({
                 ...previous,
-                type: event.target.value,
+                occasion: event.target.value,
               }))
             }
           >
             <option value=''>All</option>
-            <option value='b6ac86b1-9e9a-4a8d-8161-4709a4a1ac55'>Jeans</option>
-            <option value='7062c3a3-1388-4466-ac0a-a65a9d57a4e3'>Shorts</option>
-            <option value='9b77015b-2da2-4241-8984-61120e660b8b'>Suits</option>
-            <option value='09211447-5c09-4ea0-8aef-a440fbc128cd'>Skirt</option>
-            <option value='ca1a7d34-092e-4d2e-904d-1b603fb72685'>
-              T-shirt
-            </option>
-            <option value='b424371e-ba03-40d8-8d77-345a3f169aa0'>Dress</option>
-            <option value='ce059c1f-ddf9-4252-aa1e-8a4023684cbf'>Hoody</option>
-            <option value=''></option>
+            {occasions?.map((occasion) => (
+              <option key={occasion} value={occasion}>{occasion}</option>
+            ))}
           </select>
         </div>
-         <div className='catalog__filter__category'>
+        <div className='catalog__filter__category'>
           <label className='catalog__filter__type__label' htmlFor=''>
             Category:
           </label>
@@ -140,19 +152,14 @@ export const FilterCatalog = ({
             }
           >
             <option value=''>All</option>
-            <option value='b6ac86b1-9e9a-4a8d-8161-4709a4a1ac55'>Jeans</option>
-            <option value='7062c3a3-1388-4466-ac0a-a65a9d57a4e3'>Shorts</option>
-            <option value='9b77015b-2da2-4241-8984-61120e660b8b'>Suits</option>
-            <option value='09211447-5c09-4ea0-8aef-a440fbc128cd'>Skirt</option>
-            <option value='ca1a7d34-092e-4d2e-904d-1b603fb72685'>
-              T-shirt
-            </option>
-            <option value='b424371e-ba03-40d8-8d77-345a3f169aa0'>Dress</option>
-            <option value='ce059c1f-ddf9-4252-aa1e-8a4023684cbf'>Hoody</option>
+            {categories
+              ?.filter((cat) => !cat.parent)
+              .map((cat) => (
+                <option value={cat.id}>{cat.name['en-US']}</option>
+              ))}
             <option value=''></option>
           </select>
         </div>
-
       </div>
     </div>
   );

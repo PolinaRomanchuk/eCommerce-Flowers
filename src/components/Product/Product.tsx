@@ -21,6 +21,7 @@ import type { ProductInfo } from '../../types/product';
 import type { CartInfo } from '../../types/cart';
 import Footer from '../Footer/Footer';
 import ShopNavigation from '../Catalog/ShopNavigation';
+import { fetchCategories, fetchCategoryName } from '../../services/categories/categories';
 
 export const Product = ({ size }: ProductProps): ReactElement => {
   const { id } = useParams<{ id: string }>();
@@ -48,6 +49,14 @@ export const Product = ({ size }: ProductProps): ReactElement => {
     async function fetchProduct(): Promise<void> {
       if (id) {
         const productData = await getProductById(id);
+
+        const cat = productData.data?.categories[0].id;
+        if(cat){
+        const category = await fetchCategoryName(cat);
+        console.log(category);
+        console.log(await fetchCategories());
+
+        }
 
         if (productData.error) {
           navigate('*');

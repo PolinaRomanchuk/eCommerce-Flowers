@@ -44,7 +44,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   const [products, setProducts] = useState<Product[]>([]);
   let [filterAttributes, setFilterAttributes] = useState({
     color: '',
-    size: '',
+    occasion: '',
     price: '',
     type: '',
   });

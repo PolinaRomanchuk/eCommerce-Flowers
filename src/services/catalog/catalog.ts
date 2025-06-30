@@ -44,7 +44,7 @@ export function transformResponse(data: ProductProjectionsResponse): Product[] {
   });
 }
 export async function fetchProductsAttributes(
-  filter: { color?: string; size?: string; price?: string; type?: string },
+  filter: { color?: string; occasion?: string; price?: string; type?: string },
   sort: string,
   search: string,
   page: number = 1,
@@ -58,17 +58,16 @@ export async function fetchProductsAttributes(
   const url = new URL(
     `${apiUrl}/${projectKey}/product-projections/search?limit=${limit}&offset=${offset}`,
   );
-  url.searchParams.append('limit', '30');
   if (filter.color) {
     url.searchParams.append(
       'filter',
       `variants.attributes.color:"${filter.color}"`,
     );
   }
-  if (filter.size) {
+  if (filter.occasion) {
     url.searchParams.append(
       'filter',
-      `variants.attributes.size.key:"${filter.size}"`,
+      `variants.attributes.occasion.key:"${filter.occasion}"`,
     );
   }
   if (filter.price) {
@@ -125,3 +124,4 @@ export async function getCategories(
 
   return { products: transformed, total: result.total };
 }
+

@@ -99,4 +99,8 @@ export type ProductInfo = {
     }[];
     key: string;
   }[];
+  categories: {
+    typeId: 'category';
+    id: string;
+  }[];
 };

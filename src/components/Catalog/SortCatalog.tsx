@@ -9,7 +9,7 @@ type SortCatalogProps = {
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   filterAttributes: {
     color: string;
-    size: string;
+    occasion: string;
     price: string;
     type: string;
   };

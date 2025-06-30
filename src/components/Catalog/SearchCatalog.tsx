@@ -8,7 +8,7 @@ type SearchCatalogProps = {
   token: string | null;
   filterAttributes: {
     color: string;
-    size: string;
+    occasion: string;
     price: string;
     type: string;
   };

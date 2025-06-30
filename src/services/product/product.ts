@@ -69,6 +69,7 @@ const getTypedResponse = (rawData: RawProductInfo): ProductInfo => {
     modelAttribute: typeof model === 'string' ? model : '',
     masterVariant: rawData.masterVariant,
     variants: rawData.variants,
+    categories: rawData.categories,
   };
 };
 
