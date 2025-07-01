@@ -18,6 +18,12 @@
       min-width: 500px;
       .nav-links_container {
         display: flex;
+        p {
+          cursor: pointer;
+          &:hover {
+            color: $color-primary-pink;
+          }
+        }
       }
     }
   }

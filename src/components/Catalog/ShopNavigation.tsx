@@ -6,17 +6,19 @@ type ShopNavigationProps = {
   category?: string;
   subcategory?: string;
   productName?: string;
+  setCategory?: React.Dispatch<React.SetStateAction<string>>;
+  setSubcategory?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export const ShopNavigation = ({
   category,
   subcategory,
   productName,
+  setCategory,
+  setSubcategory,
 }: ShopNavigationProps): ReactElement => {
   let navigate = useNavigate();
-  useEffect(() => {
-    
-  }, [category]);
+  useEffect(() => {}, [category]);
 
   return (
     <>
@@ -26,10 +28,37 @@ export const ShopNavigation = ({
             <div className='nav_text_container'>
               <h1>Shop</h1>
               <div className='nav-links_container'>
-                <p className='extra-light'>home-</p>
-                <p className='extra-light'>shop</p>
-                {category && <p className='extra-light'>-{category}</p>}
-                {subcategory && <p className='extra-light'>-{subcategory}</p>}
+                <p className='extra-light' onClick={() => navigate('/')}>
+                  home-
+                </p>
+                <p
+                  className='extra-light'
+                  onClick={() => {
+                    navigate('/catalog');
+
+                    setCategory?.('');
+                  }}
+                >
+                  shop
+                </p>
+                {category && (
+                  <p
+                    className='extra-light'
+                    onClick={() => {
+                      setSubcategory?.('');
+                    }}
+                  >
+                    -{category}
+                  </p>
+                )}
+                {subcategory && (
+                  <p
+                    className='extra-light'
+                    
+                  >
+                    -{subcategory}
+                  </p>
+                )}
                 {productName && <p className='extra-light'>-{productName}</p>}
               </div>
             </div>

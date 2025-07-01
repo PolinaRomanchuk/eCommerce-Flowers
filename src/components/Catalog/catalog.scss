@@ -2,6 +2,7 @@
 
 .catalog {
   padding-bottom: 30px;
+  color: $color-dark-green;
 
   &__filter__search {
     border: 1px solid #ff4040;
@@ -233,6 +234,10 @@
     @media (max-width: 600px) {
       grid-template: auto/repeat(1, 1fr);
     }
+
+    &.six{
+      grid-template: auto / repeat(3, 1fr);
+    }
   }
 
   &__card {
@@ -347,7 +352,7 @@
     &__price {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-evenly;
 
       &__original {
         &.shadow {
@@ -489,8 +494,16 @@
     gap: 10px;
     p{
       cursor: pointer;
+      &:hover{
+        color: $color-primary-pink;
+      }
     }
   }
+}
+
+.no-products_container{
+  width: 50%;
+  
 }
 
 .cards_with_filtres_pagination_container {

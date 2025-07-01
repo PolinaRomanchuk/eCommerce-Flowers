@@ -64,6 +64,8 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   const [subcategoryName, setsubCategoryName] = useState('');
   const [allsubcategories, setallsubcategories] = useState<Category[]>();
 
+  const [isShowFiltersButton, setIsShowFiltersButton] = useState(true);
+
   useEffect(() => {
     (async function loadProducts(): Promise<void> {
       if (isCategoried && (category || subcategory)) {
@@ -98,6 +100,8 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
         const result = await fetchProducts(currentPage);
         setProducts(result.products);
         setTotalProducts(result.total);
+        setIsFiltered(false);
+        setIsCategoried(false);
       }
     })();
 
@@ -243,9 +247,11 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
       >
         <div className='catalog__card__img'>
           <img src={item.image} alt='' />
-          <div className='sale-tag_container'>
-            <span>sale</span>
-          </div>
+          {item.discountedPrice && (
+            <div className='sale-tag_container'>
+              <span>sale</span>
+            </div>
+          )}
 
           <div className='show-cart_container'>
             <Eye />
@@ -294,11 +300,11 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
           <div
             className={`catalog__card__price__original ${item.discountedPrice ? 'shadow' : ''}`}
           >
-            <p className='extra-light'> {item.prices}</p>
+            <p className='extra-light'> {item.prices}$</p>
           </div>
           {item.discountedPrice && (
             <div className='catalog__card__price__discount'>
-              <p className='medium'> {item.discountedPrice}</p>
+              <p className='medium'> {item.discountedPrice}$</p>
             </div>
           )}
         </div>
@@ -320,15 +326,24 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
       ) : (
         <Header size={size} />
       )}
-      <ShopNavigation category={categoryName} subcategory={subcategoryName} />
+      <ShopNavigation
+        category={categoryName}
+        subcategory={subcategoryName}
+        setCategory={setCategory}
+        setSubcategory={setSubcategory}
+      />
       <section className='catalog'>
         <div className='_container'>
           <div className='configur_container'>
             <div className='first'>
-              <button>
+              <button
+                onClick={() => {
+                  setIsShowFiltersButton((previous) => !previous);
+                }}
+              >
                 <span>
                   <FiltersIcon className='conf-icon' />
-                  hide filters
+                  {isShowFiltersButton ? 'hide filters' : 'show filters'}
                 </span>
               </button>
               <div className='search-container'>
@@ -377,7 +392,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                       setIsCategoried(true);
                     }}
                   >
-                    {subcat.name['en-US']}
+                    {subcat.name['en-US'].toLowerCase()}
                   </p>
                 ))}
               </div>
@@ -385,26 +400,43 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
           )}
 
           <div className='cards_with_filtres_pagination_container'>
-            <div className='filters_container'>
-              <FilterCatalog
-                filterAttributes={filterAttributes}
-                setFilterAttributes={setFilterAttributes}
-                token={token}
-                setProducts={setProducts}
-              />
-              <BreadCrumbs
-                category={category}
-                setCategory={setCategory}
-                setProducts={setProducts}
-                subcategory={subcategory}
-                setSubcategory={setSubcategory}
-                setIsCategoried={setIsCategoried}
-                allsubcategories={allsubcategories}
-                setallsubcategories={setallsubcategories}
-              />
-            </div>
+            {isShowFiltersButton && (
+              <div className='filters_container'>
+                <FilterCatalog
+                  filterAttributes={filterAttributes}
+                  setFilterAttributes={setFilterAttributes}
+                  token={token}
+                  setProducts={setProducts}
+                />
+                <BreadCrumbs
+                  category={category}
+                  setCategory={setCategory}
+                  setProducts={setProducts}
+                  subcategory={subcategory}
+                  setSubcategory={setSubcategory}
+                  setIsCategoried={setIsCategoried}
+                  allsubcategories={allsubcategories}
+                  setallsubcategories={setallsubcategories}
+                />
+              </div>
+            )}
 
-            <div className='catalog__cards'>{cards}</div>
+            {cards.length > 0 ? (
+              <div
+                className={
+                  isShowFiltersButton ? 'catalog__cards' : 'catalog__cards six'
+                }
+              >
+                {cards}
+              </div>
+            ) : (
+              <div className='no-products_container'>
+                <p className='extra-light'>
+                  There are no products according to the specified filters, try
+                  other search parameters
+                </p>
+              </div>
+            )}
           </div>
           <div className='pagination-container'>
             <button
