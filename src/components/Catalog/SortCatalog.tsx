@@ -1,7 +1,8 @@
 import { useState, type ReactElement } from 'react';
-import Arrow from '../../assets/Catalog/arrow.png';
 import type { Product } from '../../types/catalog';
-import { fetchProductsAttributes } from '../../services/catalog/catalog';
+import { fetchFilteredProducts } from '../../services/catalog/catalog';
+import { ReactComponent as SortIcon } from './../../assets/Catalog/sort-alt.svg';
+
 type SortCatalogProps = {
   sortAttributes: string;
   setSortAttributes: React.Dispatch<React.SetStateAction<string>>;
@@ -22,10 +23,17 @@ export const SortCatalog = ({
   filterAttributes,
   search,
 }: SortCatalogProps): ReactElement => {
-  const [show, setIsShow] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const options = [
+    { label: 'default', value: '' },
+    { label: 'price low to high', value: 'price asc' },
+    { label: 'price high to low', value: 'price desc' },
+    { label: 'name A to Z', value: 'name.en-US asc' },
+    { label: 'name Z to A', value: 'name.en-US desc' },
+  ];
 
   async function getProducts(sortAttributes: string): Promise<Product[]> {
-    const { products, total } = await fetchProductsAttributes(
+    const { products, total } = await fetchFilteredProducts(
       filterAttributes,
       sortAttributes,
       search,
@@ -33,65 +41,44 @@ export const SortCatalog = ({
     return products;
   }
 
+  const handleSelect = async (value: string): Promise<void> => {
+    setIsOpen(false);
+    setSortAttributes(value);
+    const products = await getProducts(value);
+    setProducts(products);
+  };
+
   return (
     <div className='catalog__sort'>
-      {show && (
-        <div className='catalog__sort__properties'>
-          <div
-            onClick={() =>
-              sortAttributes === 'price asc'
-                ? setSortAttributes('price desc')
-                : setSortAttributes('price asc')
-            }
-            className={`catalog__sort__price ${sortAttributes === 'price asc' || sortAttributes === 'price desc' ? 'active' : ''}`}
-          >
-            <button
-              onClick={async () => {
-                setProducts(
-                  await getProducts(
-                    sortAttributes === 'price asc' ? 'price desc' : 'price asc',
-                  ),
-                );
-              }}
-              className='catalog__sort__price__button'
+      <button
+        type='button'
+        className='catalog__sort-button'
+        onClick={() => setIsOpen((previous) => !previous)}
+      >
+        <SortIcon className='conf-icon' />
+        <span>
+          {sortAttributes === 'price asc' || sortAttributes === 'price desc'
+            ? 'Price'
+            : sortAttributes === 'name.en-US asc' ||
+                sortAttributes === 'name.en-US desc'
+              ? 'Name'
+              : 'Sort'}
+        </span>
+      </button>
+      {isOpen && (
+        <ul className='catalog__sort-dropdown'>
+          {options.map((option) => (
+            <li
+              key={option.value}
+              className={`catalog__sort-option ${
+                sortAttributes === option.value ? 'active' : ''
+              }`}
+              onClick={() => handleSelect(option.value)}
             >
-              Price
-            </button>
-            <div
-              className={`catalog__sort__price__img ${sortAttributes === 'price asc' ? 'up' : ''}`}
-            >
-              <img src={Arrow} alt='' />
-            </div>
-          </div>
-          <div
-            onClick={() =>
-              sortAttributes === 'name.en-US asc'
-                ? setSortAttributes('name.en-US desc')
-                : setSortAttributes('name.en-US asc')
-            }
-            className={`catalog__sort__name ${sortAttributes === 'name.en-US desc' || sortAttributes === 'name.en-US asc' ? 'active' : ''}`}
-          >
-            <button
-              onClick={async () => {
-                setProducts(
-                  await getProducts(
-                    sortAttributes === 'name.en-US asc'
-                      ? 'name.en-US desc'
-                      : 'name.en-US asc',
-                  ),
-                );
-              }}
-              className='catalog__sort__name__button'
-            >
-              Name
-            </button>
-            <div
-              className={`catalog__sort__name__img ${sortAttributes === 'name.en-US asc' ? 'up' : ''}`}
-            >
-              <img src={Arrow} alt='' />
-            </div>
-          </div>
-        </div>
+              {option.label}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

@@ -2,9 +2,9 @@ import { useEffect, useState, type ReactElement } from 'react';
 import Header, { type HeaderProps } from '../Header/Header';
 import type { Product } from '../../types/catalog';
 import {
-  fetchProducts,
-  fetchProductsAttributes,
-  getCategories,
+  fetchAllProducts,
+  fetchProductsByAttributes,
+  fetchProductsByCategory,
 } from '../../services/catalog/catalog';
 import './catalog.scss';
 import FilterCatalog from './FilterCatalog';
@@ -27,7 +27,6 @@ import ShopNavigation from './ShopNavigation';
 
 import { ReactComponent as FiltersIcon } from './../../assets/Catalog/settings-sliders.svg';
 import { ReactComponent as SearchIcon } from './../../assets/Catalog/search.svg';
-import { ReactComponent as SortIcon } from './../../assets/Catalog/sort-alt.svg';
 
 import { ReactComponent as Left } from './../../assets/Catalog/angle-small-left.svg';
 import { ReactComponent as Right } from './../../assets/Catalog/angle-small-right.svg';
@@ -69,7 +68,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   useEffect(() => {
     (async function loadProducts(): Promise<void> {
       if (isCategoried && (category || subcategory)) {
-        const { products, total } = await getCategories(
+        const { products, total } = await fetchProductsByCategory(
           subcategory || category,
           currentPage,
         );
@@ -88,7 +87,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
           setsubCategoryName(categoryname);
         }
       } else if (isFiltered) {
-        const { products, total } = await fetchProductsAttributes(
+        const { products, total } = await fetchProductsByAttributes(
           filterAttributes,
           sortAttributes,
           search,
@@ -97,7 +96,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
         setProducts(products);
         setTotalProducts(total);
       } else {
-        const result = await fetchProducts(currentPage);
+        const result = await fetchAllProducts(currentPage);
         setProducts(result.products);
         setTotalProducts(result.total);
         setIsFiltered(false);
@@ -224,7 +223,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     }
 
     try {
-      const { products, total } = await fetchProductsAttributes(
+      const { products, total } = await fetchProductsByAttributes(
         filterAttributes,
         sortAttributes,
         search,
@@ -363,20 +362,15 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                 </button>
               </div>
             </div>
-            <button>
-              <span>
-                <SortIcon className='conf-icon' />
-                sort
-              </span>
-              <SortCatalog
-                sortAttributes={sortAttributes}
-                setSortAttributes={setSortAttributes}
-                token={token}
-                setProducts={setProducts}
-                filterAttributes={filterAttributes}
-                search={search}
-              />
-            </button>
+
+            <SortCatalog
+              sortAttributes={sortAttributes}
+              setSortAttributes={setSortAttributes}
+              token={token}
+              setProducts={setProducts}
+              filterAttributes={filterAttributes}
+              search={search}
+            />
           </div>
 
           {category && (

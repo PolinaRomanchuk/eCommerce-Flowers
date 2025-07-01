@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import type { Product } from '../../types/catalog';
-import { fetchProductsAttributes } from '../../services/catalog/catalog';
+import { fetchProductsByAttributes } from '../../services/catalog/catalog';
 
 type SearchCatalogProps = {
   search: string;
@@ -23,7 +23,7 @@ export const SearchCatalog = ({
   setProducts,
 }: SearchCatalogProps): ReactElement => {
   async function getProducts(value: string): Promise<Product[]> {
-    const { products, total } = await fetchProductsAttributes(
+    const { products, total } = await fetchProductsByAttributes(
       filterAttributes,
       sortAttributes,
       value,

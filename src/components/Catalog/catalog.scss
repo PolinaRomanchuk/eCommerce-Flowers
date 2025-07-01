@@ -142,74 +142,35 @@
   }
 
   &__sort {
-    margin-bottom: 12px;
-    padding: 10px 10px 10px 0px;
+    position: relative;
+    display: inline-block;
 
-    &__title {
-      font-size: 25px;
-      padding-bottom: 10px;
-    }
-
-    &__properties {
+    &-button {
       display: flex;
-      column-gap: 15px;
-    }
-
-    &__name {
-      display: flex;
-      column-gap: 3px;
       align-items: center;
-      transition: all 0.5s ease 0s;
-      border-radius: 12px;
-      padding: 7px;
+      cursor: pointer;
+    }
 
-      &.active {
-        background-color: rgb(0, 244, 0);
-      }
+    &-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      margin-top: 4px;
+      border: 1px solid $color-dark-green;
+      background: $color-white;
+      z-index: 10;
+      list-style: none;
+      padding: 0;
 
-      &__img {
+      .catalog__sort-option {
+        padding: 8px 12px;
         cursor: pointer;
 
-        img {
-          width: 12px;
-          height: 12px;
-          transition: all 0.8s ease 0s;
+        &.active,
+        &:hover {
+          background-color: $color-primary-pink;
         }
-
-        &.up {
-          img {
-            transform: rotate(180deg);
-          }
-        }
-      }
-    }
-
-    &__price {
-      display: flex;
-      column-gap: 3px;
-      align-items: center;
-      transition: all 0.5s ease 0s;
-      border-radius: 12px;
-      padding: 7px;
-
-      &.active {
-        background-color: rgb(0, 244, 0);
-      }
-
-      &__img {
-        cursor: pointer;
-
-        &.up {
-          img {
-            transform: rotate(180deg);
-          }
-        }
-      }
-
-      img {
-        width: 12px;
-        height: 12px;
-        transition: all 0.8s ease 0s;
       }
     }
   }
@@ -235,7 +196,7 @@
       grid-template: auto/repeat(1, 1fr);
     }
 
-    &.six{
+    &.six {
       grid-template: auto / repeat(3, 1fr);
     }
   }
@@ -362,7 +323,7 @@
     }
   }
 
-  .filters_container{
+  .filters_container {
     display: flex;
     flex-direction: column;
   }
@@ -492,18 +453,17 @@
   .sub-categories-list {
     display: flex;
     gap: 10px;
-    p{
+    p {
       cursor: pointer;
-      &:hover{
+      &:hover {
         color: $color-primary-pink;
       }
     }
   }
 }
 
-.no-products_container{
+.no-products_container {
   width: 50%;
-  
 }
 
 .cards_with_filtres_pagination_container {
