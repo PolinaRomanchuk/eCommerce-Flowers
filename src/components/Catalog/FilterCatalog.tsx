@@ -1,16 +1,12 @@
 import { useEffect, useState, type ReactElement } from 'react';
-import type { Product } from '../../types/catalog';
-import type { ProductType, Category } from '../../types/categories';
+import type { ProductType } from '../../types/categories';
 import {
-  fetchCategories,
   fetchColors,
   fetchOccasions,
   fetchTypes,
 } from '../../services/categories/categories';
 
 type FilterCatalogProps = {
-  token: string | null;
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   filterAttributes: {
     color: string;
     occasion: string;
@@ -25,14 +21,16 @@ type FilterCatalogProps = {
       type: string;
     }>
   >;
+  setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 export const FilterCatalog = ({
   filterAttributes,
   setFilterAttributes,
+  setIsFiltered,
 }: FilterCatalogProps): ReactElement => {
   const [types, setTypes] = useState<ProductType[]>();
   const [colors, setcolors] = useState<string[]>();
-
   const [occasions, setOccasions] = useState<string[]>();
 
   useEffect(() => {
@@ -64,12 +62,13 @@ export const FilterCatalog = ({
           </label>
           <select
             value={filterAttributes.price}
-            onChange={(event) =>
+            onChange={(event) => {
               setFilterAttributes((previous) => ({
                 ...previous,
                 price: event.target.value,
-              }))
-            }
+              }));
+              setIsFiltered(!!event.target.value);
+            }}
           >
             <option value=''>All</option>
             <option value='0-50'>{'<50$'}</option>
@@ -84,12 +83,13 @@ export const FilterCatalog = ({
           </label>
           <select
             value={filterAttributes.color}
-            onChange={(event) =>
+            onChange={(event) => {
               setFilterAttributes((previous) => ({
                 ...previous,
                 color: event.target.value,
-              }))
-            }
+              }));
+              setIsFiltered(!!event.target.value);
+            }}
           >
             <option value=''>All</option>
             {colors?.map((color) => <option value={color}>{color}</option>)}
@@ -102,12 +102,13 @@ export const FilterCatalog = ({
           </label>
           <select
             value={filterAttributes.type}
-            onChange={(event) =>
+            onChange={(event) => {
               setFilterAttributes((previous) => ({
                 ...previous,
                 type: event.target.value,
-              }))
-            }
+              }));
+              setIsFiltered(!!event.target.value);
+            }}
           >
             <option value=''>All</option>
             {types?.map((type) => (
@@ -115,7 +116,6 @@ export const FilterCatalog = ({
                 {type.name}
               </option>
             ))}
-            <option value=''></option>
           </select>
         </div>
         <div className='catalog__filter__occasions'>
@@ -124,12 +124,13 @@ export const FilterCatalog = ({
           </label>
           <select
             value={filterAttributes.occasion}
-            onChange={(event) =>
+            onChange={(event) => {
               setFilterAttributes((previous) => ({
                 ...previous,
                 occasion: event.target.value,
-              }))
-            }
+              }));
+              setIsFiltered(!!event.target.value);
+            }}
           >
             <option value=''>All</option>
             {occasions?.map((occasion) => (

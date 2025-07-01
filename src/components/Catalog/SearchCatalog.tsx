@@ -1,42 +1,22 @@
 import type { ReactElement } from 'react';
-import type { Product } from '../../types/catalog';
-import { fetchProductsByAttributes } from '../../services/catalog/catalog';
 
 type SearchCatalogProps = {
-  search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
-  token: string | null;
-  filterAttributes: {
-    color: string;
-    occasion: string;
-    price: string;
-    type: string;
-  };
-  sortAttributes: string;
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  searchKeyword: string;
+  setSearchKeyword: React.Dispatch<React.SetStateAction<string>>;
+  setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export const SearchCatalog = ({
-  search,
-  setSearch,
-  filterAttributes,
-  sortAttributes,
-  setProducts,
+  searchKeyword,
+  setSearchKeyword,
+  setIsFiltered,
 }: SearchCatalogProps): ReactElement => {
-  async function getProducts(value: string): Promise<Product[]> {
-    const { products, total } = await fetchProductsByAttributes(
-      filterAttributes,
-      sortAttributes,
-      value,
-    );
-    return products;
-  }
   return (
     <div className='catalog__search'>
       <input
-        value={search}
+        value={searchKeyword}
         onChange={async (event) => {
-          setSearch(event.target.value);
-          setProducts(await getProducts(event.target.value.trim()));
+          setSearchKeyword(event.target.value);
+          setIsFiltered(!!event.target.value);
         }}
         type='text'
         className='catalog__search__input'

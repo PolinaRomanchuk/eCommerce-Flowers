@@ -1,27 +1,15 @@
 import { useState, type ReactElement } from 'react';
-import type { Product } from '../../types/catalog';
-import { fetchFilteredProducts } from '../../services/catalog/catalog';
 import { ReactComponent as SortIcon } from './../../assets/Catalog/sort-alt.svg';
 
 type SortCatalogProps = {
   sortAttributes: string;
   setSortAttributes: React.Dispatch<React.SetStateAction<string>>;
-  token: string | null;
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
-  filterAttributes: {
-    color: string;
-    occasion: string;
-    price: string;
-    type: string;
-  };
-  search: string;
+  setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export const SortCatalog = ({
   sortAttributes,
   setSortAttributes,
-  setProducts,
-  filterAttributes,
-  search,
+  setIsFiltered,
 }: SortCatalogProps): ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
   const options = [
@@ -32,20 +20,10 @@ export const SortCatalog = ({
     { label: 'name Z to A', value: 'name.en-US desc' },
   ];
 
-  async function getProducts(sortAttributes: string): Promise<Product[]> {
-    const { products, total } = await fetchFilteredProducts(
-      filterAttributes,
-      sortAttributes,
-      search,
-    );
-    return products;
-  }
-
   const handleSelect = async (value: string): Promise<void> => {
     setIsOpen(false);
     setSortAttributes(value);
-    const products = await getProducts(value);
-    setProducts(products);
+    setIsFiltered(!!value);
   };
 
   return (

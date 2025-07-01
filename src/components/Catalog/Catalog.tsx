@@ -1,10 +1,10 @@
 import { useEffect, useState, type ReactElement } from 'react';
 import Header, { type HeaderProps } from '../Header/Header';
 import type { Product } from '../../types/catalog';
+import type { Category } from '../../types/categories';
 import {
   fetchAllProducts,
-  fetchProductsByAttributes,
-  fetchProductsByCategory,
+  fetchFilteredProducts,
 } from '../../services/catalog/catalog';
 import './catalog.scss';
 import FilterCatalog from './FilterCatalog';
@@ -35,7 +35,6 @@ import { ReactComponent as BagPlus } from './../../assets/Catalog/shopping-bag-a
 import { ReactComponent as BagMinus } from './../../assets/Catalog/bag-shopping-minus.svg';
 import { ReactComponent as Eye } from './../../assets/Catalog/eye-icon.svg';
 import { fetchCategoryName } from '../../services/categories/categories';
-import type { Category } from '../../types/categories';
 
 export type CatalogProps = HeaderProps & {};
 
@@ -48,59 +47,58 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     type: '',
   });
   let [sortAttributes, setSortAttributes] = useState('');
-  let [search, setSearch] = useState('');
+  let [searchKeyword, setSearchKeyword] = useState('');
   let [category, setCategory] = useState('');
   let [subcategory, setSubcategory] = useState('');
-  let [isExistCart, setIsExistCart] = useState(false);
+  const [categoryName, setCategoryName] = useState('');
+  const [subcategoryName, setSubcategoryName] = useState('');
+  const [allSubcategories, setAllSubcategories] = useState<Category[]>();
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [isCategorized, setIsCategorized] = useState(false);
+
   let [cart, setCart] = useState<CartInfo>();
+  let [isExistCart, setIsExistCart] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
   const productsPerPage = 6;
-  const [isFiltered, setIsFiltered] = useState(false);
-  const [isCategoried, setIsCategoried] = useState(false);
-  const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
-  const [categoryName, setCategoryName] = useState('');
-  const [subcategoryName, setsubCategoryName] = useState('');
-  const [allsubcategories, setallsubcategories] = useState<Category[]>();
 
-  const [isShowFiltersButton, setIsShowFiltersButton] = useState(true);
+  const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
+
+  const [isShowFilters, setIsShowFilters] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async function loadProducts(): Promise<void> {
-      if (isCategoried && (category || subcategory)) {
-        const { products, total } = await fetchProductsByCategory(
-          subcategory || category,
+      if (isCategorized || isFiltered) {
+        const { products, total } = await fetchFilteredProducts(
+          {
+            ...filterAttributes,
+            categoryId: subcategory || category || undefined,
+          },
+          sortAttributes,
+          searchKeyword,
           currentPage,
         );
         setProducts(products);
         setTotalProducts(total);
-        setIsFiltered(false);
-        const categoryname = (await fetchCategoryName(category)).toLowerCase();
-        if (categoryname) {
+        if (category) {
+          const categoryname = (
+            await fetchCategoryName(category)
+          ).toLowerCase();
           setCategoryName(categoryname);
         }
 
         if (subcategory) {
-          const categoryname = (
+          const subcategoryname = (
             await fetchCategoryName(subcategory)
           ).toLowerCase();
-          setsubCategoryName(categoryname);
+          setSubcategoryName(subcategoryname);
         }
-      } else if (isFiltered) {
-        const { products, total } = await fetchProductsByAttributes(
-          filterAttributes,
-          sortAttributes,
-          search,
-          currentPage,
-        );
-        setProducts(products);
-        setTotalProducts(total);
       } else {
         const result = await fetchAllProducts(currentPage);
         setProducts(result.products);
         setTotalProducts(result.total);
-        setIsFiltered(false);
-        setIsCategoried(false);
       }
     })();
 
@@ -121,23 +119,25 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     sortAttributes,
     category,
     subcategory,
-    isCategoried,
+    isCategorized,
+    filterAttributes,
+    searchKeyword,
   ]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [filterAttributes, sortAttributes, category, subcategory]);
+  }, [filterAttributes, sortAttributes, category, subcategory, searchKeyword]);
 
   useEffect(() => {
     if (!category) {
       setCategoryName('');
     }
     if (!subcategory) {
-      setsubCategoryName('');
+      setSubcategoryName('');
     }
   }, [category, subcategory]);
 
-  function checkIfCurrentProductInCart(
+  function checkIfProductInCart(
     currproductId: string,
     currentVariantId: number,
   ): boolean {
@@ -150,8 +150,6 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     }
     return false;
   }
-
-  const navigate = useNavigate();
 
   const handleClick = (id: string): void => {
     navigate(`/product/${id}`);
@@ -217,26 +215,6 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     }
   }
 
-  async function loadFilteredProducts(): Promise<void> {
-    if (!token) {
-      return;
-    }
-
-    try {
-      const { products, total } = await fetchProductsByAttributes(
-        filterAttributes,
-        sortAttributes,
-        search,
-        currentPage,
-      );
-      setProducts(products);
-      setTotalProducts(total);
-      setIsFiltered(true);
-    } catch (error) {
-      void error;
-    }
-  }
-
   let cards = products.map((item, index) => {
     return (
       <div
@@ -255,7 +233,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
           <div className='show-cart_container'>
             <Eye />
             <span className='separator' />
-            {checkIfCurrentProductInCart(item.id, item.masterVariantId) ? (
+            {checkIfProductInCart(item.id, item.masterVariantId) ? (
               <button
                 className='add-to-cart-button-in-catalog added'
                 onClick={(event) => {
@@ -313,10 +291,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
       </div>
     );
   });
-  let token = localStorage.getItem('customer-token');
-  if (!token) {
-    token = localStorage.getItem('anonymous-token');
-  }
+
   const totalPages = Math.ceil(totalProducts / productsPerPage);
   return (
     <>
@@ -337,27 +312,21 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             <div className='first'>
               <button
                 onClick={() => {
-                  setIsShowFiltersButton((previous) => !previous);
+                  setIsShowFilters((previous) => !previous);
                 }}
               >
                 <span>
                   <FiltersIcon className='conf-icon' />
-                  {isShowFiltersButton ? 'hide filters' : 'show filters'}
+                  {isShowFilters ? 'hide filters' : 'show filters'}
                 </span>
               </button>
               <div className='search-container'>
                 <SearchCatalog
-                  search={search}
-                  setSearch={setSearch}
-                  token={token}
-                  setProducts={setProducts}
-                  filterAttributes={filterAttributes}
-                  sortAttributes={sortAttributes}
+                  searchKeyword={searchKeyword}
+                  setSearchKeyword={setSearchKeyword}
+                  setIsFiltered={setIsFiltered}
                 />
-                <button
-                  className='search-button'
-                  onClick={loadFilteredProducts}
-                >
+                <button className='search-button'>
                   <SearchIcon className='conf-icon' />
                 </button>
               </div>
@@ -366,10 +335,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             <SortCatalog
               sortAttributes={sortAttributes}
               setSortAttributes={setSortAttributes}
-              token={token}
-              setProducts={setProducts}
-              filterAttributes={filterAttributes}
-              search={search}
+              setIsFiltered={setIsFiltered}
             />
           </div>
 
@@ -377,13 +343,13 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             <div className='categories-container'>
               <h3>{categoryName}</h3>
               <div className='sub-categories-list'>
-                {allsubcategories?.map((subcat) => (
+                {allSubcategories?.map((subcat) => (
                   <p
                     className='extra-light sub-category'
                     key={subcat.id}
                     onClick={() => {
                       setSubcategory(subcat.id);
-                      setIsCategoried(true);
+                      setIsCategorized(true);
                     }}
                   >
                     {subcat.name['en-US'].toLowerCase()}
@@ -394,23 +360,21 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
           )}
 
           <div className='cards_with_filtres_pagination_container'>
-            {isShowFiltersButton && (
+            {isShowFilters && (
               <div className='filters_container'>
                 <FilterCatalog
                   filterAttributes={filterAttributes}
                   setFilterAttributes={setFilterAttributes}
-                  token={token}
-                  setProducts={setProducts}
+                  setIsFiltered={setIsFiltered}
                 />
                 <BreadCrumbs
                   category={category}
                   setCategory={setCategory}
-                  setProducts={setProducts}
                   subcategory={subcategory}
                   setSubcategory={setSubcategory}
-                  setIsCategoried={setIsCategoried}
-                  allsubcategories={allsubcategories}
-                  setallsubcategories={setallsubcategories}
+                  setIsCategoried={setIsCategorized}
+                  allSubcategories={allSubcategories}
+                  setAllSubcategories={setAllSubcategories}
                 />
               </div>
             )}
@@ -418,7 +382,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             {cards.length > 0 ? (
               <div
                 className={
-                  isShowFiltersButton ? 'catalog__cards' : 'catalog__cards six'
+                  isShowFilters ? 'catalog__cards' : 'catalog__cards six'
                 }
               >
                 {cards}

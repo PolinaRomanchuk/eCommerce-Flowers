@@ -8,21 +8,18 @@ type BreadCrumbsProps = {
   setCategory: React.Dispatch<React.SetStateAction<string>>;
   subcategory: string;
   setSubcategory: React.Dispatch<React.SetStateAction<string>>;
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   setIsCategoried: React.Dispatch<React.SetStateAction<boolean>>;
-  allsubcategories: Category[] | undefined;
-  setallsubcategories: React.Dispatch<
+  allSubcategories: Category[] | undefined;
+  setAllSubcategories: React.Dispatch<
     React.SetStateAction<Category[] | undefined>
   >;
 };
 export const BreadCrumbs = ({
   category,
   setCategory,
-  subcategory,
   setSubcategory,
   setIsCategoried,
-  allsubcategories,
-  setallsubcategories,
+  setAllSubcategories: setAllSubcategories,
 }: BreadCrumbsProps): ReactElement => {
   let [title, setTitle] = useState('All');
 
@@ -42,7 +39,7 @@ export const BreadCrumbs = ({
   useEffect(() => {
     const sub = categories?.filter((cat) => cat.parent?.id === category);
     if (sub) {
-      setallsubcategories(sub);
+      setAllSubcategories(sub);
     }
   }, [category]);
 
@@ -57,13 +54,12 @@ export const BreadCrumbs = ({
             value={category}
             onChange={async (event) => {
               const selected = event.target.value;
-
               setTitle('All');
               setCategory(selected);
               setIsCategoried(!!selected);
               if (!selected) {
                 setSubcategory('');
-                setallsubcategories(undefined);
+                setAllSubcategories(undefined);
               }
             }}
           >
