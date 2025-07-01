@@ -1,6 +1,7 @@
-import { useState, type ReactElement } from 'react';
-import { getCategories } from '../../services/catalog/catalog';
+import { useEffect, useState, type ReactElement } from 'react';
 import type { Product } from '../../types/catalog';
+import { fetchCategories } from '../../services/categories/categories';
+import type { Category } from '../../types/categories';
 
 type BreadCrumbsProps = {
   category: string;
@@ -9,149 +10,72 @@ type BreadCrumbsProps = {
   setSubcategory: React.Dispatch<React.SetStateAction<string>>;
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   setIsCategoried: React.Dispatch<React.SetStateAction<boolean>>;
+  allsubcategories: Category[] | undefined;
+  setallsubcategories: React.Dispatch<
+    React.SetStateAction<Category[] | undefined>
+  >;
 };
 export const BreadCrumbs = ({
   category,
   setCategory,
-  setProducts,
   subcategory,
   setSubcategory,
   setIsCategoried,
+  allsubcategories,
+  setallsubcategories,
 }: BreadCrumbsProps): ReactElement => {
   let [title, setTitle] = useState('All');
-  const [show, setShow] = useState(false);
 
-  async function getProducts(category: string): Promise<Product[]> {
-    const { products, total } = await getCategories(category);
-    return products;
-  }
+  const [categories, setCategories] = useState<Category[]>();
+
+  useEffect(() => {
+    async function fetchData(): Promise<void> {
+      const data = await fetchCategories();
+
+      if (data) {
+        setCategories(data.data);
+      }
+    }
+    fetchData();
+  }, [category]);
+
+  useEffect(() => {
+    const sub = categories?.filter((cat) => cat.parent?.id === category);
+    if (sub) {
+      setallsubcategories(sub);
+    }
+  }, [category]);
 
   return (
     <div className='catalog__bread'>
-      {category ? (
-        <div className='bread__links'>
-          <a
-            href='#'
-            onClick={() => {
-              setCategory('');
-              setIsCategoried(false);
-            }}
-            className='bread__link'
-          >
-            Home
-          </a>
-          <a
-            href='#'
-            onClick={async () => {
-              if (title !== 'All') {
-                setTitle('All');
-                setProducts(await getProducts(category));
-              }
-            }}
-            className='bread__link'
-          >
-            {category === 'cc09111e-e236-43dc-bcee-e0124acbf7b5'
-              ? 'man'
-              : 'women'}
-          </a>
-          {title !== 'All' ? (
-            <a href='#' className='bread__link'>
-              {title}
-            </a>
-          ) : (
-            ''
-          )}
-        </div>
-      ) : (
-        ''
-      )}
-
-      {show && (
-        <div className='catalog__bread__container'>
-          <label className='catalog__bread__title' htmlFor=''>
-            Choose category
+      <div className='catalog__bread__container'>
+        <div className='catalog__filter__category'>
+          <label className='catalog__filter__type__label' htmlFor=''>
+            Category:
           </label>
           <select
             value={category}
             onChange={async (event) => {
+              const selected = event.target.value;
+
               setTitle('All');
-              setCategory(event.target.value);
-              setIsCategoried(true);
-              // setProducts(await getProducts(event.target.value));
+              setCategory(selected);
+              setIsCategoried(!!selected);
+              if (!selected) {
+                setSubcategory('');
+                setallsubcategories(undefined);
+              }
             }}
-            name=''
-            id=''
           >
             <option value=''>All</option>
-            <option value='cc09111e-e236-43dc-bcee-e0124acbf7b5'>Man</option>
-            <option value='067e3264-b3b7-4c22-90d7-bb60da81af66'>Women</option>
+            {categories
+              ?.filter((cat) => !cat.parent)
+              .map((cat) => (
+                <option value={cat.id}>{cat.name['en-US']}</option>
+              ))}
           </select>
-          {category === 'cc09111e-e236-43dc-bcee-e0124acbf7b5' ? (
-            <>
-              <label className='catalog__bread__title' htmlFor=''>
-                Choose subcategory
-              </label>
-              <select
-                value={subcategory}
-                onChange={async (event) => {
-                  setTitle(
-                    event.target.options[event.target.selectedIndex].text,
-                  );
-                  setSubcategory(event.target.value);
-                  setIsCategoried(true);
-                  //   setProducts(await getProducts(event.target.value));
-                }}
-                name=''
-                id=''
-              >
-                <option value=''>All</option>
-                <option value='5124ec8e-4e02-48c7-8d0c-4328b9a16827'>
-                  Outerwear
-                </option>
-                <option value='191afa2f-8018-46a4-bd4a-a82411507edb'>
-                  underwear
-                </option>
-              </select>
-            </>
-          ) : (
-            ''
-          )}
-          {category === '067e3264-b3b7-4c22-90d7-bb60da81af66' ? (
-            <>
-              <label htmlFor=''>Choose subcategory</label>
-              <select
-                value={subcategory}
-                onChange={async (event) => {
-                  setTitle(
-                    event.target.options[event.target.selectedIndex].text,
-                  );
-                  setSubcategory(event.target.value);
-                  setIsCategoried(true);
-                  //  setProducts(await getProducts(event.target.value));
-                }}
-                name=''
-                id=''
-              >
-                <option value=''>All</option>
-                <option value='a8828868-f3f3-43bb-8bc9-45bf312e245e'>
-                  tops
-                </option>
-                <option value='52bcf46c-ef63-44c8-a514-d35d267881ec'>
-                  dresses
-                </option>
-                <option value='79b5b02c-0302-40fe-9e63-ec552fe163a4'>
-                  Pants
-                </option>
-                <option value='c245d4c9-8bc2-4f28-ab91-26cbe4bc61f3'>
-                  Skirts
-                </option>
-              </select>
-            </>
-          ) : (
-            ''
-          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

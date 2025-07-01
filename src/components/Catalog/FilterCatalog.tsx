@@ -30,7 +30,6 @@ export const FilterCatalog = ({
   filterAttributes,
   setFilterAttributes,
 }: FilterCatalogProps): ReactElement => {
-  const [categories, setCategories] = useState<Category[]>();
   const [types, setTypes] = useState<ProductType[]>();
   const [colors, setcolors] = useState<string[]>();
 
@@ -38,13 +37,11 @@ export const FilterCatalog = ({
 
   useEffect(() => {
     async function fetchData(): Promise<void> {
-      const data = await fetchCategories();
       const types = await fetchTypes();
-      const  colors = await fetchColors();
+      const colors = await fetchColors();
       const occasions = await fetchOccasions();
 
-      if (data && types) {
-        setCategories(data.data);
+      if (types) {
         setTypes(types.data);
       }
 
@@ -95,9 +92,7 @@ export const FilterCatalog = ({
             }
           >
             <option value=''>All</option>
-            {colors?.map((color) => (
-              <option value={color}>{color}</option>
-            ))}
+            {colors?.map((color) => <option value={color}>{color}</option>)}
           </select>
         </div>
 
@@ -115,7 +110,11 @@ export const FilterCatalog = ({
             }
           >
             <option value=''>All</option>
-            {types?.map((type) => <option key={type.name} value={type.id}>{type.name}</option>)}
+            {types?.map((type) => (
+              <option key={type.name} value={type.id}>
+                {type.name}
+              </option>
+            ))}
             <option value=''></option>
           </select>
         </div>
@@ -134,30 +133,10 @@ export const FilterCatalog = ({
           >
             <option value=''>All</option>
             {occasions?.map((occasion) => (
-              <option key={occasion} value={occasion}>{occasion}</option>
+              <option key={occasion} value={occasion}>
+                {occasion}
+              </option>
             ))}
-          </select>
-        </div>
-        <div className='catalog__filter__category'>
-          <label className='catalog__filter__type__label' htmlFor=''>
-            Category:
-          </label>
-          <select
-            value={filterAttributes.type}
-            onChange={(event) =>
-              setFilterAttributes((previous) => ({
-                ...previous,
-                type: event.target.value,
-              }))
-            }
-          >
-            <option value=''>All</option>
-            {categories
-              ?.filter((cat) => !cat.parent)
-              .map((cat) => (
-                <option value={cat.id}>{cat.name['en-US']}</option>
-              ))}
-            <option value=''></option>
           </select>
         </div>
       </div>

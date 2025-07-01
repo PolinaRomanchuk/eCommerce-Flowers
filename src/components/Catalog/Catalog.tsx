@@ -13,8 +13,6 @@ import SearchCatalog from './SearchCatalog';
 import BreadCrumbs from './BreadCrumbs';
 import { useNavigate } from 'react-router-dom';
 
-import Add from '../../assets/Catalog/add-to-cart.png';
-import Remove from '../../assets/Catalog/remove-from-cart.png';
 import {
   addProductToCart,
   checkIfCartExists,
@@ -37,6 +35,8 @@ import { ReactComponent as Right } from './../../assets/Catalog/angle-small-righ
 import { ReactComponent as BagPlus } from './../../assets/Catalog/shopping-bag-add.svg';
 import { ReactComponent as BagMinus } from './../../assets/Catalog/bag-shopping-minus.svg';
 import { ReactComponent as Eye } from './../../assets/Catalog/eye-icon.svg';
+import { fetchCategoryName } from '../../services/categories/categories';
+import type { Category } from '../../types/categories';
 
 export type CatalogProps = HeaderProps & {};
 
@@ -60,6 +60,9 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   const [isFiltered, setIsFiltered] = useState(false);
   const [isCategoried, setIsCategoried] = useState(false);
   const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
+  const [categoryName, setCategoryName] = useState('');
+  const [subcategoryName, setsubCategoryName] = useState('');
+  const [allsubcategories, setallsubcategories] = useState<Category[]>();
 
   useEffect(() => {
     (async function loadProducts(): Promise<void> {
@@ -71,6 +74,17 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
         setProducts(products);
         setTotalProducts(total);
         setIsFiltered(false);
+        const categoryname = (await fetchCategoryName(category)).toLowerCase();
+        if (categoryname) {
+          setCategoryName(categoryname);
+        }
+
+        if (subcategory) {
+          const categoryname = (
+            await fetchCategoryName(subcategory)
+          ).toLowerCase();
+          setsubCategoryName(categoryname);
+        }
       } else if (isFiltered) {
         const { products, total } = await fetchProductsAttributes(
           filterAttributes,
@@ -110,6 +124,15 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   useEffect(() => {
     setCurrentPage(1);
   }, [filterAttributes, sortAttributes, category, subcategory]);
+
+  useEffect(() => {
+    if (!category) {
+      setCategoryName('');
+    }
+    if (!subcategory) {
+      setsubCategoryName('');
+    }
+  }, [category, subcategory]);
 
   function checkIfCurrentProductInCart(
     currproductId: string,
@@ -297,82 +320,89 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
       ) : (
         <Header size={size} />
       )}
-      <ShopNavigation />
+      <ShopNavigation category={categoryName} subcategory={subcategoryName} />
       <section className='catalog'>
         <div className='_container'>
-          {category.length <= 0 ? (
-            <>
-              <div className='configur_container'>
-                <div className='first'>
-                  <button>
-                    <span>
-                      <FiltersIcon className='conf-icon' />
-                      hide filters
-                    </span>
-                  </button>
-                  <div className='search-container'>
-                    <SearchCatalog
-                      search={search}
-                      setSearch={setSearch}
-                      token={token}
-                      setProducts={setProducts}
-                      filterAttributes={filterAttributes}
-                      sortAttributes={sortAttributes}
-                    />
-                    <button
-                      className='search-button'
-                      onClick={loadFilteredProducts}
-                    >
-                      <SearchIcon className='conf-icon' />
-                    </button>
-                  </div>
-                </div>
-                <button>
-                  <span>
-                    <SortIcon className='conf-icon' />
-                    sort
-                  </span>
-                  <SortCatalog
-                    sortAttributes={sortAttributes}
-                    setSortAttributes={setSortAttributes}
-                    token={token}
-                    setProducts={setProducts}
-                    filterAttributes={filterAttributes}
-                    search={search}
-                  />
+          <div className='configur_container'>
+            <div className='first'>
+              <button>
+                <span>
+                  <FiltersIcon className='conf-icon' />
+                  hide filters
+                </span>
+              </button>
+              <div className='search-container'>
+                <SearchCatalog
+                  search={search}
+                  setSearch={setSearch}
+                  token={token}
+                  setProducts={setProducts}
+                  filterAttributes={filterAttributes}
+                  sortAttributes={sortAttributes}
+                />
+                <button
+                  className='search-button'
+                  onClick={loadFilteredProducts}
+                >
+                  <SearchIcon className='conf-icon' />
                 </button>
               </div>
+            </div>
+            <button>
+              <span>
+                <SortIcon className='conf-icon' />
+                sort
+              </span>
+              <SortCatalog
+                sortAttributes={sortAttributes}
+                setSortAttributes={setSortAttributes}
+                token={token}
+                setProducts={setProducts}
+                filterAttributes={filterAttributes}
+                search={search}
+              />
+            </button>
+          </div>
 
-              <div className='categories-container'>
-                <h3>Current category</h3>
-                <div className='sub-categories-list'>
-                  <p className='extra-light'>subcategory</p>
-                  <p className='extra-light'>subcategory</p>
-                  <p className='extra-light'>subcategory</p>
-                  <p className='extra-light'>subcategory</p>
-                  <p className='extra-light'>subcategory</p>
-                </div>
+          {category && (
+            <div className='categories-container'>
+              <h3>{categoryName}</h3>
+              <div className='sub-categories-list'>
+                {allsubcategories?.map((subcat) => (
+                  <p
+                    className='extra-light sub-category'
+                    key={subcat.id}
+                    onClick={() => {
+                      setSubcategory(subcat.id);
+                      setIsCategoried(true);
+                    }}
+                  >
+                    {subcat.name['en-US']}
+                  </p>
+                ))}
               </div>
-            </>
-          ) : (
-            ''
+            </div>
           )}
-          <BreadCrumbs
-            category={category}
-            setCategory={setCategory}
-            setProducts={setProducts}
-            subcategory={subcategory}
-            setSubcategory={setSubcategory}
-            setIsCategoried={setIsCategoried}
-          />
 
           <div className='cards_with_filtres_pagination_container'>
-            <FilterCatalog
-              filterAttributes={filterAttributes}
-              setFilterAttributes={setFilterAttributes}
-              token={token}
-              setProducts={setProducts}
-            />
+            <div className='filters_container'>
+              <FilterCatalog
+                filterAttributes={filterAttributes}
+                setFilterAttributes={setFilterAttributes}
+                token={token}
+                setProducts={setProducts}
+              />
+              <BreadCrumbs
+                category={category}
+                setCategory={setCategory}
+                setProducts={setProducts}
+                subcategory={subcategory}
+                setSubcategory={setSubcategory}
+                setIsCategoried={setIsCategoried}
+                allsubcategories={allsubcategories}
+                setallsubcategories={setallsubcategories}
+              />
+            </div>
 
             <div className='catalog__cards'>{cards}</div>
           </div>
