@@ -69,6 +69,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
       <div
         className='product-card'
         onClick={() => navigate(`/product/${plant.id}`)}
+        key={plant.id}
       >
         <div className='product-img_container'>
           <img src={plant.image} alt='Plant' />

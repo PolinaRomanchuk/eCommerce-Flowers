@@ -194,7 +194,7 @@ export const About = ({ size }: AboutProps): ReactElement => {
                     }
                   >
                     {question.answer.map((sentence) => (
-                      <span>{sentence}</span>
+                      <span key={sentence}>{sentence}</span>
                     ))}
                   </div>
                 </div>

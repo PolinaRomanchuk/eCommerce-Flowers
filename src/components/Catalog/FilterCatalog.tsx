@@ -61,6 +61,7 @@ export const FilterCatalog = ({
             Price:
           </label>
           <select
+            key={filterAttributes.price}
             value={filterAttributes.price}
             onChange={(event) => {
               setFilterAttributes((previous) => ({
@@ -82,6 +83,7 @@ export const FilterCatalog = ({
             Color:
           </label>
           <select
+            key={filterAttributes.color}
             value={filterAttributes.color}
             onChange={(event) => {
               setFilterAttributes((previous) => ({
@@ -92,7 +94,7 @@ export const FilterCatalog = ({
             }}
           >
             <option value=''>All</option>
-            {colors?.map((color) => <option value={color}>{color}</option>)}
+            {colors?.map((color) => <option value={color} key={color}>{color}</option>)}
           </select>
         </div>
 
@@ -101,6 +103,7 @@ export const FilterCatalog = ({
             Type:
           </label>
           <select
+            key={filterAttributes.type}
             value={filterAttributes.type}
             onChange={(event) => {
               setFilterAttributes((previous) => ({
@@ -123,6 +126,7 @@ export const FilterCatalog = ({
             Occasions:
           </label>
           <select
+            key={filterAttributes.occasion}
             value={filterAttributes.occasion}
             onChange={(event) => {
               setFilterAttributes((previous) => ({

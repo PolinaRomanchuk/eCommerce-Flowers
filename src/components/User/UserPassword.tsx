@@ -115,7 +115,7 @@ export const UserPassword = ({
         className='toggle-password-btn'
         onClick={() => openModal('password')}
       >
-        Change Password
+        <p className='medium'>Change Password</p>
       </button>
 
       {modalActive && (

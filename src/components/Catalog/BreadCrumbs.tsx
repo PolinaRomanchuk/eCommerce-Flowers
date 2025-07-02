@@ -51,6 +51,7 @@ export const BreadCrumbs = ({
             Category:
           </label>
           <select
+          key={category}
             value={category}
             onChange={async (event) => {
               const selected = event.target.value;
@@ -67,7 +68,7 @@ export const BreadCrumbs = ({
             {categories
               ?.filter((cat) => !cat.parent)
               .map((cat) => (
-                <option value={cat.id}>{cat.name['en-US']}</option>
+                <option value={cat.id} key={cat.id}>{cat.name['en-US']}</option>
               ))}
           </select>
         </div>

@@ -30,10 +30,10 @@ export const UserAddressesInfo = ({
 }: UserAddressesInfoProps): ReactElement => {
   const [modalActive, setModalActive] = useState(false);
   const [modalContent, setModalContent] = useState<
-    'edit-address' | 'modal-message' | null
+    'edit-address' | 'modal-message' | 'add-address' | null
   >(null);
   const openModal = (
-    type: 'edit-address' | 'modal-message',
+    type: 'edit-address' | 'modal-message' | 'add-address',
     message?: string,
   ): void => {
     setModalContent(type);
@@ -49,7 +49,6 @@ export const UserAddressesInfo = ({
   const [postValidError, setPostValidError] = useState('');
   const [countryValidError, setCountryValidError] = useState('');
 
-  const [showAddForm, setShowAddForm] = useState(false);
   const [newAddress, setNewAddress] = useState<
     Address & { isDefaultShipping: boolean; isDefaultBilling: boolean }
   >({
@@ -106,7 +105,7 @@ export const UserAddressesInfo = ({
       }
 
       setProfile(updated);
-      setShowAddForm(false);
+      openModal('modal-message', 'Your address has been added successfully!');
       setNewAddress({
         id: '',
         streetName: '',
@@ -242,7 +241,6 @@ export const UserAddressesInfo = ({
       postalCode: '',
       country: '',
     });
-    setShowAddForm(false);
     setNewAddress({
       id: '',
       streetName: '',
@@ -290,7 +288,7 @@ export const UserAddressesInfo = ({
                   className='action-btn'
                   onClick={() => handleRemoveAddress(addr.id)}
                 >
-                  <Trash className='icon'/>
+                  <Trash className='icon' />
                 </button>
               </div>
             </li>
@@ -298,7 +296,7 @@ export const UserAddressesInfo = ({
         </ul>
 
         <div className='button_container'>
-          <button type='button' onClick={() => setShowAddForm(true)}>
+          <button type='button' onClick={() => openModal('add-address')}>
             <span>Add Address</span>
           </button>
         </div>
@@ -434,6 +432,104 @@ export const UserAddressesInfo = ({
               </div>
             </div>
           )}
+
+          {modalContent === 'add-address' && (
+            <div className='add-address-modal-container'>
+              <div className='address-management__add-form'>
+                <label className='street-label'>
+                  Street
+                  <input
+                    name='streetName'
+                    value={newAddress.streetName}
+                    onChange={(event) => {
+                      handleAddFormChange(event);
+                      setStreetValidError(validateStreet(event.target.value));
+                    }}
+                  />
+                  {streetValidError && (
+                    <span className='street input-validation-span'>
+                      {streetValidError}
+                    </span>
+                  )}
+                </label>
+                <label className='city-label'>
+                  City
+                  <input
+                    name='city'
+                    value={newAddress.city}
+                    onChange={(event) => {
+                      handleAddFormChange(event);
+                      setCityValidError(validateCity(event.target.value));
+                    }}
+                  />
+                  {cityValidError && (
+                    <span className='city input-validation-span'>
+                      {cityValidError}
+                    </span>
+                  )}
+                </label>
+                <label className='postal-code-label'>
+                  Postal Code
+                  <input
+                    name='postalCode'
+                    value={newAddress.postalCode}
+                    onChange={(event) => {
+                      handleAddFormChange(event);
+                      setPostValidError(
+                        validatePostalCode(
+                          event.target.value,
+                          newAddress.country,
+                        ),
+                      );
+                    }}
+                  />
+                  {postValidError && (
+                    <span className='postalCode input-validation-span'>
+                      {postValidError}
+                    </span>
+                  )}
+                </label>
+                <label className='country-label'>
+                  Country
+                  <input
+                    name='country'
+                    value={newAddress.country}
+                    onChange={(event) => {
+                      handleAddFormChange(event);
+                      setCountryValidError(validateCountry(event.target.value));
+                    }}
+                  />
+                  {countryValidError && (
+                    <span className='country input-validation-span'>
+                      {countryValidError}
+                    </span>
+                  )}
+                </label>
+                <label className='check-box-default-address'>
+                  <span> Set as default shipping address</span>
+                  <input
+                    type='checkbox'
+                    name='isDefaultShipping'
+                    checked={newAddress.isDefaultShipping}
+                    onChange={handleAddFormChange}
+                  />
+                </label>
+                <label className='check-box-default-address'>
+                  <span> Set as default billing address</span>
+                  <input
+                    type='checkbox'
+                    name='isDefaultBilling'
+                    checked={newAddress.isDefaultBilling}
+                    onChange={handleAddFormChange}
+                  />
+                </label>
+                <button type='button' onClick={handleAddFormSubmit}>
+                  Add
+                </button>
+              </div>
+            </div>
+          )}
+
           {modalContent === 'modal-message' && (
             <div className='update-modal-message-container'>
               <div className='update-modal-message-text'>{modalMessage}</div>

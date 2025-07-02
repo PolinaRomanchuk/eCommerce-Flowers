@@ -16,12 +16,14 @@ import Footer from '../Footer/Footer';
 
 import { ReactComponent as Branch } from './../../assets/Main/branch3.svg';
 
-
 export const UserProfilePage = ({ size }: UserProps): ReactElement => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const [showMain, setShowMain] = useState(true);
+  const [showAddresses, setShowAddresses] = useState(false);
 
   useEffect(() => {
     fetchCustomerProfile()
@@ -73,21 +75,35 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
         <div className='_container'>
           <div className='user-profile-page_content'>
             <div className='menu'>
-              <button>
+              <button
+                onClick={() => {
+                  setShowAddresses((previous) => !previous);
+                  setShowMain((previous) => !previous);
+                }}
+              >
                 <p className='medium'>Main</p>
               </button>
-              <button>
+              <button
+                onClick={() => {
+                  setShowAddresses((previous) => !previous);
+                  setShowMain((previous) => !previous);
+                }}
+              >
                 <p className='medium'>Addresses</p>
               </button>
 
-              <p className='medium'>
+              <div className='medium'>
                 <UserPassword userData={profile} setProfile={setProfile} />
-              </p>
-              <Branch className='branch'/>
+              </div>
+              <Branch className='branch' />
             </div>
             <div className='data_container'>
-              <UserAddressesInfo userData={profile} setProfile={setProfile} />
-              {/* <UserMainInfo userData={profile} setProfile={setProfile} /> */}
+              {showAddresses && (
+                <UserAddressesInfo userData={profile} setProfile={setProfile} />
+              )}
+              {showMain && (
+                <UserMainInfo userData={profile} setProfile={setProfile} />
+              )}
             </div>
           </div>
         </div>
