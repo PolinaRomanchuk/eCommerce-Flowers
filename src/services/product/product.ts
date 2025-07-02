@@ -1,8 +1,4 @@
-import type {
-  RawProductInfo,
-  ProductInfo,
-  AttributeEnum,
-} from '../../types/product';
+import type { RawProductInfo, ProductInfo } from '../../types/product';
 import { generalAuthFetch } from '../../utils/auth/general-fetch';
 
 export const getProductById = async (
@@ -41,17 +37,10 @@ const getTypedResponse = (rawData: RawProductInfo): ProductInfo => {
   const color = rawData.masterVariant?.attributes?.find(
     (att) => att.name === 'color',
   )?.value;
-  const attributes = rawData.variants;
 
-  const model = rawData.masterVariant?.attributes?.find(
-    (att) => att.name === 'model',
+  const occasion = rawData.masterVariant?.attributes?.find(
+    (att) => att.name === 'occasion',
   )?.value;
-
-  const currentSizeObject = rawData.masterVariant.attributes?.find(
-    (attribut) => attribut.name === 'size',
-  )?.value;
-  const currentSize =
-    typeof currentSizeObject === 'object' ? currentSizeObject.label : '';
 
   return {
     id: rawData.id,
@@ -65,8 +54,7 @@ const getTypedResponse = (rawData: RawProductInfo): ProductInfo => {
       rawData.masterVariant?.images?.map((img: { url: string }) => img.url) ??
       [],
     colorAttribute: typeof color === 'string' ? color : '',
-    sizes: getSizes(attributes, currentSize),
-    modelAttribute: typeof model === 'string' ? model : '',
+    occasionAttribute: typeof occasion === 'object' ? occasion.key : '',
     masterVariant: rawData.masterVariant,
     variants: rawData.variants,
     categories: rawData.categories,
@@ -85,29 +73,6 @@ function getDiscountPercent(
     return `${discountPercent}%`;
   }
   return '';
-}
-
-function getSizes(
-  variants: {
-    attributes: {
-      name: string;
-      value: string | AttributeEnum;
-    }[];
-  }[],
-  currentSize: string,
-): string[] {
-  const sizesObject = variants.map(
-    (variant) =>
-      variant.attributes?.find((attribut) => attribut.name === 'size')?.value,
-  );
-
-  const sizes = sizesObject.map((size) =>
-    typeof size === 'object' && size !== null ? size.label : '',
-  );
-  sizes.push(currentSize);
-  sizes.sort((a, b) => b.localeCompare(a));
-
-  return sizes;
 }
 
 function getFormatPrice(price: number): string {

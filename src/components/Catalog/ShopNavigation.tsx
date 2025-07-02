@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import './shop-nav.scss';
-import { useEffect, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
+import { fetchCategoryName } from '../../services/categories/categories';
 
 type ShopNavigationProps = {
   category?: string;
@@ -18,7 +19,24 @@ export const ShopNavigation = ({
   setSubcategory,
 }: ShopNavigationProps): ReactElement => {
   let navigate = useNavigate();
-  useEffect(() => {}, [category]);
+  const [categoryName, setCategoryName] = useState('');
+  const [subCategoryName, setSubcategoryName] = useState('');
+
+  useEffect(() => {
+    (async function getCategoriesName(): Promise<void> {
+      if (category) {
+        const categoryname = (await fetchCategoryName(category)).toLowerCase();
+        setCategoryName(categoryname);
+      }
+
+      if (subcategory) {
+        const subcategoryname = (
+          await fetchCategoryName(subcategory)
+        ).toLowerCase();
+        setSubcategoryName(subcategoryname);
+      }
+    })();
+  }, [category, subcategory]);
 
   return (
     <>
@@ -34,9 +52,11 @@ export const ShopNavigation = ({
                 <p
                   className='extra-light'
                   onClick={() => {
-                    navigate('/catalog');
-
+                    navigate('/catalog', {
+                      state: { categoryId: '', subcategoryId: '' },
+                    });
                     setCategory?.('');
+                    setSubcategory?.('');
                   }}
                 >
                   shop
@@ -45,18 +65,35 @@ export const ShopNavigation = ({
                   <p
                     className='extra-light'
                     onClick={() => {
-                      setSubcategory?.('');
+                      navigate('/catalog', {
+                        state: { categoryId: category },
+                      });
+                      if (category) {
+                        setCategory?.(category);
+                        setSubcategory?.('');
+                      }
                     }}
                   >
-                    -{category}
+                    -{categoryName}
                   </p>
                 )}
                 {subcategory && (
                   <p
                     className='extra-light'
-                    
+                    onClick={() => {
+                      navigate('/catalog', {
+                        state: {
+                          categoryId: category,
+                          subcategoryId: subcategory,
+                        },
+                      });
+                      if (category && subcategory) {
+                        setCategory?.(category);
+                        setSubcategory?.(subcategory);
+                      }
+                    }}
                   >
-                    -{subcategory}
+                    -{subCategoryName}
                   </p>
                 )}
                 {productName && <p className='extra-light'>-{productName}</p>}

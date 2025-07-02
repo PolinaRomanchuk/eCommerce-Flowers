@@ -8,8 +8,10 @@
 
   .product-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     gap: 20px;
+    align-items: center;
+    height: 100vh;
 
     .product-photo-container {
       display: flex;
@@ -56,6 +58,7 @@
       flex-direction: column;
       color: $color-dark-green;
       gap: 20px;
+      width: 40%;
 
       .product-name {
         h2 {
@@ -88,6 +91,7 @@
           gap: 5px;
           .product-attribute-container {
             display: flex;
+            gap: 10px;
           }
         }
       }
@@ -112,7 +116,7 @@
   }
 
   .product-discount {
-    background-color: aquamarine;
+    background-color: $color-primary-pink;
   }
 }
 
@@ -140,8 +144,8 @@
   cursor: pointer;
 }
 
-.swiper-pagination-bullet-active{
- background: $color-dark-green !important;
+.swiper-pagination-bullet-active {
+  background: $color-dark-green !important;
 }
 
 @media (max-width: 1100px) {

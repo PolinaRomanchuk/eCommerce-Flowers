@@ -21,22 +21,18 @@ import type { ProductInfo } from '../../types/product';
 import type { CartInfo } from '../../types/cart';
 import Footer from '../Footer/Footer';
 import ShopNavigation from '../Catalog/ShopNavigation';
-import { fetchCategories, fetchCategoryName } from '../../services/categories/categories';
+import { fetchCategoryOrSubcategory } from '../../services/categories/categories';
 
 export const Product = ({ size }: ProductProps): ReactElement => {
   const { id } = useParams<{ id: string }>();
-
   const swiperReference = useRef<SwiperClass | null>(null);
   const swiperLargeReference = useRef<SwiperClass | null>(null);
   const [modalActive, setModalActive] = useState(false);
   const [largePhotoIndex, setLargePhotoIndex] = useState(0);
 
-  const [price, setPrice] = useState('');
   const [priceWithDiscount, setPriceWithDiscount] = useState('');
   const [procent, setProcent] = useState('');
   const [currency, setCurrency] = useState('');
-  const [images, setImages] = useState<string[]>([]);
-  const [color, setColor] = useState('white');
   const [currentVariantId, setCurrentVariantId] = useState(0);
   const navigate = useNavigate();
 
@@ -44,6 +40,10 @@ export const Product = ({ size }: ProductProps): ReactElement => {
   const [isInCart, setIsInCart] = useState(false);
   let [isExistCart, setIsExistCart] = useState(false);
   const [cart, setCart] = useState<CartInfo>();
+  const [category, setCategory] = useState('');
+  const [subcategory, setSubcategory] = useState('');
+
+  const [isCategorized, setIsCategorized] = useState(true);
 
   useEffect(() => {
     async function fetchProduct(): Promise<void> {
@@ -51,11 +51,18 @@ export const Product = ({ size }: ProductProps): ReactElement => {
         const productData = await getProductById(id);
 
         const cat = productData.data?.categories[0].id;
-        if(cat){
-        const category = await fetchCategoryName(cat);
-        console.log(category);
-        console.log(await fetchCategories());
+        const subcategory = productData.data?.categories[1].id;
 
+        if (cat && subcategory) {
+          const suborcat = await fetchCategoryOrSubcategory(cat);
+
+          if (suborcat === 'category') {
+            setCategory(cat);
+            setSubcategory(subcategory);
+          } else {
+            setCategory(subcategory);
+            setSubcategory(cat);
+          }
         }
 
         if (productData.error) {
@@ -66,25 +73,18 @@ export const Product = ({ size }: ProductProps): ReactElement => {
         if (productData && productData.data) {
           setProductData(productData.data);
 
-          setPrice(productData.data?.price);
           setCurrency(
             productData.data.currency === 'USD'
               ? '$'
               : productData.data.currency,
           );
 
-          if (productData.data.imageUrls) {
-            setImages(productData.data?.imageUrls);
-          }
           if (
             productData.data.priceWithDiscount &&
             productData.data.discountProcent
           ) {
             setPriceWithDiscount(productData.data.priceWithDiscount);
             setProcent(productData.data.discountProcent);
-          }
-          if (productData.data.colorAttribute) {
-            setColor(productData.data.colorAttribute);
           }
 
           setCurrentVariantId(productData.data.masterVariant.id);
@@ -162,28 +162,6 @@ export const Product = ({ size }: ProductProps): ReactElement => {
     return false;
   }
 
-  function handleVariant(size: string): void {
-    const masterSize = productData?.masterVariant.attributes?.find(
-      (x) => x.name === 'size',
-    )?.value;
-    if (typeof masterSize === 'object') {
-      if (productData?.masterVariant) {
-        masterSize.label === size
-          ? setCurrentVariantId(productData?.masterVariant.id)
-          : '';
-      }
-    }
-
-    productData?.variants.map((x) => {
-      const variantsize = x.attributes.find((y) => y.name === 'size')?.value;
-      if (typeof variantsize === 'object') {
-        if (productData?.variants) {
-          variantsize.label === size ? setCurrentVariantId(x.id) : '';
-        }
-      }
-    });
-  }
-
   async function handleRemoveFromCart(): Promise<void> {
     const cart = await getExistingCart();
     if (cart && productData) {
@@ -206,115 +184,121 @@ export const Product = ({ size }: ProductProps): ReactElement => {
       ) : (
         <Header size={size}></Header>
       )}
-      <ShopNavigation />
-      <div className='product-container'>
-        <div className='_container'>
-          <div className='product-content'>
-            <div className='product-photo-container'>
-              <div className='product-pictures-container'>
-                {images.map((img, index) => (
-                  <div
-                    key={index}
-                    className='product-picture-container'
-                    onClick={() => swiperReference.current?.slideTo(index)}
-                  >
-                    <img src={img} alt='photo' />
-                  </div>
-                ))}
-              </div>
-              <Swiper
-                rewind={true}
-                navigation={true}
-                modules={[Navigation]}
-                onSwiper={(swiper) => (swiperReference.current = swiper)}
-                className='product-current-photo-container'
-              >
-                {images.map((img, index) => (
-                  <SwiperSlide
-                    key={index}
-                    onClick={() => {
-                      setLargePhotoIndex(index);
-                      setModalActive(true);
-                    }}
-                  >
-                    <img src={img} alt='photo' />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-            <div className='product-info-container'>
-              <div className='product-name'>
-                <h2>{productData ? productData.name : ''}</h2>
-              </div>
-
-              {priceWithDiscount && (
-                <div className='product-discount-container'>
-                  <div className='product-old-price'>
-                    <p className='extra-light'>
-                      {priceWithDiscount ? `${price} ${currency}` : ''}
-                    </p>
-                  </div>
-                  <div className='product-discount'>{procent}</div>
+      <ShopNavigation
+        category={category}
+        subcategory={subcategory}
+        productName={productData?.name.toLocaleLowerCase()}
+        setCategory={setCategory}
+        setSubcategory={setSubcategory}
+       
+      />
+      {productData && (
+        <div className='product-container'>
+          <div className='_container'>
+            <div className='product-content'>
+              <div className='product-photo-container'>
+                <div className='product-pictures-container'>
+                  {productData?.imageUrls?.map((img, index) => (
+                    <div
+                      key={index}
+                      className='product-picture-container'
+                      onClick={() => swiperReference.current?.slideTo(index)}
+                    >
+                      <img src={img} alt='photo' />
+                    </div>
+                  ))}
                 </div>
-              )}
-              <div className='product-full-price'>
-                <h2>
-                  {priceWithDiscount
-                    ? `${priceWithDiscount} ${currency}`
-                    : `${price} ${currency}`}
-                </h2>
+                <Swiper
+                  rewind={true}
+                  navigation={true}
+                  modules={[Navigation]}
+                  onSwiper={(swiper) => (swiperReference.current = swiper)}
+                  className='product-current-photo-container'
+                >
+                  {productData?.imageUrls?.map((img, index) => (
+                    <SwiperSlide
+                      key={index}
+                      onClick={() => {
+                        setLargePhotoIndex(index);
+                        setModalActive(true);
+                      }}
+                    >
+                      <img src={img} alt='photo' />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
-              <div className='product-description'>
-                <p className='extra-light'>
-                  123 {productData ? productData.description : ''}
-                </p>
-              </div>
-
-              <div className='extra-description'>
-                <h3>Product information:</h3>
-                <div className='product-attributes-container'>
-                  {color && (
-                    <div className='product-attribute-container'>
-                      <p className='extra-light'> Color:</p>
-                      <p className='extra-light'>{color}</p>
-                    </div>
-                  )}
-                  {color && (
-                    <div className='product-attribute-container'>
-                      <p className='extra-light'> Color:</p>
-                      <p className='extra-light'>{color}</p>
-                    </div>
-                  )}
-                  {color && (
-                    <div className='product-attribute-container'>
-                      <p className='extra-light'> Color:</p>
-                      <p className='extra-light'>{color}</p>
-                    </div>
-                  )}
+              <div className='product-info-container'>
+                <div className='product-name'>
+                  <h2>{productData.name}</h2>
                 </div>
-              </div>
 
-              <div className='cart-configs-container'>
-                {!isInCart ? (
-                  <button
-                    className='add-to-cart-button'
-                    onClick={handleAddToCart}
-                  >
-                    Add to cart
-                  </button>
-                ) : (
-                  <button
-                    className='add-to-cart-button'
-                    onClick={handleRemoveFromCart}
-                  >
-                    Remove from cart
-                  </button>
+                {priceWithDiscount && (
+                  <div className='product-discount-container'>
+                    <div className='product-old-price'>
+                      <p className='extra-light'>
+                        {priceWithDiscount
+                          ? `${productData.price} ${currency}`
+                          : ''}
+                      </p>
+                    </div>
+                    <div className='product-discount'>{procent}</div>
+                  </div>
                 )}
+                <div className='product-full-price'>
+                  <h2>
+                    {priceWithDiscount
+                      ? `${priceWithDiscount} ${currency}`
+                      : `${productData.price} ${currency}`}
+                  </h2>
+                </div>
+                <div className='product-description'>
+                  <p className='extra-light'>{productData.description}</p>
+                </div>
+
+                <div className='extra-description'>
+                  <h3>Product information:</h3>
+                  <div className='product-attributes-container'>
+                    <div className='product-attribute-container'>
+                      <p className='extra-light'> Color: </p>
+                      <p className='extra-light'>
+                        {productData.colorAttribute}
+                      </p>
+                    </div>
+                    {productData.occasionAttribute && (
+                      <div className='product-attribute-container'>
+                        <p className='extra-light'> Occasion: </p>
+                        <p className='extra-light'>
+                          {productData.occasionAttribute}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className='cart-configs-container'>
+                  {!isInCart ? (
+                    <button
+                      className='add-to-cart-button'
+                      onClick={handleAddToCart}
+                    >
+                      Add to cart
+                    </button>
+                  ) : (
+                    <button
+                      className='add-to-cart-button'
+                      onClick={handleRemoveFromCart}
+                    >
+                      Remove from cart
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
       <Footer />
 
       {modalActive && (
@@ -331,7 +315,7 @@ export const Product = ({ size }: ProductProps): ReactElement => {
             }}
             className='large-photo-container'
           >
-            {images.map((img, index) => (
+            {productData?.imageUrls?.map((img, index) => (
               <SwiperSlide key={index}>
                 <img src={img} alt='photo' />
               </SwiperSlide>

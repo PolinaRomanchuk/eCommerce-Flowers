@@ -11,7 +11,7 @@ import FilterCatalog from './FilterCatalog';
 import SortCatalog from './SortCatalog';
 import SearchCatalog from './SearchCatalog';
 import BreadCrumbs from './BreadCrumbs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import {
   addProductToCart,
@@ -54,7 +54,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   const [subcategoryName, setSubcategoryName] = useState('');
   const [allSubcategories, setAllSubcategories] = useState<Category[]>();
   const [isFiltered, setIsFiltered] = useState(false);
-  const [isCategorized, setIsCategorized] = useState(false);
+  const [isCategorized, setIsCategorized] = useState(true);
 
   let [cart, setCart] = useState<CartInfo>();
   let [isExistCart, setIsExistCart] = useState(false);
@@ -67,9 +67,32 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
 
   const [isShowFilters, setIsShowFilters] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     (async function loadProducts(): Promise<void> {
+      const categoryFromState = location.state?.categoryId ?? null;
+      const subcategoryFromState = location.state?.subcategoryId ?? null;
+
+      if (categoryFromState === '' && category !== '') {
+        setCategory('');
+        setIsCategorized(false);
+      }
+
+      if (subcategoryFromState === '' && subcategory !== '') {
+        setSubcategory('');
+      }
+
+      if (categoryFromState && !category && !subcategory) {
+        setCategory(categoryFromState);
+        setIsCategorized(true);
+      }
+
+      if (subcategoryFromState && !category && !subcategory) {
+        setSubcategory(subcategoryFromState);
+        setIsCategorized(true);
+      }
+
       if (isCategorized || isFiltered) {
         const { products, total } = await fetchFilteredProducts(
           {
@@ -122,6 +145,8 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     isCategorized,
     filterAttributes,
     searchKeyword,
+    location.state?.categoryId,
+    location.state?.subcategoryId,
   ]);
 
   useEffect(() => {
@@ -301,8 +326,8 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
         <Header size={size} />
       )}
       <ShopNavigation
-        category={categoryName}
-        subcategory={subcategoryName}
+        category={category}
+        subcategory={subcategory}
         setCategory={setCategory}
         setSubcategory={setSubcategory}
       />

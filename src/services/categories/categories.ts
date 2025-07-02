@@ -15,6 +15,22 @@ export async function fetchCategoryName(id: string): Promise<string> {
     throw error;
   }
 }
+
+export async function fetchCategoryOrSubcategory(id: string): Promise<string> {
+  const url = `${process.env.REACT_APP_CT_API_URL}/${process.env.REACT_APP_CT_PROJECT_KEY}/categories/${id}`;
+  try {
+    const response = await generalAuthFetch(url, { method: 'GET' });
+    if (!response.ok) {
+      throw new Error('Failed to fetch products');
+    }
+    const data = await response.json();
+    const result = data.parent ? 'subcategory' : 'category';
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function fetchCategories(): Promise<{ data: Category[] }> {
   const url = `${process.env.REACT_APP_CT_API_URL}/${process.env.REACT_APP_CT_PROJECT_KEY}/categories`;
   try {

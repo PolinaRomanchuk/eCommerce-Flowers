@@ -41,7 +41,7 @@ export const BreadCrumbs = ({
     if (sub) {
       setAllSubcategories(sub);
     }
-  }, [category]);
+  }, [categories, category, setAllSubcategories]);
 
   return (
     <div className='catalog__bread'>
