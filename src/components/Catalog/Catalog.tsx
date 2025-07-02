@@ -73,6 +73,14 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     (async function loadProducts(): Promise<void> {
       const categoryFromState = location.state?.categoryId ?? null;
       const subcategoryFromState = location.state?.subcategoryId ?? null;
+      const typeFromState = location.state?.typeId ?? null;
+      if (typeFromState && filterAttributes.type !== typeFromState) {
+        setFilterAttributes((previous) => ({
+          ...previous,
+          type: typeFromState,
+        }));
+        setIsFiltered(true);
+      }
 
       if (categoryFromState === '' && category !== '') {
         setCategory('');
@@ -88,7 +96,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
         setIsCategorized(true);
       }
 
-      if (subcategoryFromState && !category && !subcategory) {
+      if (subcategoryFromState && !subcategory) {
         setSubcategory(subcategoryFromState);
         setIsCategorized(true);
       }
@@ -147,6 +155,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     searchKeyword,
     location.state?.categoryId,
     location.state?.subcategoryId,
+    location.state?.typeId,
   ]);
 
   useEffect(() => {

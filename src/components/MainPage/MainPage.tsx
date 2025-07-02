@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import './main.scss';
 import Header, { type HeaderProps } from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -7,43 +7,104 @@ import { ReactComponent as Branch } from './../../assets/Main/branch.svg';
 import { ReactComponent as BlackBranch } from './../../assets/Main/branch2.svg';
 import { ReactComponent as WhiteBranch } from './../../assets/Main/branch3.svg';
 import { ReactComponent as BrownBranch } from './../../assets/Main/branch6.svg';
-import Plant from '../../assets/Main/plant 1.png';
 import Pionies from '../../assets/Main/pion.jpg';
 
-import flowerImg from '../../assets/Main/flower.png';
-const flowers = Array(5).fill({ name: 'Spring flower', image: flowerImg });
+import {
+  fetchCategories,
+  fetchTypes,
+} from '../../services/categories/categories';
+import type { Category } from '../../types/categories';
+import { fetchFilteredProducts } from '../../services/catalog/catalog';
+import type { Product } from '../../types/catalog';
 
 export type MainPageProps = HeaderProps & {};
-type ProductCardProps = {
-  price: string;
-  image: string;
-};
 
 export const MainPage = ({ size }: MainPageProps): ReactElement => {
   const navigate = useNavigate();
 
-  const products = [
-    { id: 1, price: '$180.15', image: Plant },
-    { id: 2, price: '$180.10', image: Plant },
-    { id: 3, price: '$180.15', image: Plant },
-    { id: 4, price: '$90.00', image: Plant },
-    { id: 5, price: '$180.15', image: Plant },
-    { id: 6, price: '$180.15', image: Plant },
-    { id: 7, price: '$180.10', image: Plant },
-    { id: 8, price: '$180.15', image: Plant },
-  ];
+  const [flCategories, setFlCategories] = useState<Category[]>();
 
-  function ProductCard({ price, image }: ProductCardProps): ReactElement {
+  const [flowerCategoryId, setFlowerCategoryId] = useState('');
+  const [flowers, setFlowers] = useState<
+    { name: string; image: string; id: string }[]
+  >([]);
+
+  const [plants, setPlants] = useState<Product[]>([]);
+
+  async function getFlowersCategories(): Promise<void> {
+    const all = (await fetchCategories()).data;
+    const flowerscat = all.find(
+      (x) => !x.parent && x.name['en-US'] === 'Flowers',
+    )?.id;
+    if (flowerscat) {
+      setFlowerCategoryId(flowerscat);
+    }
+    const flowerCategories = all.filter((x) => x.parent?.id === flowerscat);
+    setFlCategories(flowerCategories);
+
+    const flowersWithImages = await Promise.all(
+      flowerCategories.map(async (category) => {
+        const image = await getFlowersCategoriesImg(category.id);
+        return {
+          name: category.name['en-US'],
+          image,
+          id: category.id,
+        };
+      }),
+    );
+
+    setFlowers(flowersWithImages);
+  }
+
+  async function getFlowersCategoriesImg(categoryId: string): Promise<string> {
+    const all = (
+      await fetchFilteredProducts({ categoryId: categoryId }, '', '')
+    ).products;
+    const img = all.find((x) => x)?.image;
+    return img ? img : '';
+  }
+
+  const cards = plants.map((plant) => {
     return (
-      <div className='product-card'>
+      <div
+        className='product-card'
+        onClick={() => navigate(`/product/${plant.id}`)}
+      >
         <div className='product-img_container'>
-          <img src={image} alt='Ceramic Plant' />
+          <img src={plant.image} alt='Plant' />
         </div>
-        <p className='medium'>Ceramic Plant</p>
-        <span className='extra-light'>{price}</span>
+        <p className='medium'>{plant.name}</p>
+        <span className='extra-light'>{plant.prices}</span>
       </div>
     );
+  });
+
+  async function getPlants(): Promise<void> {
+    const all = (await fetchCategories()).data;
+    const plantscat = all.find(
+      (x) => !x.parent && x.name['en-US'] === 'Plants',
+    )?.id;
+
+    const allplants = (
+      await fetchFilteredProducts({ categoryId: plantscat }, '', '')
+    ).products;
+
+    setPlants(allplants);
   }
+
+  async function handleClick(): Promise<void> {
+    const types = (await fetchTypes()).data;
+    const peony = types.find((x) => x.name === 'Peony')?.id;
+
+    navigate('/catalog', {
+      state: { typeId: peony },
+    });
+  }
+
+  useEffect(() => {
+    getFlowersCategories();
+    getPlants();
+  }, []);
 
   return (
     <>
@@ -128,7 +189,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                   </p>
                 </div>
                 <div className='main_about-us_button'>
-                  <button>
+                  <button onClick={() => navigate('/about')}>
                     <span>About us</span>
                   </button>
                 </div>
@@ -145,13 +206,11 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                 <h2>House Creative Plant</h2>
               </div>
               <div className='grid-container'>
-                {products.slice(0, 3).map((product) => (
-                  <ProductCard key={product.id} {...product} />
-                ))}
+                {cards.slice(0, 3)}
 
                 <div className='featured'>
                   <img src={Pionies} alt='Featured Plant' />
-                  <div className='pionies-label'>
+                  <div className='pionies-label' onClick={handleClick}>
                     <p className='extra-light'>We also have peonies</p>
                     <div className='pionies_button-container'>
                       <button>
@@ -161,15 +220,9 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                   </div>
                 </div>
 
-                <div className='right-column'>
-                  {products.slice(3, 4).map((product) => (
-                    <ProductCard key={product.id} {...product} />
-                  ))}
-                </div>
+                <div className='right-column'>{cards.slice(3, 4)}</div>
 
-                {products.slice(4).map((product) => (
-                  <ProductCard key={product.id} {...product} />
-                ))}
+                {cards.slice(4)}
               </div>
             </div>
           </section>
@@ -188,20 +241,31 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
           </section>
           <section className='main_flowers-category'>
             <div className='main_flowers-category_content'>
-
               <div className='flower-grid'>
-              <div className='left-text'>
-                <p className='extra-light'>Discover category</p>
-                <h2>All kind of Flowers</h2>
-                <BrownBranch />
-              </div>
-
-              {flowers.map((flower, index) => (
-                <div className='flower-card' key={index}>
-                  <img src={flower.image} alt={flower.name} />
-                  <p className='regular'>{flower.name}</p>
+                <div className='left-text'>
+                  <p className='extra-light'>Discover category</p>
+                  <h2>All kind of Flowers</h2>
+                  <BrownBranch />
                 </div>
-              ))}</div>
+
+                {flowers?.map((flower, index) => (
+                  <div
+                    className='flower-card'
+                    key={index}
+                    onClick={() => {
+                      navigate('/catalog', {
+                        state: {
+                          categoryId: flowerCategoryId,
+                          subcategoryId: flower.id,
+                        },
+                      });
+                    }}
+                  >
+                    <img src={flower.image} alt='' />
+                    <p className='regular'>{flower.name}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
         </div>
