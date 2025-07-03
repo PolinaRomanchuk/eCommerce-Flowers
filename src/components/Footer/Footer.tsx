@@ -6,8 +6,11 @@ import { ReactComponent as Mail } from './../../assets/Footer/circle-envelope.sv
 import { ReactComponent as Linkedin } from './../../assets/Footer/linkedin.svg';
 import { ReactComponent as Rss } from './../../assets/Footer/rss-logo.svg';
 import Logo from '../../assets/Header/logo.png';
+import { useNavigate } from 'react-router-dom';
 
 export const Footer = (): ReactElement => {
+  const navigate = useNavigate();
+
   return (
     <div className='footer'>
       <div className='_container'>
@@ -21,9 +24,26 @@ export const Footer = (): ReactElement => {
                 Made by Polina Romanchuk. To contact me, use the following links
               </p>
               <div className='icons-container'>
-                <Git className='footer-icon' />
-                <Mail className='footer-icon' />
-                <Linkedin className='footer-icon' />
+                <a
+                  href='https://github.com/PolinaRomanchuk'
+                  target='_blank'
+                  className='rss_link'
+                >
+                  <Git className='footer-icon' />
+                </a>
+                <a
+                  href='mailto:polina.romanchuk99@mail.ru'
+                  className='rss_link'
+                >
+                  <Mail className='footer-icon' />
+                </a>
+                <a
+                  href='https://www.linkedin.com/in/polina-romanchuk-2b2543286/'
+                  target='_blank'
+                  className='rss_link'
+                >
+                  <Linkedin className='footer-icon' />
+                </a>
               </div>
             </section>
             <section className='footer_about'>
@@ -38,7 +58,13 @@ export const Footer = (): ReactElement => {
                 with HTML, CSS, TypeScript, React & CommerceTools
               </p>
               <div className='icons-container'>
-                <Rss />
+                <a
+                  href='https://rs.school/'
+                  target='_blank'
+                  className='rss_link'
+                >
+                  <Rss className='footer-icon' />
+                </a>
               </div>
             </section>
             <section className='footer_pages'>
@@ -46,13 +72,62 @@ export const Footer = (): ReactElement => {
                 <h3>Pages</h3>
               </div>
               <div className='pages_container'>
-                <p className='extra-light'>home</p>
-                <p className='extra-light'>shop</p>
-                <p className='extra-light'>about</p>
-                <p className='extra-light'>cart</p>
-                <p className='extra-light'>user</p>
-                <p className='extra-light'>registration</p>
-                <p className='extra-light'>login</p>
+                <p
+                  className='extra-light'
+                  onClick={() => {
+                    navigate('/');
+                  }}
+                >
+                  home
+                </p>
+                <p
+                  className='extra-light'
+                  onClick={() => {
+                    navigate('/catalog');
+                  }}
+                >
+                  shop
+                </p>
+                <p
+                  className='extra-light'
+                  onClick={() => {
+                    navigate('/about');
+                  }}
+                >
+                  about
+                </p>
+                <p
+                  className='extra-light'
+                  onClick={() => {
+                    navigate('/cart');
+                  }}
+                >
+                  cart
+                </p>
+                <p
+                  className='extra-light'
+                  onClick={() => {
+                    navigate('/profile');
+                  }}
+                >
+                  user
+                </p>
+                <p
+                  className='extra-light'
+                  onClick={() => {
+                    navigate('/registration');
+                  }}
+                >
+                  registration
+                </p>
+                <p
+                  className='extra-light'
+                  onClick={() => {
+                    navigate('/login');
+                  }}
+                >
+                  login
+                </p>
               </div>
             </section>
           </div>
