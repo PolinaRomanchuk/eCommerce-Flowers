@@ -22,16 +22,16 @@ export type MainPageProps = HeaderProps & {};
 export const MainPage = ({ size }: MainPageProps): ReactElement => {
   const navigate = useNavigate();
 
-  const [flCategories, setFlCategories] = useState<Category[]>();
+  const [flowerSubcategories, setFlowerSubcategories] = useState<Category[]>();
 
   const [flowerCategoryId, setFlowerCategoryId] = useState('');
-  const [flowers, setFlowers] = useState<
+  const [flowerSubcategoryCards, setFlowerSubcategoryCards] = useState<
     { name: string; image: string; id: string }[]
   >([]);
 
   const [plants, setPlants] = useState<Product[]>([]);
 
-  async function getFlowersCategories(): Promise<void> {
+  async function loadFlowerSubcategoriesWithImages(): Promise<void> {
     const all = (await fetchCategories()).data;
     const flowerscat = all.find(
       (x) => !x.parent && x.name['en-US'] === 'Flowers',
@@ -40,11 +40,11 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
       setFlowerCategoryId(flowerscat);
     }
     const flowerCategories = all.filter((x) => x.parent?.id === flowerscat);
-    setFlCategories(flowerCategories);
+    setFlowerSubcategories(flowerCategories);
 
     const flowersWithImages = await Promise.all(
       flowerCategories.map(async (category) => {
-        const image = await getFlowersCategoriesImg(category.id);
+        const image = await getImageForFlowersCategory(category.id);
         return {
           name: category.name['en-US'],
           image,
@@ -53,10 +53,12 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
       }),
     );
 
-    setFlowers(flowersWithImages);
+    setFlowerSubcategoryCards(flowersWithImages);
   }
 
-  async function getFlowersCategoriesImg(categoryId: string): Promise<string> {
+  async function getImageForFlowersCategory(
+    categoryId: string,
+  ): Promise<string> {
     const all = (
       await fetchFilteredProducts({ categoryId: categoryId }, '', '')
     ).products;
@@ -64,7 +66,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
     return img ? img : '';
   }
 
-  const cards = plants.map((plant) => {
+  const plantCards = plants.map((plant) => {
     return (
       <div
         className='product-card'
@@ -75,7 +77,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
           <img src={plant.image} alt='Plant' />
         </div>
         <p className='medium'>{plant.name}</p>
-        <span className='extra-light'>{plant.prices}</span>
+        <span className='extra-light'>{plant.prices}$</span>
       </div>
     );
   });
@@ -93,7 +95,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
     setPlants(allplants);
   }
 
-  async function handleClick(): Promise<void> {
+  async function handlePeonyClick(): Promise<void> {
     const types = (await fetchTypes()).data;
     const peony = types.find((x) => x.name === 'Peony')?.id;
 
@@ -103,7 +105,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
   }
 
   useEffect(() => {
-    getFlowersCategories();
+    loadFlowerSubcategoriesWithImages();
     getPlants();
   }, []);
 
@@ -154,7 +156,6 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
             <div className='main_about-us-content'>
               <div className='main_about-us_header-container'>
                 <div className='main_about-us_under-header'>
-                  {' '}
                   <p className='extra-light'>Who we are</p>
                 </div>
                 <div className='main_about-us_header'>
@@ -173,9 +174,8 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                       target='_blank'
                       className='rss_link'
                     >
-                      {' '}
                       RSSchool
-                    </a>{' '}
+                    </a>
                     courses.
                   </p>
                   <p className='extra-light main_about-us_p'>
@@ -183,7 +183,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                     and is not a commercial product. Built with HTML, CSS,
                     TypeScript, React, and CommerceTools, it showcases practical
                     implementation of frontend development and e-commerce
-                    integration
+                    integration.
                   </p>
                   <p className='extra-light main_about-us_p'>
                     Thank you for visiting!
@@ -207,11 +207,11 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                 <h2>House Creative Plant</h2>
               </div>
               <div className='grid-container'>
-                {cards.slice(0, 4)}
+                {plantCards.slice(0, 4)}
 
                 <div className='featured'>
                   <img src={Pionies} alt='Featured Plant' />
-                  <div className='pionies-label' onClick={handleClick}>
+                  <div className='pionies-label' onClick={handlePeonyClick}>
                     <p className='extra-light'>We also have peonies</p>
                     <div className='pionies_button-container'>
                       <button>
@@ -221,7 +221,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                   </div>
                 </div>
 
-                {cards.slice(4, 8)}
+                {plantCards.slice(4, 8)}
               </div>
             </div>
           </section>
@@ -247,7 +247,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                   <BrownBranch />
                 </div>
 
-                {flowers?.map((flower, index) => (
+                {flowerSubcategoryCards?.map((flower, index) => (
                   <div
                     className='flower-card'
                     key={index}
