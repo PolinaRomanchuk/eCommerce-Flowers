@@ -110,33 +110,34 @@ export const UserMainInfo = ({
 
   return (
     <>
-      <h2>Main info</h2>
+      <div className='main-info-management'>
+        <h2>Main info</h2>
 
-      <div className='profile-summary'>
-        <div className='user_info'>
-          <p className='medium'>
-            Name: {userData.firstName} {userData.lastName}
-          </p>
+        <div className='profile-summary'>
+          <div className='user_info'>
+            <p className='medium'>
+              Name: {userData.firstName} {userData.lastName}
+            </p>
+          </div>
+          <div className='user_info'>
+            <p className='medium'>Email: {userData.email}</p>
+          </div>
+          <div className='user_info'>
+            <p className='medium'>
+              Date of Birth:
+              {userData.dateOfBirth
+                ? new Date(userData.dateOfBirth).toLocaleDateString()
+                : '-'}
+            </p>
+          </div>
         </div>
-        <div className='user_info'>
-          <p className='medium'>Email: {userData.email}</p>
-        </div>
-        <div className='user_info'>
-          <p className='medium'>
-            Date of Birth:
-            {userData.dateOfBirth
-              ? new Date(userData.dateOfBirth).toLocaleDateString()
-              : '-'}
-          </p>
+
+        <div className='button_container'>
+          <button type='button' onClick={() => openModal('profile')}>
+            Edit Profile
+          </button>
         </div>
       </div>
-
-      <div className='button_container'>
-        <button type='button' onClick={() => openModal('profile')}>
-          Edit Profile
-        </button>
-      </div>
-
       {modalActive && (
         <Modal
           active={modalActive}
@@ -230,7 +231,9 @@ export const UserMainInfo = ({
                     </span>
                   )}
                 </label>
-                <button type='submit'>Save</button>
+                <div className='button_container'>
+                  <button type='submit'>Save</button>
+                </div>
               </form>
             </div>
           )}

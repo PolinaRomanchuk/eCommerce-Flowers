@@ -12,6 +12,9 @@ import {
 } from '../../utils/validate';
 import { AuthContext } from '../../context/AuthContext';
 
+import { ReactComponent as EyeOpen } from './../../assets/Login/eye.svg';
+import { ReactComponent as EyeClose } from './../../assets/Login/crossed-eye.svg';
+
 type UserPasswordProps = {
   userData: UserProfile;
   setProfile: (profile: UserProfile) => void;
@@ -46,6 +49,9 @@ export const UserPassword = ({
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const auth = useContext(AuthContext);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handlePasswordSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
@@ -126,64 +132,119 @@ export const UserPassword = ({
         >
           {modalContent === 'password' && (
             <form className='password-form' onSubmit={handlePasswordSubmit}>
-              <label>
-                Current Password
-                <input
-                  type='password'
-                  value={currentPassword}
-                  onChange={(event) => {
-                    setCurrentPassword(event.target.value);
-                    setPasswordValidError(
-                      validateOldPassword(event.target.value),
-                    );
-                  }}
-                  required
-                />
+              <div className='password-input-container current'>
+                <div className='input-name'>
+                  <p> Current Password</p>
+                </div>
+                <div className='input_icon_visibility'>
+                  <input
+                    type={showCurrentPassword ? 'text' : 'password'}
+                    value={currentPassword}
+                    onChange={(event) => {
+                      setCurrentPassword(event.target.value);
+                      setPasswordValidError(
+                        validateOldPassword(event.target.value),
+                      );
+                    }}
+                    required
+                  />
+                  <div
+                    className='password-visibility-icon-container'
+                    onClick={() =>
+                      setShowCurrentPassword((previous) => !previous)
+                    }
+                  >
+                    {showCurrentPassword ? (
+                      <EyeOpen className='eye' />
+                    ) : (
+                      <EyeClose className='eye' />
+                    )}
+                  </div>
+                </div>
                 {passwordValidError && (
-                  <span className='password input-validation-span'>
+                  <span className='password input-validation-span extra-light'>
                     {passwordValidError}
                   </span>
                 )}
-              </label>
-              <label>
-                New Password
-                <input
-                  type='password'
-                  value={newPassword}
-                  onChange={(event) => {
-                    setNewPassword(event.target.value);
-                    setNewPasswordValidError(
-                      validatePassword(event.target.value, currentPassword),
-                    );
-                  }}
-                  required
-                />
+              </div>
+
+              <div className='password-input-container new-password'>
+                <div className='input-name'>
+                  <p> New Password</p>
+                </div>
+                <div className='input_icon_visibility'>
+                  <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    value={newPassword}
+                    onChange={(event) => {
+                      setNewPassword(event.target.value);
+                      setNewPasswordValidError(
+                        validatePassword(event.target.value),
+                      );
+                    }}
+                    required
+                  />
+                  <div
+                    className='password-visibility-icon-container'
+                    onClick={() => setShowNewPassword((previous) => !previous)}
+                  >
+                    {showNewPassword ? (
+                      <EyeOpen className='eye' />
+                    ) : (
+                      <EyeClose className='eye' />
+                    )}
+                  </div>
+                </div>
                 {newPasswordValidError && (
-                  <span className='password input-validation-span'>
+                  <span className='password input-validation-span extra-light'>
                     {newPasswordValidError}
                   </span>
                 )}
-              </label>
-              <label>
-                Confirm New Password
-                <input
-                  type='password'
-                  value={confirmPassword}
-                  onChange={(event) => {
-                    setConfirmPassword(event.target.value);
-                    setConfirmPasswordValidError(
-                      validatePasswordConfirm(event.target.value, newPassword),
-                    );
-                  }}
-                  required
-                />
+              </div>
+
+              <div className='password-input-container confirm-password'>
+                <div className='input-name'>
+                  <p>Confirm New Password</p>
+                </div>
+                <div className='input_icon_visibility'>
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={(event) => {
+                      setConfirmPassword(event.target.value);
+                      setConfirmPasswordValidError(
+                        validatePasswordConfirm(
+                          event.target.value,
+                          newPassword,
+                        ),
+                      );
+                    }}
+                    required
+                  />
+                  <div
+                    className='password-visibility-icon-container'
+                    onClick={() =>
+                      setShowConfirmPassword((previous) => !previous)
+                    }
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOpen className='eye' />
+                    ) : (
+                      <EyeClose className='eye' />
+                    )}
+                  </div>
+                </div>
                 {confirmPasswordValidError && (
-                  <span className='password input-validation-span'>
+                  <span className='password input-validation-span extra-light'>
                     {confirmPasswordValidError}
                   </span>
                 )}
-              </label>
-              <button type='submit'>Save Password</button>
+              </div>
+              <div className='button_container'>
+                <button type='submit'>
+                  <span>Save Password</span>
+                </button>
+              </div>
             </form>
           )}
           {modalContent === 'modal-message' && (

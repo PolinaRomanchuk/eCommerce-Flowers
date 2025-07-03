@@ -26,10 +26,18 @@
       p {
         color: $color-white;
       }
-      .branch{
+      .branch {
         position: absolute;
         right: 0;
         top: 10px;
+      }
+
+      button {
+        &:hover {
+          p {
+            color: $color-primary-pink;
+          }
+        }
       }
     }
     .data_container {
@@ -37,8 +45,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 700px;
-      height: 700px;
+      width: 600px;
+      height: 600px;
       background-color: $color-content-background;
       color: $color-dark-green;
     }
@@ -49,27 +57,12 @@
   form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    color: #fff;
+    gap: 40px;
 
     label {
       display: flex;
       flex-direction: column;
       font-weight: 600;
-
-      input {
-        margin-top: 0.5rem;
-        padding: 0.5rem 0.75rem;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        transition: border-color 0.2s ease;
-      }
-
-      input:focus {
-        border-color: #e8e6e6;
-        outline: none;
-      }
     }
 
     fieldset {
@@ -90,23 +83,6 @@
 
       label {
         flex: 1 1 calc(50% - 1rem);
-      }
-    }
-
-    button {
-      align-self: flex-start;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 4px;
-      background-color: #3c46ff;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #2a34cc;
       }
     }
   }
@@ -143,24 +119,65 @@
     gap: 20px;
     align-items: center;
     justify-content: center;
+    div {
+      width: 300px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 
   .toggle-password-btn {
     color: #fff;
     cursor: pointer;
   }
-
-  .password-form {
-    margin-top: 1rem;
-  }
 }
 
 .password-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 2rem;
-  color: #fff;
+  width: 430px;
+
+  .password-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    input {
+      border: 1px solid $color-dark-green;
+    }
+
+    .input-name {
+      p {
+        color: $color-dark-green;
+      }
+    }
+
+    .input_icon_visibility {
+      position: relative;
+      .password-visibility-icon-container {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        svg {
+          width: 100%;
+          height: 100%;
+          fill: $color-dark-green;
+        }
+      }
+    }
+
+    p {
+      color: $color-color-wrong;
+      text-align: justify;
+    }
+  }
+
+  .button_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 label {
@@ -168,44 +185,16 @@ label {
   flex-direction: column;
   font-weight: 600;
 
-  input {
-    margin-top: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: border-color 0.2s ease;
+  input,
+  select {
+    border: 1px solid $color-dark-green;
+    padding: 10px;
   }
 
   input:focus {
-    border-color: #e8e6e6;
+    border-color: $color-primary-pink;
     outline: none;
   }
-}
-
-/*
-.error {
-  color: #ff6b6b;
-  font-weight: 500;
-}
-  */
-
-.info {
-  color: #ffe66d;
-  font-weight: 500;
-  display: none;
-}
-
-.user-profile-page__modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .user-profile-page__modal {
@@ -251,11 +240,14 @@ label {
   }
 }
 
-.address-management {
+.address-management,
+.main-info-management {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 20px;
   width: 100%;
+  height: 90%;
 
   .button_container {
     display: flex;
@@ -278,6 +270,9 @@ label {
     flex-direction: column;
     gap: 10px;
     width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   &__item {
@@ -293,6 +288,9 @@ label {
     align-items: center;
     flex: 1;
     gap: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     .tag {
       background-color: $color-primary-pink;
@@ -329,91 +327,60 @@ label {
     }
   }
 
-  &__edit-form {
+  &__edit-form,
+  &__add-form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin: 1rem 0;
+    gap: 20px;
 
     label {
       display: flex;
       flex-direction: column;
-      font-weight: 600;
-      color: #fff;
+      gap: 10px;
+      color: $color-dark-green;
+    }
+    .input-validation-span {
+      color: $color-color-wrong;
+      text-align: justify;
+    }
 
-      input {
-        margin-top: 0.5rem;
-        padding: 0.5rem 0.75rem;
-        font-size: 1rem;
-        border: 1px solid #0b0202;
-        border-radius: 12px;
-        transition: border-color 0.2s ease;
+    .check-box-default-address {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      span {
+        display: flex;
+        width: 80%;
       }
-
-      input:focus {
-        border-color: #e8e6e6;
-        outline: none;
+      input {
+        width: 20px;
+        height: 20px;
       }
     }
 
-    button {
-      align-self: flex-start;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 4px;
-      background-color: #3c46ff;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #2a34cc;
-      }
+    .input-validation-span {
+      color: $color-color-wrong;
+      text-align: justify;
     }
   }
 }
 
 .modal-profile-container,
-.edit-address-modal-container {
+.edit-address-modal-container,
+.add-address-modal-container {
   width: 40vw;
   padding: 10px;
 
   .modal-profile-form {
-    color: black;
-  }
-}
-
-.input-validation-span {
-  color: red;
-  font-weight: 300;
-}
-
-.address-form.add {
-  .input-validation-span {
-    color: rgb(255 113 113);
-    font-weight: 300;
-    margin-top: 5px;
+    color: $color-dark-green;
   }
 }
 
 .edit-address-modal-container {
-  p {
-    color: black;
-  }
-
-  input {
-    margin-top: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: border-color 0.2s ease;
-  }
-
   label {
-    color: black;
+    color: $color-dark-green;
   }
 
   .check-box-default-address {
@@ -421,13 +388,15 @@ label {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-  }
-}
-
-.password-form {
-  padding: 10px;
-  label {
-    color: black;
+    width: 100%;
+    span {
+      display: flex;
+      width: 80%;
+    }
+    input {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 
@@ -443,20 +412,8 @@ label {
   }
 }
 
-.add-new-address-button-container {
+.button_container {
   display: flex;
-  margin-bottom: 20px;
-  gap: 20px;
-}
-
-.address-management__edit-form {
-  label {
-    input {
-      margin-top: 0.5rem;
-      padding: 0.5rem 0.75rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-  }
+  align-items: center;
+  justify-content: center;
 }

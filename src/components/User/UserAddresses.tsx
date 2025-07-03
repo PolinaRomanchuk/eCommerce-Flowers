@@ -122,17 +122,22 @@ export const UserAddressesInfo = ({
   };
 
   const handleAddFormChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ): void => {
-    const { name, value, type, checked } = event.target;
+    const { name, value, type } = event.target;
+    const isCheckbox = type === 'checkbox';
+    const checked = isCheckbox
+      ? (event.target as HTMLInputElement).checked
+      : undefined;
+
     setNewAddress((previous) => ({
       ...previous,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: isCheckbox ? checked : value,
     }));
   };
 
   const handleEditChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     field: keyof Address,
   ): void => {
     const { value } = event.target;
@@ -320,7 +325,7 @@ export const UserAddressesInfo = ({
                     }}
                   />
                   {streetValidError && (
-                    <span className='street input-validation-span'>
+                    <span className='street input-validation-span extra-light'>
                       {streetValidError}
                     </span>
                   )}
@@ -335,7 +340,7 @@ export const UserAddressesInfo = ({
                     }}
                   />
                   {cityValidError && (
-                    <span className='city input-validation-span'>
+                    <span className='city input-validation-span extra-light'>
                       {cityValidError}
                     </span>
                   )}
@@ -355,22 +360,27 @@ export const UserAddressesInfo = ({
                     }}
                   />
                   {postValidError && (
-                    <span className='postalCode input-validation-span'>
+                    <span className='postalCode input-validation-span extra-light'>
                       {postValidError}
                     </span>
                   )}
                 </label>
                 <label className='country-label'>
                   Country
-                  <input
+                  <select
                     value={editingValues.country}
                     onChange={(event) => {
                       handleEditChange(event, 'country');
                       setCountryValidError(validateCountry(event.target.value));
                     }}
-                  />
+                  >
+                    <option value=''>Select country</option>
+                    <option value='BY'>Belarus</option>
+                    <option value='PL'>Poland</option>
+                    <option value='GE'>Georgia</option>
+                  </select>
                   {countryValidError && (
-                    <span className='country input-validation-span'>
+                    <span className='country input-validation-span extra-light'>
                       {countryValidError}
                     </span>
                   )}
@@ -426,9 +436,11 @@ export const UserAddressesInfo = ({
                     }}
                   />
                 </label>
-                <button type='button' onClick={handleEditSave}>
-                  Save
-                </button>
+                <div className='button_container'>
+                  <button type='button' onClick={handleEditSave}>
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -447,7 +459,7 @@ export const UserAddressesInfo = ({
                     }}
                   />
                   {streetValidError && (
-                    <span className='street input-validation-span'>
+                    <span className='street input-validation-span extra-light'>
                       {streetValidError}
                     </span>
                   )}
@@ -463,7 +475,7 @@ export const UserAddressesInfo = ({
                     }}
                   />
                   {cityValidError && (
-                    <span className='city input-validation-span'>
+                    <span className='city input-validation-span extra-light'>
                       {cityValidError}
                     </span>
                   )}
@@ -484,23 +496,28 @@ export const UserAddressesInfo = ({
                     }}
                   />
                   {postValidError && (
-                    <span className='postalCode input-validation-span'>
+                    <span className='postalCode input-validation-span extra-light'>
                       {postValidError}
                     </span>
                   )}
                 </label>
                 <label className='country-label'>
                   Country
-                  <input
+                  <select
                     name='country'
                     value={newAddress.country}
                     onChange={(event) => {
                       handleAddFormChange(event);
                       setCountryValidError(validateCountry(event.target.value));
                     }}
-                  />
+                  >
+                    <option value=''>Select country</option>
+                    <option value='BY'>Belarus</option>
+                    <option value='PL'>Poland</option>
+                    <option value='GE'>Georgia</option>
+                  </select>
                   {countryValidError && (
-                    <span className='country input-validation-span'>
+                    <span className='country input-validation-span extra-light'>
                       {countryValidError}
                     </span>
                   )}
@@ -523,9 +540,11 @@ export const UserAddressesInfo = ({
                     onChange={handleAddFormChange}
                   />
                 </label>
-                <button type='button' onClick={handleAddFormSubmit}>
-                  Add
-                </button>
+                <div className='button_container'>
+                  <button type='button' onClick={handleAddFormSubmit}>
+                    Add
+                  </button>
+                </div>
               </div>
             </div>
           )}

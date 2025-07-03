@@ -6,6 +6,7 @@ import type {
   ProductProjectionsResponse,
 } from '../../types/catalog';
 import { generalAuthFetch } from '../../utils/auth/general-fetch';
+import { getFormatPrice } from '../../utils/format-attributes';
 
 export async function fetchAllProducts(
   page: number,
@@ -102,8 +103,9 @@ export async function fetchFilteredProducts(
 export function transformResponse(data: ProductProjectionsResponse): Product[] {
   return data.results.map((item: ProductProjection) => {
     const priceEntry = item.masterVariant?.prices?.[0];
-
+    let fullPrice = '';
     const originalPrice = priceEntry?.value.centAmount ?? 0;
+    fullPrice = getFormatPrice(originalPrice);
     const discountedPrice = priceEntry?.discounted?.value.centAmount;
 
     return {
@@ -111,8 +113,8 @@ export function transformResponse(data: ProductProjectionsResponse): Product[] {
       name: item.name?.['en-US'] ?? 'No name',
       description: item.description?.['en-US'] ?? '',
       image: item.masterVariant?.images?.[0]?.url ?? '',
-      prices: (originalPrice / 100).toFixed(2),
-      discountedPrice: discountedPrice && discountedPrice / 100,
+      prices: fullPrice,
+      discountedPrice: getFormatPrice(discountedPrice),
       masterVariantId: item.masterVariant?.id,
     };
   });
