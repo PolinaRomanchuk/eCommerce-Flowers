@@ -87,7 +87,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
     )?.id;
 
     const allplants = (
-      await fetchFilteredProducts({ categoryId: plantscat }, '', '')
+      await fetchFilteredProducts({ categoryId: plantscat }, '', '', 1, 8)
     ).products;
 
     setPlants(allplants);
@@ -207,7 +207,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                 <h2>House Creative Plant</h2>
               </div>
               <div className='grid-container'>
-                {cards.slice(0, 3)}
+                {cards.slice(0, 4)}
 
                 <div className='featured'>
                   <img src={Pionies} alt='Featured Plant' />
@@ -221,9 +221,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                   </div>
                 </div>
 
-                <div className='right-column'>{cards.slice(3, 4)}</div>
-
-                {cards.slice(4)}
+                {cards.slice(4, 8)}
               </div>
             </div>
           </section>
