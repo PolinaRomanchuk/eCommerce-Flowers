@@ -13,6 +13,7 @@
     flex-direction: column;
     justify-content: space-between;
     min-height: 600px;
+    gap: 70px;
   }
 
   .products-container {
@@ -21,6 +22,11 @@
     gap: 30px;
 
     .product-card-list {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: 500px;
     }
   }
 
@@ -58,6 +64,8 @@
     justify-content: space-evenly;
     background-color: $color-dark-green;
     color: $color-white;
+    align-items: center;
+    gap: 10px;
 
     button {
       border-color: $color-white;
@@ -95,7 +103,7 @@
     display: flex;
     padding: 10px;
     background-color: $color-primary-pink;
-    border-radius: 10px;
+    border-radius: 2px;
     position: relative;
     margin-left: 5px;
     .promo-name {
@@ -108,8 +116,10 @@
       position: absolute;
       top: 0;
       right: 0;
-      color: black;
       padding-top: 0;
+      &:hover {
+        color: $color-white;
+      }
     }
   }
 }

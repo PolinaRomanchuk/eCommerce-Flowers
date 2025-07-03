@@ -29,6 +29,14 @@ export const Cart = ({ size }: CartProps): ReactElement => {
   const [promoData, setPromodata] = useState<DiscountCode[]>();
   const [modalActive, setModalActive] = useState(false);
   const [cart, setCart] = useState<CartInfo>();
+  const [modalContent, setModalContent] = useState<
+    'delete-cart' | 'modal-message' | null
+  >(null);
+
+  const openModal = (type: 'delete-cart' | 'modal-message'): void => {
+    setModalContent(type);
+    setModalActive(true);
+  };
 
   useEffect(() => {
     async function fetchCart(): Promise<void> {
@@ -120,6 +128,18 @@ export const Cart = ({ size }: CartProps): ReactElement => {
     }
   };
 
+  async function handlePlaceOrder(): Promise<void> {
+    openModal('modal-message');
+    const data = await removeCart(cartId, cartVersion);
+    if (data.data) {
+      setCartVersion(data.data.version);
+      setCartIsEmpty(true);
+      setCartItems([]);
+      setCart(undefined);
+      localStorage.removeItem('promo-code-name');
+    }
+  }
+
   return (
     <>
       <Header size={size} newCounter={cart?.totalLineItemQuantity} />
@@ -179,7 +199,10 @@ export const Cart = ({ size }: CartProps): ReactElement => {
                         <div className='total-price'>{totalCartPrice}$</div>
                       )}
 
-                      <button className='place-order-button'>
+                      <button
+                        className='place-order-button'
+                        onClick={handlePlaceOrder}
+                      >
                         <span>Place order</span>
                       </button>
                     </div>
@@ -208,7 +231,7 @@ export const Cart = ({ size }: CartProps): ReactElement => {
                 </div>
                 <button
                   className='remove-all-items-button'
-                  onClick={() => setModalActive(true)}
+                  onClick={() => openModal('delete-cart')}
                 >
                   <span>Clear Shopping Cart</span>
                 </button>
@@ -219,18 +242,31 @@ export const Cart = ({ size }: CartProps): ReactElement => {
       </div>
 
       <Footer />
+
       {modalActive && (
         <Modal active={modalActive} setActive={setModalActive}>
-          <div className='modal-message-empty-cart-container'>
-            <div className='modal-message-empty-cart'>
-              Are you sure you want to empty the cart?
+          {modalContent === 'delete-cart' && (
+            <div className='modal-message-empty-cart-container'>
+              <div className='modal-message-empty-cart'>
+                Are you sure you want to empty the cart?
+              </div>
+              <div className='clear-cart-button-container'>
+                <button
+                  className='clear-cart-button'
+                  onClick={handleRemoveCart}
+                >
+                  <span>Yes</span>
+                </button>
+              </div>
             </div>
-            <div className='clear-cart-button-container'>
-              <button className='clear-cart-button' onClick={handleRemoveCart}>
-                <span>Yes</span>
-              </button>
+          )}
+          {modalContent === 'modal-message' && (
+            <div className='-modal-message-container'>
+              <div className='modal-message-text'>
+                Your order has been accepted
+              </div>
             </div>
-          </div>
+          )}
         </Modal>
       )}
     </>
