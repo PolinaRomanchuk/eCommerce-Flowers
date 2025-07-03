@@ -22,8 +22,8 @@ export const BreadCrumbs = ({
   setAllSubcategories: setAllSubcategories,
 }: BreadCrumbsProps): ReactElement => {
   let [title, setTitle] = useState('All');
-
   const [categories, setCategories] = useState<Category[]>();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     async function fetchData(): Promise<void> {
@@ -43,35 +43,43 @@ export const BreadCrumbs = ({
     }
   }, [categories, category, setAllSubcategories]);
 
+  const rootCategories = categories?.filter((cat) => !cat.parent) || [];
+
+  const handleSelect = (id: string, name: string): void => {
+    setTitle(name);
+    setCategory(id);
+    setIsCategoried(!!id);
+    setIsOpen(false);
+    if (!id) {
+      setSubcategory('');
+      setAllSubcategories(undefined);
+    }
+  };
+
   return (
     <div className='catalog__bread'>
-      <div className='catalog__bread__container'>
-        <div className='catalog__filter__category'>
-          <label className='catalog__filter__type__label' htmlFor=''>
-            Category:
-          </label>
-          <select
-          key={category}
-            value={category}
-            onChange={async (event) => {
-              const selected = event.target.value;
-              setTitle('All');
-              setCategory(selected);
-              setIsCategoried(!!selected);
-              if (!selected) {
-                setSubcategory('');
-                setAllSubcategories(undefined);
-              }
-            }}
-          >
-            <option value=''>All</option>
-            {categories
-              ?.filter((cat) => !cat.parent)
-              .map((cat) => (
-                <option value={cat.id} key={cat.id}>{cat.name['en-US']}</option>
-              ))}
-          </select>
-        </div>
+      <h3> Category:</h3>
+      <div className='custom-select' onClick={() => setIsOpen(!isOpen)}>
+        <div className='custom-select__selected'>{title}</div>
+        {isOpen && (
+          <ul className='custom-select__dropdown'>
+            <li
+              className={!category ? 'active' : ''}
+              onClick={() => handleSelect('', 'All')}
+            >
+              All
+            </li>
+            {rootCategories.map((cat) => (
+              <li
+                key={cat.id}
+                className={category === cat.id ? 'active' : ''}
+                onClick={() => handleSelect(cat.id, cat.name['en-US'])}
+              >
+                {cat.name['en-US']}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

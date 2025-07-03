@@ -118,5 +118,16 @@
         }
       }
     }
+
+    .under-text {
+      width: 95%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      border-top: 1px $color-white solid;
+      border-bottom: 1px $color-white solid;
+      padding: 10px;
+    }
   }
 }

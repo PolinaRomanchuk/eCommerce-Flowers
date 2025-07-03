@@ -33,14 +33,15 @@ export const SortCatalog = ({
         className='catalog__sort-button'
         onClick={() => setIsOpen((previous) => !previous)}
       >
-        <SortIcon className='conf-icon' />
         <span>
+          <SortIcon className='conf-icon' />
+
           {sortAttributes === 'price asc' || sortAttributes === 'price desc'
-            ? 'Price'
+            ? 'price'
             : sortAttributes === 'name.en-US asc' ||
                 sortAttributes === 'name.en-US desc'
-              ? 'Name'
-              : 'Sort'}
+              ? 'name'
+              : 'sort'}
         </span>
       </button>
       {isOpen && (

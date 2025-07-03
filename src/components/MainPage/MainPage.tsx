@@ -174,7 +174,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                       target='_blank'
                       className='rss_link'
                     >
-                      RSSchool
+                      {` RSSchool `}
                     </a>
                     courses.
                   </p>

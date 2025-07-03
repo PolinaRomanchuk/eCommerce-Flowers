@@ -342,124 +342,148 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
       />
       <section className='catalog'>
         <div className='_container'>
-          <div className='configur_container'>
-            <div className='first'>
-              <button
-                onClick={() => {
-                  setIsShowFilters((previous) => !previous);
-                }}
-              >
-                <span>
-                  <FiltersIcon className='conf-icon' />
-                  {isShowFilters ? 'hide filters' : 'show filters'}
-                </span>
-              </button>
-              <div className='search-container'>
-                <SearchCatalog
-                  searchKeyword={searchKeyword}
-                  setSearchKeyword={setSearchKeyword}
-                  setIsFiltered={setIsFiltered}
-                />
-                <button className='search-button'>
-                  <SearchIcon className='conf-icon' />
+          <div
+            className={
+              isShowFilters ? 'catalog_content' : 'catalog_content six'
+            }
+          >
+            <div className='configur_container'>
+              <div className='first'>
+                <button
+                  onClick={() => {
+                    setIsShowFilters((previous) => !previous);
+                  }}
+                >
+                  <span>
+                    <FiltersIcon className='conf-icon' />
+                    {isShowFilters ? 'hide filters' : 'show filters'}
+                  </span>
                 </button>
+                <div className='search-container'>
+                  <SearchCatalog
+                    searchKeyword={searchKeyword}
+                    setSearchKeyword={setSearchKeyword}
+                    setIsFiltered={setIsFiltered}
+                  />
+                  <button className='search-button'>
+                    <SearchIcon className='conf-icon' />
+                  </button>
+                </div>
               </div>
+
+              <SortCatalog
+                sortAttributes={sortAttributes}
+                setSortAttributes={setSortAttributes}
+                setIsFiltered={setIsFiltered}
+              />
             </div>
 
-            <SortCatalog
-              sortAttributes={sortAttributes}
-              setSortAttributes={setSortAttributes}
-              setIsFiltered={setIsFiltered}
-            />
-          </div>
+            {category && (
+              <div className='categories-container'>
+                <h3>{categoryName}</h3>
+                <div className='sub-categories-list'>
+                  {allSubcategories?.map((subcat) => (
+                    <p
+                      className='extra-light sub-category'
+                      key={subcat.id}
+                      onClick={() => {
+                        setSubcategory(subcat.id);
+                        setIsCategorized(true);
+                      }}
+                    >
+                      {subcat.name['en-US'].toLowerCase()}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
 
-          {category && (
-            <div className='categories-container'>
-              <h3>{categoryName}</h3>
-              <div className='sub-categories-list'>
-                {allSubcategories?.map((subcat) => (
-                  <p
-                    className='extra-light sub-category'
-                    key={subcat.id}
-                    onClick={() => {
-                      setSubcategory(subcat.id);
-                      setIsCategorized(true);
-                    }}
+            <div
+              className={
+                isShowFilters
+                  ? 'cards_with_filtres_container'
+                  : 'cards_with_filtres_container six'
+              }
+            >
+              {isShowFilters && (
+                <div className='filters_container'>
+                  <FilterCatalog
+                    filterAttributes={filterAttributes}
+                    setFilterAttributes={setFilterAttributes}
+                    setIsFiltered={setIsFiltered}
+                  />
+                  <BreadCrumbs
+                    category={category}
+                    setCategory={setCategory}
+                    subcategory={subcategory}
+                    setSubcategory={setSubcategory}
+                    setIsCategoried={setIsCategorized}
+                    allSubcategories={allSubcategories}
+                    setAllSubcategories={setAllSubcategories}
+                  />
+                </div>
+              )}
+
+              {cards.length > 0 ? (
+                <div
+                  className={
+                    isShowFilters
+                      ? 'cards_flex_container'
+                      : 'cards_flex_container six'
+                  }
+                >
+                  <div
+                    className={
+                      isShowFilters ? 'catalog__cards' : 'catalog__cards six'
+                    }
                   >
-                    {subcat.name['en-US'].toLowerCase()}
+                    {cards}
+                  </div>
+                </div>
+              ) : (
+                <div className='no-products_container'>
+                  <p className='extra-light'>
+                    There are no products according to the specified filters,
+                    try other search parameters
                   </p>
-                ))}
-              </div>
+                </div>
+              )}
             </div>
-          )}
-
-          <div className='cards_with_filtres_pagination_container'>
-            {isShowFilters && (
-              <div className='filters_container'>
-                <FilterCatalog
-                  filterAttributes={filterAttributes}
-                  setFilterAttributes={setFilterAttributes}
-                  setIsFiltered={setIsFiltered}
-                />
-                <BreadCrumbs
-                  category={category}
-                  setCategory={setCategory}
-                  subcategory={subcategory}
-                  setSubcategory={setSubcategory}
-                  setIsCategoried={setIsCategorized}
-                  allSubcategories={allSubcategories}
-                  setAllSubcategories={setAllSubcategories}
-                />
-              </div>
-            )}
-
-            {cards.length > 0 ? (
-              <div
-                className={
-                  isShowFilters ? 'catalog__cards' : 'catalog__cards six'
-                }
-              >
-                {cards}
-              </div>
-            ) : (
-              <div className='no-products_container'>
-                <p className='extra-light'>
-                  There are no products according to the specified filters, try
-                  other search parameters
-                </p>
-              </div>
-            )}
-          </div>
-          <div className='pagination-container'>
-            <button
-              className='pagination-button'
-              onClick={() =>
-                setCurrentPage((previous) => Math.max(previous - 1, 1))
-              }
-              disabled={currentPage === 1}
-            >
-              <Left />
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <div className='pagination-container'>
               <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={page === currentPage ? 'active-page' : 'page'}
+                className='pagination-button'
+                onClick={() =>
+                  setCurrentPage((previous) => Math.max(previous - 1, 1))
+                }
+                disabled={currentPage === 1}
               >
-                {page}
+                <Left />
               </button>
-            ))}
 
-            <button
-              className='pagination-button'
-              onClick={() =>
-                setCurrentPage((previous) => Math.min(previous + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-            >
-              <Right />
-            </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={page === currentPage ? 'active-page' : 'page'}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+
+              <button
+                className='pagination-button'
+                onClick={() =>
+                  setCurrentPage((previous) =>
+                    Math.min(previous + 1, totalPages),
+                  )
+                }
+                disabled={currentPage === totalPages}
+              >
+                <Right />
+              </button>
+            </div>
           </div>
         </div>
       </section>
