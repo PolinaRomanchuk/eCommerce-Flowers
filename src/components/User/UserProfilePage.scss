@@ -13,6 +13,11 @@
     align-content: center;
     justify-content: center;
 
+    @media (max-width: 1100px) {
+      justify-content: center;
+      flex-direction: column;
+    }
+
     .menu {
       background-color: $color-dark-green;
       display: flex;
@@ -39,6 +44,28 @@
           }
         }
       }
+
+      @media (max-width: 1100px) {
+        height: 70px;
+        flex-direction: row;
+        svg {
+          display: none;
+        }
+      }
+      @media (max-width: 770px) {
+        button {
+          max-width: 100px;
+        }
+      }
+      @media (max-width: 390px) {
+        gap: 0;
+        button {
+          width: 80px;
+          p {
+            font-size: 10px;
+          }
+        }
+      }
     }
     .data_container {
       display: flex;
@@ -49,6 +76,9 @@
       height: 600px;
       background-color: $color-content-background;
       color: $color-dark-green;
+      @media (max-width: 710px) {
+        width: 100%;
+      }
     }
   }
 }
@@ -88,7 +118,7 @@
 }
 
 .password-form {
-  width: 430px;
+  width: 100%;
 
   .password-input-container {
     display: flex;
@@ -216,6 +246,15 @@ label {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    .address {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 500px) {
+      flex-wrap: wrap;
+      flex-direction: row;
+    }
 
     .tag {
       background-color: $color-primary-pink;
@@ -295,7 +334,7 @@ label {
 .modal-profile-container,
 .edit-address-modal-container,
 .add-address-modal-container {
-  width: 40vw;
+  width: 100%;
   padding: 10px;
 
   .modal-profile-form {
