@@ -97,7 +97,24 @@
   }
 }
 @media (max-width: 450px) {
+  .card-content {
+    min-height: 920px;
+    align-items: center;
+  }
   .product-card-content {
     gap: 0px;
+  }
+}
+
+@media (max-width: 380px) {
+  .product-card-container {
+    padding: 0px;
+  }
+  .product-card-info-container {
+    .medium,
+    p,
+    .product-color {
+      font-size: 10px;
+    }
   }
 }
