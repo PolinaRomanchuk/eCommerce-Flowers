@@ -2,6 +2,10 @@
 
 .about {
   color: $color-dark-green;
+
+  svg {
+    overflow: visible;
+  }
   .about-team_header_container {
     display: flex;
     align-items: center;
@@ -159,6 +163,18 @@
         }
       }
     }
+
+    @media (max-width: 680px) {
+      flex-direction: column;
+      .about-team-prodject_text_container {
+        width: auto;
+        .qustion_content {
+          h2 {
+            text-align: justify;
+          }
+        }
+      }
+    }
   }
 
   .about-my-contribution {
@@ -187,6 +203,9 @@
         padding: 20px;
         gap: 20px;
         height: 400px;
+        svg {
+          overflow: visible;
+        }
 
         .icon_container {
           display: flex;
@@ -210,6 +229,25 @@
           path {
             fill: $color-dark-green;
           }
+        }
+      }
+    }
+
+    @media (max-width: 680px) {
+      gap: 20px;
+      .about-my-contribution_text_container {
+        flex-direction: column;
+        .my-team-work_container,
+        .my-own-work_container {
+          padding: 10px;
+          margin: 20px;
+        }
+      }
+    }
+    @media (max-width: 400px) {
+      .about-my-contribution_text_container {
+        p {
+          font-size: 14px;
         }
       }
     }
