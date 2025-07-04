@@ -35,13 +35,15 @@ export const SortCatalog = ({
       >
         <span>
           <SortIcon className='conf-icon' />
-
-          {sortAttributes === 'price asc' || sortAttributes === 'price desc'
-            ? 'price'
-            : sortAttributes === 'name.en-US asc' ||
-                sortAttributes === 'name.en-US desc'
-              ? 'name'
-              : 'sort'}
+          <p>
+            {' '}
+            {sortAttributes === 'price asc' || sortAttributes === 'price desc'
+              ? 'price'
+              : sortAttributes === 'name.en-US asc' ||
+                  sortAttributes === 'name.en-US desc'
+                ? 'name'
+                : 'sort'}
+          </p>
         </span>
       </button>
       {isOpen && (

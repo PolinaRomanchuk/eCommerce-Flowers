@@ -65,7 +65,9 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
 
   const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
 
-  const [isShowFilters, setIsShowFilters] = useState(true);
+  const [isShowFilters, setIsShowFilters] = useState(
+    () => window.innerWidth > 550,
+  );
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -170,6 +172,14 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
       setSubcategoryName('');
     }
   }, [category, subcategory]);
+
+  useEffect(() => {
+    if (size <= 550) {
+      setIsShowFilters(false);
+    } else {
+      setIsShowFilters(true);
+    }
+  }, [size]);
 
   function checkIfProductInCart(
     currproductId: string,
@@ -356,7 +366,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                 >
                   <span>
                     <FiltersIcon className='conf-icon' />
-                    {isShowFilters ? 'hide filters' : 'show filters'}
+                    <p>{isShowFilters ? 'hide filters' : 'show filters'}</p>
                   </span>
                 </button>
                 <div className='search-container'>
