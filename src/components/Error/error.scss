@@ -34,4 +34,22 @@
       }
     }
   }
+
+  @media (max-width: 1300px) {
+    .error_img_container {
+      display: none;
+    }
+  }
+
+  @media (max-width: 650px) {
+    h1 {
+      font-size: 30px;
+    }
+    .error_text_container {
+      width: 100% !important;
+    }
+    .error_header {
+      font-size: 150px !important;
+    }
+  }
 }
