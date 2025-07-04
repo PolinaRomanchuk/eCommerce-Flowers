@@ -13,6 +13,7 @@ import UserAddressesInfo from './UserAddresses';
 import UserPassword from './UserPassword';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Footer/Footer';
+import Spinner from '../../assets/spinner.gif';
 
 import { ReactComponent as Branch } from './../../assets/Main/branch3.svg';
 
@@ -61,9 +62,12 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
     return (
       <>
         <Header size={size} />
-        <div className='user-profile-page'>
-          <p>Loading...</p>
+        <div className='spinner_container'>
+          <div className='img-container'>
+            <img src={Spinner} alt='spinner' />
+          </div>
         </div>
+        <Footer />
       </>
     );
   }

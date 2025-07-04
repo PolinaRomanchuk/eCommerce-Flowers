@@ -1,7 +1,7 @@
 @use '../../styles/variables' as *;
 
 .header {
-  padding: 20px 0 20px 0;
+  padding: 20px;
   color: $color-dark-green;
   height: 80px;
 
@@ -234,6 +234,7 @@
   .icon-menu {
     display: none;
     background-color: unset;
+    border: unset;
 
     @media (max-width: 880px) {
       display: block;

@@ -23,6 +23,8 @@ import Footer from '../Footer/Footer';
 import ShopNavigation from '../Catalog/ShopNavigation';
 import { fetchCategoryOrSubcategory } from '../../services/categories/categories';
 
+import Spinner from '../../assets/spinner.gif';
+
 export const Product = ({ size }: ProductProps): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const swiperReference = useRef<SwiperClass | null>(null);
@@ -42,8 +44,6 @@ export const Product = ({ size }: ProductProps): ReactElement => {
   const [cart, setCart] = useState<CartInfo>();
   const [category, setCategory] = useState('');
   const [subcategory, setSubcategory] = useState('');
-
-  const [isCategorized, setIsCategorized] = useState(true);
 
   useEffect(() => {
     async function fetchProduct(): Promise<void> {
@@ -190,8 +190,16 @@ export const Product = ({ size }: ProductProps): ReactElement => {
         productName={productData?.name.toLocaleLowerCase()}
         setCategory={setCategory}
         setSubcategory={setSubcategory}
-       
       />
+      {!productData && (
+        <div className='spinner_container'>
+          {' '}
+          <div className='img-container'>
+            <img src={Spinner} alt='spinner' />
+          </div>
+        </div>
+      )}
+      
       {productData && (
         <div className='product-container'>
           <div className='_container'>
