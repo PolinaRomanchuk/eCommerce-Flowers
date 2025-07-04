@@ -416,21 +416,40 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
               }
             >
               {isShowFilters && (
-                <div className='filters_container'>
-                  <FilterCatalog
-                    filterAttributes={filterAttributes}
-                    setFilterAttributes={setFilterAttributes}
-                    setIsFiltered={setIsFiltered}
-                  />
-                  <BreadCrumbs
-                    category={category}
-                    setCategory={setCategory}
-                    subcategory={subcategory}
-                    setSubcategory={setSubcategory}
-                    setIsCategoried={setIsCategorized}
-                    allSubcategories={allSubcategories}
-                    setAllSubcategories={setAllSubcategories}
-                  />
+                <div
+                  onClick={() => setIsShowFilters(false)}
+                  className={
+                    size <= 540
+                      ? 'filters-wrapper-overlay '
+                      : 'filters-wrapper-overlay hidden'
+                  }
+                >
+                  <div className='filters_container'>
+                    {size <= 540 && (
+                      <div className='button_container'>
+                        <button
+                          className='icon'
+                          onClick={() => setIsShowFilters(false)}
+                        >
+                          x
+                        </button>
+                      </div>
+                    )}
+                    <FilterCatalog
+                      filterAttributes={filterAttributes}
+                      setFilterAttributes={setFilterAttributes}
+                      setIsFiltered={setIsFiltered}
+                    />
+                    <BreadCrumbs
+                      category={category}
+                      setCategory={setCategory}
+                      subcategory={subcategory}
+                      setSubcategory={setSubcategory}
+                      setIsCategoried={setIsCategorized}
+                      allSubcategories={allSubcategories}
+                      setAllSubcategories={setAllSubcategories}
+                    />
+                  </div>
                 </div>
               )}
 

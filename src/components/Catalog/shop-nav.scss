@@ -25,6 +25,14 @@
           }
         }
       }
+      @media (max-width: 520px) {
+        width: auto;
+        min-width: unset;
+        .nav-links_container{
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
     }
   }
 }
