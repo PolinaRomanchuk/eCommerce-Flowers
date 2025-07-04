@@ -87,6 +87,37 @@ body {
       justify-content: center;
     }
   }
+
+  @media (max-width: 530px) {
+    justify-content: center;
+    background-position: right;
+    color: $color-white;
+
+    .main_welcome_content {
+      width: 90%;
+      margin: 0;
+
+      .main_welcome_header_container {
+        width: 100%;
+        .main_welcome_header {
+          width: 90%;
+          text-align: center;
+        }
+      }
+      .main_welcome_customers-experience {
+        .separator {
+          background-color: $color-white;
+        }
+      }
+      button {
+        border-color: $color-white;
+        color: $color-white;
+        &:hover {
+          border-color: $color-dark-green;
+        }
+      }
+    }
+  }
 }
 
 .main_about-us {
@@ -107,6 +138,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
 
     .main_about-us_text {
       height: 150px;
@@ -121,6 +153,30 @@ body {
             color: $color-dark-green;
           }
         }
+      }
+    }
+  }
+
+  svg{
+    overflow: visible;
+  }
+
+ 
+   @media (max-width: 950px) {
+    .main_about-us-content {
+      flex-direction: column;
+
+      .main_about-us_text_container {
+        min-height: 300px;
+        .main_about-us_text {
+          height: auto;
+          gap: 10px;
+        }
+      }
+      .img-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }
@@ -239,6 +295,27 @@ body {
       gap: 20px;
     }
   }
+  @media (max-width: 1020px) {
+    .main_saled_plants_header_container{
+      h2{
+        width: auto !important;
+      }
+    }
+    .grid-container {
+      grid-template-columns: repeat(2, 1fr);
+      justify-items: stretch;
+      padding: 0;
+    }
+  }
+  @media (max-width: 675px) {
+    .grid-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+     
+    }
+
+  }
 }
 
 .main_promo {
@@ -269,6 +346,17 @@ body {
     .main_promo_text {
       max-width: 600px;
       text-align: justify;
+    }
+    svg {
+      overflow: visible;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .main_promo_text {
+      h3 {
+        font-size: 24px;
+      }
     }
   }
 }
@@ -316,4 +404,18 @@ body {
       }
     }
   }
+ 
+  @media (max-width: 800px) {
+    .flower-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+   @media (max-width: 560px) {
+    .flower-grid {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
 }
