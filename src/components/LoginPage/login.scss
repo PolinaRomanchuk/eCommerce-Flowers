@@ -13,7 +13,6 @@
     padding: 20px;
     text-align: center;
     display: flex;
-
     justify-content: space-between;
 
     .login-header-container {
@@ -79,14 +78,14 @@
             .password-visibility-icon-container {
               position: absolute;
               right: 10px;
-              top:10px;
+              top: 10px;
               cursor: pointer;
 
               svg {
-                path{
-                   fill: $color-dark-green;
+                path {
+                  fill: $color-dark-green;
                 }
-               
+
                 width: 20px;
                 height: 20px;
               }
@@ -134,16 +133,43 @@
         }
 
         .missing-account-message {
-         color: $color-white;
-         display: flex;
-         gap: 5px;
+          color: $color-white;
+          display: flex;
+          gap: 5px;
 
           .create-account-link {
-            
             cursor: pointer;
           }
         }
       }
+    }
+
+    @media (max-width: 1020px) {
+      width: 100%;
+      .login-header-container {
+        width: 30%;
+      }
+      .form_container {
+        width: 60%;
+      }
+    }
+    @media (max-width: 770px) {
+      .login-form-container {
+        .login-input-container, .password-input-container {
+          width: 100% !important;
+        }
+      }
+      svg{
+        display: none;
+      }
+    }
+    @media (max-width: 390px) {
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     .separator{
+      display: none;
+     }
     }
   }
 
