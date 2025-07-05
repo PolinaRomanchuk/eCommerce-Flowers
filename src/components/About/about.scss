@@ -5,109 +5,127 @@
 
   svg {
     overflow: visible;
-  }
-  .about-team_header_container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    h2 {
-      width: 250px;
+
+    path {
+      fill: $color-dark-green;
     }
   }
 
   &__team {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  &__member {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    justify-content: space-between;
-    height: 500px;
-    width: 350px;
-
-    .about__photo_container {
-      width: 250px;
-      height: 250px;
+    &-header {
       display: flex;
-      img {
-        width: 100%;
-        height: 100%;
+      align-items: center;
+      justify-content: center;
 
-        object-fit: cover;
+      &-title {
+        width: 250px;
       }
     }
 
-    .member-info {
-      height: 230px;
-      background-color: $color-dark-green;
-      color: $color-white;
+    &-list {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    &-member {
       display: flex;
       flex-direction: column;
+      text-align: center;
+      align-items: center;
       justify-content: space-between;
-      padding: 5px;
-      position: relative;
+      height: 550px;
+      width: 320px;
 
-      .bio,
-      .contribution {
-        text-align: justify;
+      &-photo-container {
+        width: 250px;
+        height: 250px;
+        display: flex;
 
-        font-size: 14px;
+        &-photo {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
 
-      .bio {
-        height: 70px;
+      &-info {
+        height: 250px;
+        background-color: $color-dark-green;
+        color: $color-white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 5px;
+        position: relative;
+
+        &-bio {
+          text-align: justify;
+          height: 70px;
+          font-size: 14px;
+        }
+
+        &-contribution {
+          text-align: justify;
+          height: 50px;
+          font-size: 14px;
+        }
+
+        &-github {
+          :hover {
+            color: $color-primary-pink;
+          }
+        }
       }
-      .contribution {
-        height: 50px;
-      }
-      .plant {
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
-      a:hover {
-        color: $color-primary-pink;
-      }
+    }
+
+    &-plant-img {
+      position: absolute;
+      right: 0;
+      top: 0;
     }
   }
 
-  .about-team-prodject {
+  &__project {
     display: flex;
     align-items: center;
     justify-content: space-around;
     min-height: 700px;
-    margin: 40px 20px 40px 20px;
-    .about-team-prodject_header_container {
+    padding: 20px;
+    gap: 20px;
+
+    &-header {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       max-width: 370px;
     }
-    .about-team-prodject_text_container {
+
+    &-qa {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 20px;
-      width: 700px;
-      .question_container {
+      width: 80vw;
+
+      &-content {
         display: flex;
+        align-items: center;
+        justify-content: space-between;
         flex-direction: column;
-        gap: 10px;
         width: 100%;
-        .qustion_content {
+
+        &-question {
           display: flex;
-          align-items: center;
+          gap: 10px;
+          width: 100%;
           justify-content: space-between;
 
-          button {
+          &-arrow {
             background-color: $color-dark-green;
             border-radius: 50%;
             width: 40px;
@@ -119,6 +137,7 @@
             &.open {
               transform: rotate(180deg);
               background-color: $color-white;
+
               svg {
                 path {
                   fill: $color-dark-green;
@@ -127,6 +146,7 @@
 
               &:hover {
                 background-color: $color-dark-green;
+
                 svg {
                   path {
                     fill: $color-white;
@@ -137,15 +157,31 @@
 
             &:hover {
               background-color: $color-white;
+
               svg {
                 path {
                   fill: $color-dark-green;
                 }
               }
             }
+
+            svg {
+              path {
+                fill: $color-white;
+              }
+            }
+          }
+
+          &-title {
+            text-align: justify;
+
+            @media (max-width: 400px) {
+              font-size: 30px;
+            }
           }
         }
-        .answers {
+
+        &-answer {
           max-height: 0;
           overflow: hidden;
           opacity: 0;
@@ -153,12 +189,15 @@
           span {
             text-align: justify;
           }
+
           &.open {
             max-height: 500px;
             opacity: 1;
             display: flex;
             flex-direction: column;
             gap: 5px;
+            align-items: flex-start;
+            width: 100%;
           }
         }
       }
@@ -166,36 +205,32 @@
 
     @media (max-width: 680px) {
       flex-direction: column;
-      .about-team-prodject_text_container {
-        width: auto;
-        .qustion_content {
-          h2 {
-            text-align: justify;
-          }
-        }
-      }
     }
   }
 
-  .about-my-contribution {
+  &__contribution {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    .about-my-contribution_header_container {
+    margin: 20px;
+
+    &-header {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
     }
-    .about-my-contribution_text_container {
+
+    &-content {
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 500px;
       gap: 20px;
-      .my-team-work_container,
-      .my-own-work_container {
+
+      &-team,
+      &-own {
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -203,67 +238,50 @@
         padding: 20px;
         gap: 20px;
         height: 400px;
-        svg {
-          overflow: visible;
-        }
+      }
 
-        .icon_container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .my-work_container {
-          display: flex;
-          flex-direction: column;
-          gap: 20px;
-          height: 240px;
-        }
-        .my-work {
-          display: flex;
-          gap: 20px;
-          align-items: center;
-        }
-        svg {
+      &-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        height: 240px;
+      }
+
+      &-item {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+
+        &-svg {
           width: 30px;
           height: 30px;
-          path {
-            fill: $color-dark-green;
+        }
+
+        &-name {
+          @media (max-width: 400px) {
+            font-size: 14px !important;
           }
         }
       }
-    }
 
-    @media (max-width: 680px) {
-      gap: 20px;
-      .about-my-contribution_text_container {
+      @media (max-width: 790px) {
         flex-direction: column;
-        .my-team-work_container,
-        .my-own-work_container {
-          padding: 10px;
-          margin: 20px;
-        }
       }
     }
-    @media (max-width: 400px) {
-      .about-my-contribution_text_container {
-        p {
-          font-size: 14px;
-        }
-      }
-    }
-  }
-}
 
-@media (max-width: 900px) {
-  .about {
-    &__team {
-      flex-direction: column;
+    &-icon {
+      display: flex;
       align-items: center;
+      justify-content: center;
+
+      &-svg {
+        width: 30px;
+        height: 30px;
+      }
     }
 
-    &__member {
-      width: 100%;
-      max-width: 400px;
+    @media (max-width: 790px) {
+      gap: 20px;
     }
   }
 }
