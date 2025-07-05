@@ -62,41 +62,48 @@ export const ProductCard = ({
 
   return (
     <>
-      <div className='product-card-container'>
-        <div className='product-card-content'>
-          <button className='close-button icon' onClick={handleRemoveProduct}>
+      <div className='cart__item'>
+        <div className='cart__product-card'>
+          <button
+            className='cart__product-card__remove-button icon'
+            onClick={handleRemoveProduct}
+          >
             x
           </button>
-          <div className='product-card-image-container'>
-            <img className='product-card-image' src={img} alt='photo' />
+          <div className='cart__product-card__image-container'>
+            <img
+              className='cart__product-card__image-container-image'
+              src={img}
+              alt='photo'
+            />
           </div>
-          <div className='product-card-info-container'>
-            <div className='medium'>{name}</div>
+          <div className='cart__product-card__info'>
+            <div className='cart__product-card__info-name medium'>{name}</div>
             {color && (
-              <div className='product-color'>
+              <div className='cart__product-card__info-color'>
                 <p className='extra-light'>Color:</p> {color}
               </div>
             )}
           </div>
-          <div className='product-price-container'>
+          <div className='cart__product-card__price'>
             {discountedPrice ? (
               <>
-                <div className='old-price-for-item'>
+                <div className='cart__product-card__price-old'>
                   <p className='extra-light'>{price}</p>
                 </div>
-                <div className='final-price-for-item'>
+                <div className='product-card__price-final'>
                   <p className='extra-light'>{discountedPrice}</p>
                 </div>
               </>
             ) : (
-              <div className='final-price-for-item'>
+              <div className='product-card__price-final'>
                 <p className='regular'>{price}</p>
               </div>
             )}
           </div>
-          <div className='product-counter-container'>
+          <div className='cart__product-card__counter'>
             <button
-              className='minus-button icon'
+              className='cart__product-card__counter-button icon'
               onClick={() => {
                 if (count > 1) {
                   setCount(count - 1);
@@ -106,9 +113,9 @@ export const ProductCard = ({
             >
               -
             </button>
-            <span className='current-product-count'>{count}</span>
+            <span className='cart__product-card__counter-value'>{count}</span>
             <button
-              className='plus-button icon'
+              className='cart__product-card__counter-button icon'
               onClick={() => {
                 setCount(count + 1);
                 handleCount('plus');
@@ -117,8 +124,8 @@ export const ProductCard = ({
               +
             </button>
           </div>
-          <div className='product-price-container'>
-            <div className='final-price-for-all-items'>{totalPrice}$</div>
+          <div className='cart__product-card__total'>
+            <div className='cart__product-card__total-value'>{totalPrice}$</div>
           </div>
         </div>
       </div>

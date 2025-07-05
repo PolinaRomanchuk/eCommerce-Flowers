@@ -2,12 +2,12 @@ $color-primary-pink: rgba(244, 158, 160, 0.5);
 $color-dark-green: #46544f;
 $color-white: #fff;
 $color-color-wrong: #ffd1d2;
-$color-content-background: #F8F3EE;
+$color-content-background: #f8f3ee;
 
 $overlay-background: rgba(0, 0, 0, 0.4) !default;
 $shadow:
-  0 0 20px 0 rgba(0, 0, 0, 0.2),
-  0 5px 5px 0 rgba(0, 0, 0, 0.24) !default;
+  0 2px 6px rgba(0, 0, 0, 0.08),
+  0 4px 12px rgba(0, 0, 0, 0.06) !default;
 
 $font-family: 'Poppins', sans-serif;
 $second-family: 'SF Pro', sans-serif;

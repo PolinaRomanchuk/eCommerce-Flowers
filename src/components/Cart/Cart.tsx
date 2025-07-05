@@ -143,16 +143,16 @@ export const Cart = ({ size }: CartProps): ReactElement => {
   return (
     <>
       <Header size={size} newCounter={cart?.totalLineItemQuantity} />
-      <div className='cart-container'>
+      <div className='cart'>
         <div className='_container'>
-          <div className='cart-content'>
+          <div className='cart__content'>
             {cartIsEmpty ? (
               <EmptyCart />
             ) : (
               <>
-                <h2 className='cart-header'>My cart</h2>
-                <div className='products-container'>
-                  <div className='product-card-list'>
+                <h2 className='cart_title'>My cart</h2>
+                <div className='cart__products'>
+                  <div className='cart__products-product-list'>
                     {cartItems.length > 0 &&
                       cartItems.map((item) => (
                         <ProductCard
@@ -175,62 +175,70 @@ export const Cart = ({ size }: CartProps): ReactElement => {
                         />
                       ))}
                   </div>
-                  <div className='price-container'>
-                    <div className='full-price-container'>
-                      <h3 className='total-message'>Total price</h3>
+                  <div className='cart__summary'>
+                    <div className='cart__summary-prices'>
+                      <h3 className='cart__summary-title'>Total price</h3>
                       {discount ? (
                         <>
-                          <div className='discount-container'>
-                            <div className='old-price'>{fullPrice}$</div>
-                            <div className='promo-tag-container'>
-                              <div className='promo-name'>{promoName}</div>
+                          <div className='cart__summary-discount'>
+                            <div className='cart__summary-old-price'>
+                              {fullPrice}$
+                            </div>
+                            <div className='cart__summary-promo'>
+                              <div className='cart__summary-promo-name'>
+                                {promoName}
+                              </div>
                               <button
-                                className='remove-promo-button icon'
+                                className='cart__summary-promo-remove icon'
                                 onClick={handleRemovePromo}
                               >
                                 x
                               </button>
                             </div>
                           </div>
-
-                          <div className='total-price'>{totalCartPrice}$</div>
+                          <div className='cart__summary-total'>
+                            {totalCartPrice}$
+                          </div>
                         </>
                       ) : (
-                        <div className='total-price'>{totalCartPrice}$</div>
+                        <div className='cart__summary-total'>
+                          {totalCartPrice}$
+                        </div>
                       )}
 
                       <button
-                        className='place-order-button'
+                        className='cart__summary-order-button'
                         onClick={handlePlaceOrder}
                       >
                         <span>Place order</span>
                       </button>
                     </div>
 
-                    {!discount ? (
-                      <div className='promo-container'>
-                        <h3>Enter promo</h3>
+                    {!discount && (
+                      <div className='cart__promo'>
+                        <h3 className='cart__promo-title'>Enter promo</h3>
                         <input
                           name='promo'
                           type='text'
-                          className='promo-input'
+                          className='cart__promo-input'
                           value={promoInput}
                           onChange={(event) => {
                             setPromoInput(event.target.value);
                           }}
                         />
-                        <span className='valid-promo-error'>{promoError}</span>
-                        <button onClick={handleAddPromo}>
+                        <span className='cart__promo-error'>{promoError}</span>
+                        <button
+                          onClick={handleAddPromo}
+                          className='cart__promo-button'
+                        >
                           <span>Apply</span>
                         </button>
                       </div>
-                    ) : (
-                      <></>
                     )}
                   </div>
                 </div>
                 <button
-                  className='remove-all-items-button'
+                  className='cart__clear-button'
                   onClick={() => openModal('delete-cart')}
                 >
                   <span>Clear Shopping Cart</span>
@@ -246,13 +254,13 @@ export const Cart = ({ size }: CartProps): ReactElement => {
       {modalActive && (
         <Modal active={modalActive} setActive={setModalActive}>
           {modalContent === 'delete-cart' && (
-            <div className='modal-message-empty-cart-container'>
-              <div className='modal-message-empty-cart'>
+            <div className='cart__modal-clear'>
+              <div className='cart__modal-clear-text'>
                 Are you sure you want to empty the cart?
               </div>
-              <div className='clear-cart-button-container'>
+              <div className='cart__modal-clear-actions'>
                 <button
-                  className='clear-cart-button'
+                  className='cart__modal-clear-button'
                   onClick={handleRemoveCart}
                 >
                   <span>Yes</span>
