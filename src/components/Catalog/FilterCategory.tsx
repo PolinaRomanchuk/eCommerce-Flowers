@@ -3,7 +3,7 @@ import type { Product } from '../../types/catalog';
 import { fetchCategories } from '../../services/categories/categories';
 import type { Category } from '../../types/categories';
 
-type BreadCrumbsProps = {
+type FilterCategoryProps = {
   category: string;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
   subcategory: string;
@@ -14,13 +14,13 @@ type BreadCrumbsProps = {
     React.SetStateAction<Category[] | undefined>
   >;
 };
-export const BreadCrumbs = ({
+export const FilterCategory = ({
   category,
   setCategory,
   setSubcategory,
   setIsCategoried,
   setAllSubcategories: setAllSubcategories,
-}: BreadCrumbsProps): ReactElement => {
+}: FilterCategoryProps): ReactElement => {
   let [title, setTitle] = useState('All');
   const [categories, setCategories] = useState<Category[]>();
   const [isOpen, setIsOpen] = useState(false);
@@ -85,4 +85,4 @@ export const BreadCrumbs = ({
   );
 };
 
-export default BreadCrumbs;
+export default FilterCategory;

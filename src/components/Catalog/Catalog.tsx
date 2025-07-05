@@ -7,10 +7,10 @@ import {
   fetchFilteredProducts,
 } from '../../services/catalog/catalog';
 import './catalog.scss';
-import FilterCatalog from './FilterCatalog';
-import SortCatalog from './SortCatalog';
-import SearchCatalog from './SearchCatalog';
-import BreadCrumbs from './BreadCrumbs';
+import FilterAttributes from './FilterAttributes';
+import Sort from './Sort';
+import Search from './Search';
+import FilterCategory from './FilterCategory';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import {
@@ -155,12 +155,6 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   useEffect(() => {
     setCurrentPage(1);
   }, [filterAttributes, sortAttributes, category, subcategory, searchKeyword]);
-
-  useEffect(() => {
-    if (!category) {
-      setCategoryName('');
-    }
-  }, [category]);
 
   useEffect(() => {
     if (size <= 550) {
@@ -359,7 +353,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                   </span>
                 </button>
                 <div className='search-container'>
-                  <SearchCatalog
+                  <Search
                     searchKeyword={searchKeyword}
                     setSearchKeyword={setSearchKeyword}
                     setIsFiltered={setIsFiltered}
@@ -370,7 +364,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                 </div>
               </div>
 
-              <SortCatalog
+              <Sort
                 sortAttributes={sortAttributes}
                 setSortAttributes={setSortAttributes}
                 setIsFiltered={setIsFiltered}
@@ -423,12 +417,12 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                         </button>
                       </div>
                     )}
-                    <FilterCatalog
+                    <FilterAttributes
                       filterAttributes={filterAttributes}
                       setFilterAttributes={setFilterAttributes}
                       setIsFiltered={setIsFiltered}
                     />
-                    <BreadCrumbs
+                    <FilterCategory
                       category={category}
                       setCategory={setCategory}
                       subcategory={subcategory}

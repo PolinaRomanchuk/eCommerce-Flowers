@@ -7,6 +7,7 @@ import { ReactComponent as Linkedin } from './../../assets/Footer/linkedin.svg';
 import { ReactComponent as Rss } from './../../assets/Footer/rss-logo.svg';
 import Logo from '../../assets/Header/logo.png';
 import { useNavigate } from 'react-router-dom';
+import { Pages } from '../../data/footer';
 
 export const Footer = (): ReactElement => {
   const navigate = useNavigate();
@@ -14,124 +15,79 @@ export const Footer = (): ReactElement => {
   return (
     <div className='footer'>
       <div className='_container'>
-        <div className='footer_content'>
-          <div className='sections-container'>
-            <section className='footer_contacts'>
+        <div className='footer__content'>
+          <div className='footer__sections'>
+            <section className='footer__section footer__contact'>
               <div className='footer_contacts_header'>
-                <h3>Contact</h3>
+                <h3 className='footer__title'>Contact</h3>
               </div>
-              <p className='extra-light'>
+              <p className='footer__text extra-light'>
                 Made by Polina Romanchuk. To contact me, use the following links
               </p>
-              <div className='icons-container'>
+              <div className='footer__icons'>
                 <a
                   href='https://github.com/PolinaRomanchuk'
                   target='_blank'
                   className='rss_link'
                 >
-                  <Git className='footer-icon' />
+                  <Git className='footer__icons-icon' />
                 </a>
                 <a
                   href='mailto:polina.romanchuk99@mail.ru'
                   className='rss_link'
                 >
-                  <Mail className='footer-icon' />
+                  <Mail className='footer__icons-icon' />
                 </a>
                 <a
                   href='https://www.linkedin.com/in/polina-romanchuk-2b2543286/'
                   target='_blank'
                   className='rss_link'
                 >
-                  <Linkedin className='footer-icon' />
+                  <Linkedin className='footer__icons-icon' />
                 </a>
               </div>
             </section>
-            <section className='footer_about'>
-              <div className='footer_about_header'>
-                <div className='footer_logo-container'>
-                  <img src={Logo} alt='logo' />
+            <section className='footer__section footer__about'>
+              <div className='footer__about-header'>
+                <div className='footer__logo'>
+                  <img src={Logo} alt='logo' className='footer__logo-icon' />
                 </div>
-                <h3>FloralMuse</h3>
+                <h3 className='footer__title'>FloralMuse</h3>
               </div>
-              <p className='extra-light'>
+              <p className='footer__text extra-light'>
                 RSSchool learning project. Online flower & plant store.Built
                 with HTML, CSS, TypeScript, React & CommerceTools
               </p>
-              <div className='icons-container'>
+              <div className='footer__icons'>
                 <a
                   href='https://rs.school/'
                   target='_blank'
                   className='rss_link'
                 >
-                  <Rss className='footer-icon' />
+                  <Rss className='footer__icons-icon' />
                 </a>
               </div>
             </section>
-            <section className='footer_pages'>
-              <div className='footer_pages_header'>
-                <h3>Pages</h3>
+            <section className='footer__section footer__pages'>
+              <div className='footer__pages-header'>
+                <h3 className='footer__title'>Pages</h3>
               </div>
-              <div className='pages_container'>
-                <p
-                  className='extra-light'
-                  onClick={() => {
-                    navigate('/');
-                  }}
-                >
-                  home
-                </p>
-                <p
-                  className='extra-light'
-                  onClick={() => {
-                    navigate('/catalog');
-                  }}
-                >
-                  shop
-                </p>
-                <p
-                  className='extra-light'
-                  onClick={() => {
-                    navigate('/about');
-                  }}
-                >
-                  about
-                </p>
-                <p
-                  className='extra-light'
-                  onClick={() => {
-                    navigate('/cart');
-                  }}
-                >
-                  cart
-                </p>
-                <p
-                  className='extra-light'
-                  onClick={() => {
-                    navigate('/profile');
-                  }}
-                >
-                  user
-                </p>
-                <p
-                  className='extra-light'
-                  onClick={() => {
-                    navigate('/registration');
-                  }}
-                >
-                  registration
-                </p>
-                <p
-                  className='extra-light'
-                  onClick={() => {
-                    navigate('/login');
-                  }}
-                >
-                  login
-                </p>
+              <div className='footer__pages-list'>
+                {Pages.map((page) => (
+                  <p
+                    key={page.label}
+                    className='footer__pages-page extra-light'
+                    onClick={() => {
+                      navigate(page.path);
+                    }}
+                  >
+                    {page.label}
+                  </p>
+                ))}
               </div>
             </section>
           </div>
-          <div className='under-text'>
+          <div className='footer__copyright'>
             <p className='regular'>©Learning project 2025 FloralMuse</p>{' '}
           </div>
         </div>

@@ -6,7 +6,7 @@ import {
   fetchTypes,
 } from '../../services/categories/categories';
 
-type FilterCatalogProps = {
+type FilterAttributesProps = {
   filterAttributes: {
     color: string;
     occasion: string;
@@ -24,11 +24,11 @@ type FilterCatalogProps = {
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const FilterCatalog = ({
+export const FilterAttributes = ({
   filterAttributes,
   setFilterAttributes,
   setIsFiltered,
-}: FilterCatalogProps): ReactElement => {
+}: FilterAttributesProps): ReactElement => {
   const [types, setTypes] = useState<ProductType[]>();
   const [colors, setcolors] = useState<string[]>();
   const [occasions, setOccasions] = useState<string[]>();
@@ -59,7 +59,7 @@ export const FilterCatalog = ({
       <div className='catalog__filter__properties'>
         <div className='catalog__filter__price'>
           <h3>Price:</h3>
-          <div className='price-options'>
+          <div className='catalog__filter__price-options'>
             <button
               className={!filterAttributes.price ? 'active' : ''}
               onClick={() => {
@@ -110,7 +110,7 @@ export const FilterCatalog = ({
 
         <div className='catalog__filter__color'>
           <h3>Color:</h3>
-          <div className='color-options'>
+          <div className='catalog__filter__color-options'>
             <button
               className={!filterAttributes.color ? 'active' : ''}
               onClick={() => {
@@ -137,7 +137,7 @@ export const FilterCatalog = ({
 
         <div className='catalog__filter__occasions'>
           <h3>Occasions:</h3>
-          <div className='occasions-options'>
+          <div className='catalog__filter__occasions-options'>
             <button
               className={!filterAttributes.occasion ? 'active' : ''}
               onClick={() => {
@@ -223,4 +223,4 @@ export const FilterCatalog = ({
   );
 };
 
-export default FilterCatalog;
+export default FilterAttributes;

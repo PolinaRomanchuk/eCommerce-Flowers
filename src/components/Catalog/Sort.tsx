@@ -6,7 +6,7 @@ type SortCatalogProps = {
   setSortAttributes: React.Dispatch<React.SetStateAction<string>>;
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export const SortCatalog = ({
+export const Sort = ({
   sortAttributes,
   setSortAttributes,
   setIsFiltered,
@@ -65,4 +65,4 @@ export const SortCatalog = ({
   );
 };
 
-export default SortCatalog;
+export default Sort;

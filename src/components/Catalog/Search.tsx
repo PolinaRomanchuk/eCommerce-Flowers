@@ -1,15 +1,15 @@
 import type { ReactElement } from 'react';
 
-type SearchCatalogProps = {
+type SearchProps = {
   searchKeyword: string;
   setSearchKeyword: React.Dispatch<React.SetStateAction<string>>;
   setIsFiltered: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export const SearchCatalog = ({
+export const Search = ({
   searchKeyword,
   setSearchKeyword,
   setIsFiltered,
-}: SearchCatalogProps): ReactElement => {
+}: SearchProps): ReactElement => {
   return (
     <div className='catalog__search'>
       <input
@@ -25,4 +25,4 @@ export const SearchCatalog = ({
   );
 };
 
-export default SearchCatalog;
+export default Search;
