@@ -9,20 +9,18 @@
     display: flex;
     align-items: center;
 
-    @media (max-width: 511px) {
+    @media (max-width: 590px) {
       justify-content: space-between;
     }
 
     &__logo {
       display: flex;
       align-items: center;
-      column-gap: 5px;
+      gap: 5px;
 
       &__img {
-        background-color: $color-white;
         width: 40px;
         height: 40px;
-        border-radius: 50%;
         cursor: pointer;
 
         @media (any-hover: hover) {
@@ -34,22 +32,20 @@
         }
 
         img {
-          transition: all 0.5s ease 0s;
           max-width: 100%;
         }
       }
 
       &__text {
-        cursor: pointer;
-        align-self: start;
-        height: 40px;
-        position: relative;
         display: flex;
         align-items: center;
-        h3 {
-          &:hover {
-            color: $color-primary-pink;
-          }
+        height: 40px;
+        cursor: pointer;
+        align-self: start;
+        position: relative;
+
+        &-title:hover {
+          color: $color-primary-pink;
         }
       }
     }
@@ -67,7 +63,6 @@
         top: 0;
         right: 100%;
         overflow: auto;
-        padding-bottom: 25px;
         z-index: 10;
         background: $overlay-background;
       }
@@ -80,37 +75,33 @@
     &__list {
       display: flex;
       justify-self: center;
-      column-gap: 25px;
+      gap: 25px;
 
       @media (max-width: 880px) {
         display: flex;
         flex-direction: column;
-        row-gap: 15px;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
         position: absolute;
-        justify-content: space-between;
-        width: 56.23%;
+        width: 50%;
         min-height: 100%;
         top: 0;
         right: 0;
         opacity: 1;
         background: $color-dark-green;
-        padding: 30px 0 20px 30px;
-        align-items: center;
-        justify-content: center;
       }
 
       @media (max-width: 640px) {
-        width: 72.23%;
+        width: 70%;
       }
 
       &__items {
         display: flex;
-        column-gap: 15px;
+        gap: 15px;
 
         @media (max-width: 880px) {
-          display: flex;
           flex-direction: column;
-          row-gap: 15px;
           align-items: center;
         }
       }
@@ -123,7 +114,6 @@
 
         @media (max-width: 880px) {
           color: $color-white;
-          text-decoration: unset;
         }
       }
 
@@ -136,18 +126,15 @@
 
     &__access {
       display: flex;
-      column-gap: 15px;
+      gap: 15px;
       justify-content: end;
       align-items: center;
 
-      @media (max-width: 880px) {
-        flex: 1 1 auto;
-        text-align: end;
-      }
-
-      @media (max-width: 511px) {
-        max-height: 50px;
-        justify-content: start;
+      &__separator {
+        display: block;
+        @media (max-width: 590px) {
+          display: none;
+        }
       }
 
       &__cart {
@@ -162,14 +149,7 @@
           fill: $color-dark-green;
         }
 
-        @media (any-hover: hover) {
-          &:hover {
-            svg {
-              fill: $color-primary-pink;
-            }
-          }
-        }
-        .cart-counter-container {
+        &-counter {
           background-color: $color-dark-green;
           border-radius: 50%;
           width: 20px;
@@ -181,11 +161,26 @@
           top: -8px;
           right: -10px;
 
-          .cart-counter {
+          &-value {
             font-size: 10px;
             color: $color-white;
             text-align: center;
           }
+        }
+
+        @media (any-hover: hover) {
+          &:hover {
+            color: $color-primary-pink;
+            svg {
+              fill: $color-primary-pink;
+            }
+          }
+        }
+
+        @media (max-width: 590px) {
+          width: auto;
+          height: auto;
+          padding: 0;
         }
       }
 
@@ -202,10 +197,17 @@
 
         @media (any-hover: hover) {
           &:hover {
+            color: $color-primary-pink;
             svg {
               fill: $color-primary-pink;
             }
           }
+        }
+
+        @media (max-width: 590px) {
+          width: auto;
+          height: auto;
+          padding: 0;
         }
       }
 
@@ -216,6 +218,10 @@
         :hover {
           color: $color-primary-pink;
         }
+
+        @media (max-width: 590px) {
+          padding: 0;
+        }
       }
 
       &__registration {
@@ -225,67 +231,85 @@
         :hover {
           color: $color-primary-pink;
         }
+
+        @media (max-width: 590px) {
+          padding: 0;
+        }
+      }
+
+      @media (max-width: 880px) {
+        flex: 1 1 auto;
+        text-align: end;
+      }
+
+      @media (max-width: 590px) {
+        flex-direction: column;
+        color: $color-white;
       }
     }
-  }
-}
 
-.button-menu-container {
-  .icon-menu {
-    display: none;
-    background-color: unset;
-    border: unset;
+    &__button {
+      &__icon {
+        display: none;
+        background-color: unset;
+        border: unset;
 
-    @media (max-width: 880px) {
-      display: block;
-      position: relative;
-      width: 20px;
-      height: 10px;
-      cursor: pointer;
-      z-index: 10;
-
-      span,
-      &::before,
-      &::after {
-        content: '';
-        transition: all 0.3s ease 0s;
-        right: 0;
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        background-color: $color-dark-green;
-      }
-
-      &::before {
-        top: 0;
-      }
-
-      &::after {
-        bottom: 0;
-      }
-
-      span {
-        top: calc(50% - 1px);
-      }
-
-      .menu-open & {
-        span {
-          width: 0;
+        &:hover {
+          background-color: unset;
         }
 
-        &::before {
-          top: calc(50% - 1px);
-          transform: rotate(-45deg);
-        }
+        @media (max-width: 880px) {
+          display: block;
+          position: relative;
+          width: 20px;
+          height: 10px;
+          cursor: pointer;
+          z-index: 10;
 
-        &::after {
-          bottom: calc(50% - 1px);
-          transform: rotate(45deg);
-        }
-        span,
-        &::before,
-        &::after {
-          background-color: $color-white;
+          span,
+          &::before,
+          &::after {
+            content: '';
+            transition: all 0.3s ease 0s;
+            right: 0;
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: $color-dark-green;
+          }
+
+          &::before {
+            top: 0;
+          }
+
+          &::after {
+            bottom: 0;
+          }
+
+          span {
+            top: calc(50% - 1px);
+          }
+
+          .menu-open & {
+            span {
+              width: 0;
+            }
+
+            &::before {
+              top: calc(50% - 1px);
+              transform: rotate(-45deg);
+            }
+
+            &::after {
+              bottom: calc(50% - 1px);
+              transform: rotate(45deg);
+            }
+            span,
+            &::before,
+            &::after {
+              background-color: $color-white;
+            }
+          }
         }
       }
     }

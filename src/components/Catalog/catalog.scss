@@ -356,6 +356,7 @@
         font-size: 14px !important;
         display: -webkit-box;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -557,19 +558,19 @@
   width: 100%;
 
   .filters-wrapper-overlay {
-    height: 100vh;
-    width: 100vw;
-    background-color: $overlay-background;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 1;
-    z-index: 10;
-    &.hidden {
-      opacity: 0;
+    
+    &.active {
+      height: 100vh;
+      width: 100vw;
+      background-color: $overlay-background;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      z-index: 10;
     }
     .filters_container {
       display: flex;

@@ -51,7 +51,6 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   let [category, setCategory] = useState('');
   let [subcategory, setSubcategory] = useState('');
   const [categoryName, setCategoryName] = useState('');
-  const [subcategoryName, setSubcategoryName] = useState('');
   const [allSubcategories, setAllSubcategories] = useState<Category[]>();
   const [isFiltered, setIsFiltered] = useState(false);
   const [isCategorized, setIsCategorized] = useState(true);
@@ -121,13 +120,6 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
           ).toLowerCase();
           setCategoryName(categoryname);
         }
-
-        if (subcategory) {
-          const subcategoryname = (
-            await fetchCategoryName(subcategory)
-          ).toLowerCase();
-          setSubcategoryName(subcategoryname);
-        }
       } else {
         const result = await fetchAllProducts(currentPage);
         setProducts(result.products);
@@ -168,10 +160,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     if (!category) {
       setCategoryName('');
     }
-    if (!subcategory) {
-      setSubcategoryName('');
-    }
-  }, [category, subcategory]);
+  }, [category]);
 
   useEffect(() => {
     if (size <= 550) {
@@ -417,11 +406,10 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             >
               {isShowFilters && (
                 <div
-                  onClick={() => setIsShowFilters(false)}
                   className={
                     size <= 540
-                      ? 'filters-wrapper-overlay '
-                      : 'filters-wrapper-overlay hidden'
+                      ? 'filters-wrapper-overlay active'
+                      : 'filters-wrapper-overlay'
                   }
                 >
                   <div className='filters_container'>

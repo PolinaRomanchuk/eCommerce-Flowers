@@ -44,17 +44,21 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
     <div className='header__menu__access'>
       <div
         onClick={() => navigate('/cart')}
-        className='header__menu__access__cart'
+        className='header__menu__access__cart medium'
       >
-        <Cart />
-        {cartCounter ? (
-          <div className='cart-counter-container'>
-            <span className='cart-counter'>
-              {cartCounter > 1000 ? '999+' : cartCounter}
-            </span>
-          </div>
+        {size <= 590 ? (
+          <>Cart ({cartCounter})</>
         ) : (
-          <></>
+          <>
+            <Cart className='header__menu__access__cart__icon' />
+            {cartCounter > 0 && (
+              <div className='header__menu__access__cart-counter'>
+                <span className='header__menu__access__cart-counter-value'>
+                  {cartCounter > 1000 ? '999+' : cartCounter}
+                </span>
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -62,18 +66,22 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
         <div className='header__menu__access__profile'>
           <a
             href=''
-            className='header__menu__access__profile__link'
+            className='header__menu__access__profile__link medium'
             onClick={(event) => {
               document.documentElement.classList.remove('menu-open');
               navigate('/profile');
               event.preventDefault();
             }}
           >
-            <ProfileIcon className='profile-icon' />
+            {size <= 590 ? (
+              <>Profile</>
+            ) : (
+              <ProfileIcon className='header__menu__access__profile__link_icon' />
+            )}
           </a>
         </div>
       )}
-      <div>|</div>
+      <div className='header__menu__access__separator'>|</div>
       <div className='header__menu__access__login'>
         <a
           onClick={(event) => {
@@ -90,7 +98,7 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
       </div>
       {!auth?.isLogin && (
         <>
-          <div>/</div>
+          <div className='header__menu__access__separator'>/</div>
           <div className='header__menu__access__registration'>
             <a
               onClick={(event): void => {
@@ -123,7 +131,7 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
               onClick={() => navigate('/')}
               className='header__menu__logo__text'
             >
-              <h3>FloralMuse</h3>
+              <h3 className='header__menu__logo__text-title'>FloralMuse</h3>
             </div>
           </div>
           <nav className='header__menu__body'>
@@ -169,17 +177,19 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
                   </a>
                 </li>
               </ul>
-              {size < 511 && access}
+              {size < 590 && (
+                <div className=' header__menu__access--mobile'>{access}</div>
+              )}
             </div>
           </nav>
-          {size > 510 && access}
-          <div className='button-menu-container'> 
+          {size > 590 && access}
+          <div className='header__menu__button'>
             <button
               onClick={() =>
                 document.documentElement.classList.toggle('menu-open')
               }
               type='button'
-              className='menu__icon icon-menu'
+              className='header__menu__button__icon'
             >
               <span></span>
             </button>
