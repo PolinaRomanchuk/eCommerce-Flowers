@@ -1,15 +1,21 @@
 @use '../../styles/variables' as *;
 
-.registration-container {
+.registration {
   display: flex;
-  flex-direction: column;
+  height: 800px;
   align-items: center;
   justify-content: center;
-  height: 800px;
 
-  .registration-content {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__form {
     background: $color-dark-green;
-    width: 1000px;
+    width: 60vw;
     height: 700px;
     padding: 20px;
     position: relative;
@@ -17,242 +23,190 @@
     flex-direction: column;
     gap: 10px;
 
-    .branch {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 170px;
-      height: 240px;
-      path {
-        fill: $color-white;
-      }
-    }
-
-    .registration-header-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: $color-white;
-    }
-
-    .registration-form__slides-wrapper {
-      overflow: hidden;
-      width: 100%;
-
-      .registration-form__slides {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-
-        .registration-form__slide {
-          flex: 0 0 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-
-          .data_container {
-            height: 100%;
-            width: 700px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-evenly;
-            color: $color-white;
-            fieldset {
-              width: 100%;
-            }
-
-            .country-city_container,
-            .postal-street_container {
-              display: flex;
-              width: 100%;
-              gap: 20px;
-              align-items: center;
-              justify-content: center;
-
-              .input-container {
-                width: 350px;
-              }
-            }
-
-            .input-container {
-              display: flex;
-              flex-direction: column;
-              width: 440px;
-              height: 140px;
-              gap: 10px;
-
-              &.checkbox {
-                flex-direction: row;
-                height: 40px;
-                width: 100%;
-                align-items: center;
-                input {
-                  width: auto;
-                }
-                p {
-                  color: $color-white;
-                }
-              }
-
-              p {
-                color: $color-color-wrong;
-                text-align: justify;
-              }
-
-              .pass-with-eye-container {
-                position: relative;
-
-                .password-visibility-icon-container {
-                  position: absolute;
-                  right: 10px;
-                  top: 10px;
-                  cursor: pointer;
-
-                  svg {
-                    path {
-                      fill: $color-dark-green;
-                    }
-
-                    width: 20px;
-                    height: 20px;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    .registration-form__slide-controls {
-      display: flex;
-      justify-content: space-between;
-      button {
-        width: 40px;
-        height: 40px;
-        svg {
-          path {
-            fill: $color-white;
-          }
-        }
-
-        &:disabled {
-          cursor: default;
-          svg {
-            path {
-              fill: $color-dark-green;
-            }
-          }
-        }
-      }
-    }
-
-    .button_container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .reg-button {
-        border-color: $color-white;
-        span {
-          color: $color-white;
-        }
-
-        @media (any-hover: hover) {
-          &:hover {
-            background-color: $color-white;
-            span {
-              color: $color-dark-green;
-            }
-          }
-        }
-      }
-    }
-    .missing-account-message {
-      color: $color-white;
-      display: flex;
-      gap: 5px;
-      align-items: center;
-      justify-content: center;
-
-      .create-account-link {
-        cursor: pointer;
-      }
-    }
-
     @media (max-width: 1090px) {
-      width: 800px;
+      width: 70vw;
     }
-    @media (max-width: 820px) {
-      width: 700px;
-
-      .country-city_container,
-      .postal-street_container {
-        width: 70% !important;
-      }
+    @media (max-width: 900px) {
+      width: 80vw;
     }
 
     @media (max-width: 710px) {
-      width: 100vw;
-      .data_container {
-        width: auto !important;
-      }
+      width: 90vw;
+    }
+  }
+
+  &__branch-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 170px;
+    height: 240px;
+    path {
+      fill: $color-white;
+    }
+    @media (max-width: 850px) {
+      display: none;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-white;
+  }
+
+  &__slides-wrapper {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  &__slides {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  &__slide {
+    flex: 0 0 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &-data {
+      height: 90%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      color: $color-white;
     }
 
-    @media (max-width: 570px) {
-      .country-city_container,
-      .postal-street_container {
-        width: 55% !important;
-      }
-    }
+    &__field {
+      display: flex;
+      flex-direction: column;
+      width: 60%;
+      height: 140px;
+      gap: 10px;
 
-    @media (max-width: 560px) {
-      h1 {
-        font-size: 30px;
-      }
-      .data_container {
-        width: 90% !important;
-        .input-container {
-          width: auto !important;
+      &--checkbox {
+        flex-direction: row;
+        height: 40px;
+        width: 90%;
+        align-items: center;
+        &-input {
+          width: auto;
         }
-        .country-city_container,
-        .postal-street_container {
-          width: 90% !important;
+      }
+
+      &-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      @media (max-width: 500px) {
+        width: 90%;
+      }
+    }
+    &__error {
+      color: $color-color-wrong;
+      text-align: justify !important;
+    }
+
+    &__password-wrapper {
+      position: relative;
+    }
+
+    &__password-toggle {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 10px;
+
+      &-icon {
+        width: 20px;
+        height: 20px;
+        path {
+          fill: $color-dark-green;
+        }
+      }
+    }
+
+    &__checkbox-label {
+      text-align: justify !important;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: space-between;
+    button {
+      width: 40px;
+      height: 40px;
+      svg {
+        path {
+          fill: $color-white;
+        }
+      }
+
+      &:disabled {
+        cursor: default;
+        svg {
+          path {
+            fill: $color-dark-green;
+          }
         }
       }
     }
   }
-}
 
-.modal {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 6px;
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
+  &__submit-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &-button {
+      border-color: $color-white;
+      span {
+        color: $color-white;
+      }
 
-  p {
-    margin-bottom: 1rem;
-    font-size: 1rem;
-    color: #d9534f;
+      @media (any-hover: hover) {
+        &:hover {
+          background-color: $color-white;
+          span {
+            color: $color-dark-green;
+          }
+        }
+      }
+    }
   }
-}
 
-.registration-header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .registration-header-name {
-    font-size: 1.5rem;
-    font-weight: 700;
+  &__already-have-account {
+    color: $color-white;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-}
 
-.registration-success-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
+  &__login-link {
+    cursor: pointer;
+  }
+
+  &__modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+  }
+
+  &__fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 90%;
+  }
 }

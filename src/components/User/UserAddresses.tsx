@@ -1,4 +1,4 @@
-import { type FormEvent, type ReactElement, useState } from 'react';
+import { type ChangeEvent, type ReactElement, useState } from 'react';
 import type { UserProfile } from '../../types/user-profile';
 import Modal from '../../utils/modal/modal';
 import {
@@ -18,6 +18,7 @@ import {
 
 import { ReactComponent as Trash } from './../../assets/User/trash.svg';
 import { ReactComponent as Pencil } from './../../assets/User/pencil.svg';
+import { AddressForm } from './AddressForm';
 
 type UserAddressesInfoProps = {
   userData: UserProfile;
@@ -70,8 +71,7 @@ export const UserAddressesInfo = ({
     country: '',
   });
 
-  const handleAddFormSubmit = async (event: FormEvent): Promise<void> => {
-    event.preventDefault();
+  const handleAddFormSubmit = async (): Promise<void> => {
     if (!userData) {
       return;
     }
@@ -259,48 +259,48 @@ export const UserAddressesInfo = ({
 
   return (
     <>
-      <div className='address-management'>
-        <h2>Manage Addresses</h2>
+      <div className='user-profile__section'>
+        <h2 className='user-profile__title'>Manage Addresses</h2>
 
-        <ul className='address-management__list'>
+        <ul className='user-profile__summary'>
           {userData.addresses.map((addr) => (
-            <li key={addr.id} className='address-management__item'>
-              <div className='address-management__details'>
-                <div className='address'>
+            <li key={addr.id} className='user-profile__summary-item'>
+              <div className='user-profile__address-text-container'>
+                <div className='user-profile__address-text'>
                   {addr.streetName}, {addr.city}, {addr.postalCode},
                   {addr.country}
                 </div>
                 {userData.defaultShippingAddressId === addr.id && (
-                  <p className='tag extra-light'>Default Shipping</p>
+                  <p className='user-profile__tag'>Default Shipping</p>
                 )}
                 {userData.defaultBillingAddressId === addr.id && (
-                  <p className='tag extra-light'>Default Billing</p>
+                  <p className='user-profile__tag'>Default Billing</p>
                 )}
               </div>
-              <div className='address-management__actions'>
+              <div className='user-profile__actions'>
                 <button
                   type='button'
-                  className='action-btn'
+                  className='user-profile__action-btn'
                   onClick={() => {
                     openModal('edit-address');
                     handleEditClick(addr);
                   }}
                 >
-                  <Pencil className='icon' />
+                  <Pencil className='user-profile__icon' />
                 </button>
                 <button
                   type='button'
-                  className='action-btn'
+                  className='user-profile__action-btn'
                   onClick={() => handleRemoveAddress(addr.id)}
                 >
-                  <Trash className='icon' />
+                  <Trash className='user-profile__icon' />
                 </button>
               </div>
             </li>
           ))}
         </ul>
 
-        <div className='button_container'>
+        <div className='user-profile__button-container'>
           <button type='button' onClick={() => openModal('add-address')}>
             <span>Add Address</span>
           </button>
@@ -312,247 +312,103 @@ export const UserAddressesInfo = ({
           setActive={setModalActive}
           onClose={handleReset}
         >
-          {modalContent === 'edit-address' && (
-            <div className='edit-address-modal-container'>
-              <div className='address-management__edit-form'>
-                <label className='street-label'>
-                  Street
-                  <input
-                    value={editingValues.streetName}
-                    onChange={(event) => {
-                      handleEditChange(event, 'streetName');
-                      setStreetValidError(validateStreet(event.target.value));
-                    }}
-                  />
-                  {streetValidError && (
-                    <span className='street input-validation-span extra-light'>
-                      {streetValidError}
-                    </span>
-                  )}
-                </label>
-                <label className='city-label'>
-                  City
-                  <input
-                    value={editingValues.city}
-                    onChange={(event) => {
-                      handleEditChange(event, 'city');
-                      setCityValidError(validateCity(event.target.value));
-                    }}
-                  />
-                  {cityValidError && (
-                    <span className='city input-validation-span extra-light'>
-                      {cityValidError}
-                    </span>
-                  )}
-                </label>
-                <label className='postal-code-label'>
-                  Postal Code
-                  <input
-                    value={editingValues.postalCode}
-                    onChange={(event) => {
-                      handleEditChange(event, 'postalCode');
-                      setPostValidError(
-                        validatePostalCode(
-                          event.target.value,
-                          editingValues.country,
-                        ),
-                      );
-                    }}
-                  />
-                  {postValidError && (
-                    <span className='postalCode input-validation-span extra-light'>
-                      {postValidError}
-                    </span>
-                  )}
-                </label>
-                <label className='country-label'>
-                  Country
-                  <select
-                    value={editingValues.country}
-                    onChange={(event) => {
-                      handleEditChange(event, 'country');
-                      setCountryValidError(validateCountry(event.target.value));
-                    }}
-                  >
-                    <option value=''>Select country</option>
-                    <option value='BY'>Belarus</option>
-                    <option value='PL'>Poland</option>
-                    <option value='GE'>Georgia</option>
-                  </select>
-                  {countryValidError && (
-                    <span className='country input-validation-span extra-light'>
-                      {countryValidError}
-                    </span>
-                  )}
-                </label>
-                <label className='check-box-default-address'>
-                  <span> Set as default shipping address</span>
-                  <input
-                    type='checkbox'
-                    name='defaultShipping'
-                    checked={
-                      userData.defaultShippingAddressId === editingAddressId
-                    }
-                    onChange={() => {
-                      if (
-                        userData.defaultShippingAddressId !==
-                          editingAddressId &&
-                        editingAddressId
-                      ) {
-                        handleSetDefaultAddress(editingAddressId, 'Shipping');
-                      } else {
-                        if (editingAddressId) {
-                          handleRemoveDefaultAddress(
-                            editingAddressId,
-                            'Shipping',
-                          );
-                        }
-                      }
-                    }}
-                  />
-                </label>
-                <label className='check-box-default-address'>
-                  <span> Set as default billing address</span>
-                  <input
-                    type='checkbox'
-                    name='defaultBilling'
-                    checked={
-                      userData.defaultBillingAddressId === editingAddressId
-                    }
-                    onChange={() => {
-                      if (
-                        userData.defaultBillingAddressId !== editingAddressId &&
-                        editingAddressId
-                      ) {
-                        handleSetDefaultAddress(editingAddressId, 'Billing');
-                      } else {
-                        if (editingAddressId) {
-                          handleRemoveDefaultAddress(
-                            editingAddressId,
-                            'Billing',
-                          );
-                        }
-                      }
-                    }}
-                  />
-                </label>
-                <div className='button_container'>
-                  <button type='button' onClick={handleEditSave}>
-                    Save
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+          {(modalContent === 'edit-address' ||
+            modalContent === 'add-address') && (
+            <div className='user-modal__container'>
+              <AddressForm
+                values={
+                  modalContent === 'edit-address' ? editingValues : newAddress
+                }
+                errors={{
+                  streetName: streetValidError,
+                  city: cityValidError,
+                  postalCode: postValidError,
+                  country: countryValidError,
+                }}
+                onChange={(
+                  event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+                ) => {
+                  const value = event.target.value;
+                  const name = event.target.name;
 
-          {modalContent === 'add-address' && (
-            <div className='add-address-modal-container'>
-              <div className='address-management__add-form'>
-                <label className='street-label'>
-                  Street
-                  <input
-                    name='streetName'
-                    value={newAddress.streetName}
-                    onChange={(event) => {
-                      handleAddFormChange(event);
-                      setStreetValidError(validateStreet(event.target.value));
-                    }}
-                  />
-                  {streetValidError && (
-                    <span className='street input-validation-span extra-light'>
-                      {streetValidError}
-                    </span>
-                  )}
-                </label>
-                <label className='city-label'>
-                  City
-                  <input
-                    name='city'
-                    value={newAddress.city}
-                    onChange={(event) => {
-                      handleAddFormChange(event);
-                      setCityValidError(validateCity(event.target.value));
-                    }}
-                  />
-                  {cityValidError && (
-                    <span className='city input-validation-span extra-light'>
-                      {cityValidError}
-                    </span>
-                  )}
-                </label>
-                <label className='postal-code-label'>
-                  Postal Code
-                  <input
-                    name='postalCode'
-                    value={newAddress.postalCode}
-                    onChange={(event) => {
-                      handleAddFormChange(event);
-                      setPostValidError(
-                        validatePostalCode(
-                          event.target.value,
-                          newAddress.country,
-                        ),
-                      );
-                    }}
-                  />
-                  {postValidError && (
-                    <span className='postalCode input-validation-span extra-light'>
-                      {postValidError}
-                    </span>
-                  )}
-                </label>
-                <label className='country-label'>
-                  Country
-                  <select
-                    name='country'
-                    value={newAddress.country}
-                    onChange={(event) => {
-                      handleAddFormChange(event);
-                      setCountryValidError(validateCountry(event.target.value));
-                    }}
-                  >
-                    <option value=''>Select country</option>
-                    <option value='BY'>Belarus</option>
-                    <option value='PL'>Poland</option>
-                    <option value='GE'>Georgia</option>
-                  </select>
-                  {countryValidError && (
-                    <span className='country input-validation-span extra-light'>
-                      {countryValidError}
-                    </span>
-                  )}
-                </label>
-                <label className='check-box-default-address'>
-                  <span> Set as default shipping address</span>
-                  <input
-                    type='checkbox'
-                    name='isDefaultShipping'
-                    checked={newAddress.isDefaultShipping}
-                    onChange={handleAddFormChange}
-                  />
-                </label>
-                <label className='check-box-default-address'>
-                  <span> Set as default billing address</span>
-                  <input
-                    type='checkbox'
-                    name='isDefaultBilling'
-                    checked={newAddress.isDefaultBilling}
-                    onChange={handleAddFormChange}
-                  />
-                </label>
-                <div className='button_container'>
-                  <button type='button' onClick={handleAddFormSubmit}>
-                    Add
-                  </button>
-                </div>
-              </div>
+                  if (modalContent === 'edit-address') {
+                    handleEditChange(event, name as keyof Address);
+                  } else {
+                    handleAddFormChange(event);
+                  }
+
+                  if (name === 'streetName') {
+                    setStreetValidError(validateStreet(value));
+                  } else if (name === 'city') {
+                    setCityValidError(validateCity(value));
+                  } else if (name === 'postalCode') {
+                    const country =
+                      modalContent === 'edit-address'
+                        ? editingValues.country
+                        : newAddress.country;
+                    setPostValidError(validatePostalCode(value, country));
+                  } else if (name === 'country') {
+                    setCountryValidError(validateCountry(value));
+                  }
+                }}
+                onSubmit={
+                  modalContent === 'edit-address'
+                    ? handleEditSave
+                    : handleAddFormSubmit
+                }
+                isDefaultShipping={
+                  modalContent === 'edit-address'
+                    ? userData.defaultShippingAddressId === editingAddressId
+                    : newAddress.isDefaultShipping
+                }
+                isDefaultBilling={
+                  modalContent === 'edit-address'
+                    ? userData.defaultBillingAddressId === editingAddressId
+                    : newAddress.isDefaultBilling
+                }
+                onToggleShipping={() => {
+                  if (!editingAddressId) {
+                    return;
+                  }
+                  if (modalContent === 'edit-address') {
+                    if (
+                      userData.defaultShippingAddressId !== editingAddressId
+                    ) {
+                      handleSetDefaultAddress(editingAddressId, 'Shipping');
+                    } else {
+                      handleRemoveDefaultAddress(editingAddressId, 'Shipping');
+                    }
+                  } else {
+                    setNewAddress((previous) => ({
+                      ...previous,
+                      isDefaultShipping: !previous.isDefaultShipping,
+                    }));
+                  }
+                }}
+                onToggleBilling={() => {
+                  if (!editingAddressId) {
+                    return;
+                  }
+                  if (modalContent === 'edit-address') {
+                    if (userData.defaultBillingAddressId !== editingAddressId) {
+                      handleSetDefaultAddress(editingAddressId, 'Billing');
+                    } else {
+                      handleRemoveDefaultAddress(editingAddressId, 'Billing');
+                    }
+                  } else {
+                    setNewAddress((previous) => ({
+                      ...previous,
+                      isDefaultBilling: !previous.isDefaultBilling,
+                    }));
+                  }
+                }}
+                buttonText={modalContent === 'edit-address' ? 'Save' : 'Add'}
+              />
             </div>
           )}
 
           {modalContent === 'modal-message' && (
-            <div className='update-modal-message-container'>
-              <div className='update-modal-message-text'>{modalMessage}</div>
-            </div>
+            <div className='user-modal__message'>{modalMessage}</div>
           )}
         </Modal>
       )}

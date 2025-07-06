@@ -51,8 +51,8 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
     return (
       <>
         <Header size={size} />
-        <div className='user-profile-page'>
-          <p className='error'>{errorMessage}</p>
+        <div className='user-profile'>
+          <p className='user-profile__error'>{errorMessage}</p>
         </div>
       </>
     );
@@ -62,9 +62,9 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
     return (
       <>
         <Header size={size} />
-        <div className='spinner_container'>
-          <div className='img-container'>
-            <img src={Spinner} alt='spinner' />
+        <div className='user-profile__spinner'>
+          <div className='user-profile__spinner-image'>
+            <img src={Spinner} alt='Loading...' />
           </div>
         </div>
         <Footer />
@@ -75,33 +75,35 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
   return (
     <>
       <Header size={size} />
-      <div className='user-profile-page'>
+      <div className='user-profile'>
         <div className='_container'>
-          <div className='user-profile-page_content'>
-            <div className='menu'>
+          <div className='user-profile__content'>
+            <div className='user-profile__menu'>
               <button
+                className='user-profile__menu-button'
                 onClick={() => {
                   setShowAddresses((previous) => !previous);
                   setShowMain((previous) => !previous);
                 }}
               >
-                <p className='medium'>Main</p>
+                <p className='user-profile__menu-label medium'>Main</p>
               </button>
               <button
+                className='user-profile__menu-button'
                 onClick={() => {
                   setShowAddresses((previous) => !previous);
                   setShowMain((previous) => !previous);
                 }}
               >
-                <p className='medium'>Addresses</p>
+                <p className='user-profile__menu-label medium'>Addresses</p>
               </button>
 
-              <div className='medium'>
+              <div className='user-profile__password medium'>
                 <UserPassword userData={profile} setProfile={setProfile} />
               </div>
-              <Branch className='branch' />
+              <Branch className='user-profile__branch' />
             </div>
-            <div className='data_container'>
+            <div className='user-profile__data'>
               {showAddresses && (
                 <UserAddressesInfo userData={profile} setProfile={setProfile} />
               )}
