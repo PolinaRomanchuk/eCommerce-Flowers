@@ -192,24 +192,24 @@ export const Product = ({ size }: ProductProps): ReactElement => {
         setSubcategory={setSubcategory}
       />
       {!productData && (
-        <div className='spinner_container'>
+        <div className='product__spinner'>
           {' '}
-          <div className='img-container'>
+          <div className='product__spinner-img'>
             <img src={Spinner} alt='spinner' />
           </div>
         </div>
       )}
-      
+
       {productData && (
-        <div className='product-container'>
+        <div className='product'>
           <div className='_container'>
-            <div className='product-content'>
-              <div className='product-photo-container'>
-                <div className='product-pictures-container'>
+            <div className='product__content'>
+              <div className='product__photos'>
+                <div className='product__photos-previews'>
                   {productData?.imageUrls?.map((img, index) => (
                     <div
                       key={index}
-                      className='product-picture-container'
+                      className='product__photos-preview'
                       onClick={() => swiperReference.current?.slideTo(index)}
                     >
                       <img src={img} alt='photo' />
@@ -221,7 +221,7 @@ export const Product = ({ size }: ProductProps): ReactElement => {
                   navigation={true}
                   modules={[Navigation]}
                   onSwiper={(swiper) => (swiperReference.current = swiper)}
-                  className='product-current-photo-container'
+                  className='product__photos-current-picture'
                 >
                   {productData?.imageUrls?.map((img, index) => (
                     <SwiperSlide
@@ -236,47 +236,47 @@ export const Product = ({ size }: ProductProps): ReactElement => {
                   ))}
                 </Swiper>
               </div>
-              <div className='product-info-container'>
-                <div className='product-name'>
+              <div className='product__info'>
+                <div className='product__name'>
                   <h2>{productData.name}</h2>
                 </div>
 
                 {priceWithDiscount && (
-                  <div className='product-discount-container'>
-                    <div className='product-old-price'>
+                  <div className='product__discount'>
+                    <div className='product__old-price'>
                       <p className='extra-light'>
                         {priceWithDiscount
                           ? `${productData.price} ${currency}`
                           : ''}
                       </p>
                     </div>
-                    <div className='product-discount'>{procent}</div>
+                    <div className='product__discount-value'>{procent}</div>
                   </div>
                 )}
-                <div className='product-full-price'>
+                <div className='product__price'>
                   <h2>
                     {priceWithDiscount
                       ? `${priceWithDiscount} ${currency}`
                       : `${productData.price} ${currency}`}
                   </h2>
                 </div>
-                <div className='product-description'>
+                <div className='product__description'>
                   <p className='extra-light'>{productData.description}</p>
                 </div>
 
-                <div className='extra-description'>
-                  <h3>Product information:</h3>
-                  <div className='product-attributes-container'>
-                    <div className='product-attribute-container'>
-                      <p className='extra-light'> Color: </p>
-                      <p className='extra-light'>
+                <div className='product__details'>
+                  <p className='medium'>Product information:</p>
+                  <div className='product__attributes'>
+                    <div className='product__attribute'>
+                      <p className='regular'> Color: </p>
+                      <p className='regular'>
                         {productData.colorAttribute}
                       </p>
                     </div>
                     {productData.occasionAttribute && (
-                      <div className='product-attribute-container'>
-                        <p className='extra-light'> Occasion: </p>
-                        <p className='extra-light'>
+                      <div className='product__attribute'>
+                        <p className='regular'> Occasion: </p>
+                        <p className='regular'>
                           {productData.occasionAttribute}
                         </p>
                       </div>
@@ -284,17 +284,17 @@ export const Product = ({ size }: ProductProps): ReactElement => {
                   </div>
                 </div>
 
-                <div className='cart-configs-container'>
+                <div className='product__cart'>
                   {!isInCart ? (
                     <button
-                      className='add-to-cart-button'
+                      className='product__cart-button'
                       onClick={handleAddToCart}
                     >
                       Add to cart
                     </button>
                   ) : (
                     <button
-                      className='add-to-cart-button'
+                      className='product__cart-button'
                       onClick={handleRemoveFromCart}
                     >
                       Remove from cart
@@ -321,7 +321,7 @@ export const Product = ({ size }: ProductProps): ReactElement => {
               swiperLargeReference.current = swiper;
               swiper.slideTo(largePhotoIndex);
             }}
-            className='large-photo-container'
+            className='product__modal-swiper'
           >
             {productData?.imageUrls?.map((img, index) => (
               <SwiperSlide key={index}>
