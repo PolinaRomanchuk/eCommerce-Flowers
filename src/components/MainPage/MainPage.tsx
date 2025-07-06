@@ -13,7 +13,6 @@ import {
   fetchCategories,
   fetchTypes,
 } from '../../services/categories/categories';
-import type { Category } from '../../types/categories';
 import { fetchFilteredProducts } from '../../services/catalog/catalog';
 import type { Product } from '../../types/catalog';
 
@@ -21,8 +20,6 @@ export type MainPageProps = HeaderProps & {};
 
 export const MainPage = ({ size }: MainPageProps): ReactElement => {
   const navigate = useNavigate();
-
-  const [flowerSubcategories, setFlowerSubcategories] = useState<Category[]>();
 
   const [flowerCategoryId, setFlowerCategoryId] = useState('');
   const [flowerSubcategoryCards, setFlowerSubcategoryCards] = useState<
@@ -40,7 +37,6 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
       setFlowerCategoryId(flowerscat);
     }
     const flowerCategories = all.filter((x) => x.parent?.id === flowerscat);
-    setFlowerSubcategories(flowerCategories);
 
     const flowersWithImages = await Promise.all(
       flowerCategories.map(async (category) => {
@@ -69,11 +65,11 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
   const plantCards = plants.map((plant) => {
     return (
       <div
-        className='product-card'
+        className='main__plants-product-card'
         onClick={() => navigate(`/product/${plant.id}`)}
         key={plant.id}
       >
-        <div className='product-img_container'>
+        <div className='main__plants-product-img-wrapper'>
           <img src={plant.image} alt='Plant' />
         </div>
         <p className='medium'>{plant.name}</p>
@@ -114,59 +110,51 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
       <Header size={size} />
       <main className='main'>
         <div className='_container'>
-          <section className='main_welcome-info'>
-            <div className='main_welcome_content'>
-              <div className='main_welcome_header_container'>
-                <h1 className='main_welcome_header'>
+          <section className='main__welcome'>
+            <div className='main__welcome-content'>
+              <div className='main__welcome-header-wrapper'>
+                <h1 className='main__welcome-header'>
                   The best stories start with flowers
                 </h1>
               </div>
-              <div className='main_welcome_customers-experience'>
+              <div className='main__welcome-stats'>
                 <div className='flowers'>
-                  <p className='main_welcome_customers-experience_counter light'>
-                    50+
-                  </p>
-                  <p className='main_welcome_customers-experience_text medium'>
-                    Flowers
-                  </p>
+                  <p className='main__welcome-stats-value light'>50+</p>
+                  <p className='main__welcome-stats-text medium'>Flowers</p>
                 </div>
-                <div className='separator'></div>
+                <div className='main__welcome-separator'></div>
                 <div className='customers'>
-                  <p className='main_welcome_customers-experience_counter light'>
-                    100+
-                  </p>
-                  <p className='main_welcome_customers-experience_text medium'>
-                    Customers
-                  </p>
+                  <p className='main__welcome-stats-value light'>100+</p>
+                  <p className='main__welcome-stats-text medium'>Customers</p>
                 </div>
               </div>
-              <div className='main_welcome_button_container'>
+              <div className='main__welcome-button-wrapper'>
                 <button
-                  className='main_welcome_button'
+                  className='main__welcome-button'
                   onClick={() => {
                     navigate('/catalog');
                   }}
                 >
-                  <span className='main_welcome_button_span'>Shop now</span>
+                  <span className='main__welcome-button-text'>Shop now</span>
                 </button>
               </div>
             </div>
           </section>
-          <section className='main_about-us'>
-            <div className='main_about-us-content'>
-              <div className='main_about-us_header-container'>
-                <div className='main_about-us_under-header'>
+          <section className='main__about'>
+            <div className='main__about-content'>
+              <div className='main__about-header-wrapper'>
+                <div className='main__about-subtitle'>
                   <p className='extra-light'>Who we are</p>
                 </div>
-                <div className='main_about-us_header'>
+                <div className='main__about-title'>
                   <h2>Flower’s Wonders Expedition</h2>
                 </div>
-                <div className='img-container'>
-                  <Branch className='main_about-us_branch' />
+                <div className='main__about-branch-container'>
+                  <Branch className='main__about-branch' />
                 </div>
               </div>
-              <div className='main_about-us_text_container'>
-                <div className='main_about-us_text'>
+              <div className='main__about-text-wrapper'>
+                <div className='main__about-text'>
                   <p className='medium'>
                     This website was created as an educational project for the
                     <a
@@ -178,18 +166,18 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
                     </a>
                     courses.
                   </p>
-                  <p className='extra-light main_about-us_p'>
+                  <p className='extra-light main__about-paragraph'>
                     It serves as a demonstration of web development techniques
                     and is not a commercial product. Built with HTML, CSS,
                     TypeScript, React, and CommerceTools, it showcases practical
                     implementation of frontend development and e-commerce
                     integration.
                   </p>
-                  <p className='extra-light main_about-us_p'>
+                  <p className='extra-light main__about-paragraph'>
                     Thank you for visiting!
                   </p>
                 </div>
-                <div className='main_about-us_button'>
+                <div className='main__about-button-wrapper'>
                   <button onClick={() => navigate('/about')}>
                     <span>About us</span>
                   </button>
@@ -197,23 +185,26 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
               </div>
             </div>
           </section>
-          <section className='main_saled_plants'>
-            <div className='main_saled_plants_content'>
-              <div className='main_saled_plants_header_container'>
+          <section className='main__plants'>
+            <div className='main__plants-content'>
+              <div className='main__plants-header-wrapper'>
                 <p className='extra-light'>New Collection</p>
-                <div className='branch_container'>
+                <div className='main__branch-wrapper'>
                   <BlackBranch />
                 </div>
-                <h2>House Creative Plant</h2>
+                <h2 className='main__plants-header'>House Creative Plant</h2>
               </div>
-              <div className='grid-container'>
+              <div className='main__plants-grid'>
                 {plantCards.slice(0, 4)}
 
-                <div className='featured'>
+                <div className='main__plants-featured'>
                   <img src={Pionies} alt='Featured Plant' />
-                  <div className='pionies-label' onClick={handlePeonyClick}>
+                  <div
+                    className='main__plants-pionies-label'
+                    onClick={handlePeonyClick}
+                  >
                     <p className='extra-light'>We also have peonies</p>
-                    <div className='pionies_button-container'>
+                    <div className='main__plants-button-wrapper'>
                       <button>
                         <span>view more</span>
                       </button>
@@ -225,23 +216,23 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
               </div>
             </div>
           </section>
-          <section className='main_promo'>
-            <div className='main_promo_content'>
-              <div className='main_promo_header_container'>
+          <section className='main__promo'>
+            <div className='main__promo-content'>
+              <div className='main__promo-header-wrapper'>
                 <p className='extra-light'>Promo code</p>
                 <WhiteBranch />
               </div>
-              <div className='main_promo_text'>
+              <div className='main__promo-text'>
                 <h3>
                   Use the promo code HAPPY to get a 10% discount on houseplants.
                 </h3>
               </div>
             </div>
           </section>
-          <section className='main_flowers-category'>
-            <div className='main_flowers-category_content'>
-              <div className='flower-grid'>
-                <div className='left-text'>
+          <section className='main__flowers'>
+            <div className='main__flowers-content'>
+              <div className='main__flowers-grid'>
+                <div className='main__flowers-intro'>
                   <p className='extra-light'>Discover category</p>
                   <h2>All kind of Flowers</h2>
                   <BrownBranch />
@@ -249,7 +240,7 @@ export const MainPage = ({ size }: MainPageProps): ReactElement => {
 
                 {flowerSubcategoryCards?.map((flower, index) => (
                   <div
-                    className='flower-card'
+                    className='main__flowers-card'
                     key={index}
                     onClick={() => {
                       navigate('/catalog', {

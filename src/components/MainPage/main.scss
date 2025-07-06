@@ -25,91 +25,75 @@ body {
 
 .main {
   flex: 1 1 auto;
-}
 
-.footer-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.header-main-page {
-  text-align: center;
-  font-size: 40px;
-  margin-top: 20px;
-  margin-bottom: 40px;
-}
-
-.main_welcome-info {
-  width: 100%;
-  height: 700px;
-  background-image: url('../../assets/Main/welcome-home.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  color: $color-dark-green;
-
-  .main_welcome_content {
-    width: 500px;
-    height: 500px;
+  &__welcome {
+    width: 100%;
+    height: 700px;
+    background-image: url('../../assets/Main/welcome-home.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    margin-left: 70px;
+    justify-content: flex-start;
+    align-items: center;
+    color: $color-dark-green;
 
-    .main_welcome_header_container {
+    &-content {
+      width: 500px;
+      height: 500px;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      .main_welcome_header {
-        width: 440px;
-        display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin-left: 70px;
+
+      @media (max-width: 530px) {
+        width: 90%;
+        margin: 0;
       }
     }
 
-    .main_welcome_customers-experience {
+    &-header-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media (max-width: 530px) {
+        width: 100%;
+      }
+    }
+
+    &-header {
+      width: 440px;
+      display: flex;
+
+      @media (max-width: 530px) {
+        width: 90%;
+        text-align: center;
+      }
+    }
+
+    &-stats {
       display: flex;
       justify-content: space-around;
     }
 
-    .separator {
+    &-separator {
       width: 2px;
       height: 50px;
       background-color: $color-dark-green;
+
+      @media (max-width: 530px) {
+        background-color: $color-white;
+      }
     }
 
-    .main_welcome_button_container {
+    &-button-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
     }
-  }
-
-  @media (max-width: 530px) {
-    justify-content: center;
-    background-position: right;
-    color: $color-white;
-
-    .main_welcome_content {
-      width: 90%;
-      margin: 0;
-
-      .main_welcome_header_container {
-        width: 100%;
-        .main_welcome_header {
-          width: 90%;
-          text-align: center;
-        }
-      }
-      .main_welcome_customers-experience {
-        .separator {
-          background-color: $color-white;
-        }
-      }
-      button {
+    &-button {
+      @media (max-width: 530px) {
         border-color: $color-white;
         color: $color-white;
         &:hover {
@@ -117,109 +101,131 @@ body {
         }
       }
     }
-  }
-}
 
-.main_about-us {
-  min-height: 690px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: $color-dark-green;
-
-  .main_about-us-content {
-    display: flex;
-    width: 70vw;
-    gap: 30px;
+    @media (max-width: 530px) {
+      justify-content: center;
+      background-position: right;
+      color: $color-white;
+    }
   }
 
-  .main_about-us_text_container {
+  &__about {
+    min-height: 690px;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    color: $color-dark-green;
 
-    .main_about-us_text {
+    &-content {
+      display: flex;
+      width: 70vw;
+      gap: 30px;
+
+      @media (max-width: 950px) {
+        flex-direction: column;
+      }
+    }
+
+    &-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+
+      @media (max-width: 950px) {
+        min-height: 300px;
+      }
+    }
+
+    &-text {
       height: 150px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      p {
-        text-align: justify;
-        a {
-          color: $color-primary-pink;
-          &:hover {
-            color: $color-dark-green;
-          }
+
+      @media (max-width: 950px) {
+        height: auto;
+        gap: 10px;
+      }
+    }
+    &-paragraph {
+      text-align: justify !important;
+      a {
+        color: $color-primary-pink;
+        &:hover {
+          color: $color-dark-green;
         }
       }
     }
-  }
 
-  svg{
-    overflow: visible;
-  }
+    &-branch {
+      overflow: visible;
+    }
 
- 
-   @media (max-width: 950px) {
-    .main_about-us-content {
-      flex-direction: column;
-
-      .main_about-us_text_container {
-        min-height: 300px;
-        .main_about-us_text {
-          height: auto;
-          gap: 10px;
-        }
-      }
-      .img-container{
+    &-branch-container {
+      @media (max-width: 950px) {
         display: flex;
         align-items: center;
         justify-content: center;
       }
     }
   }
-}
 
-.main_saled_plants {
-  min-height: 1850px;
-  color: $color-dark-green;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  &__plants {
+    min-height: 1850px;
+    color: $color-dark-green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  .main_saled_plants_content {
-    .main_saled_plants_header_container {
+    &-header-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
-      h2 {
-        width: 180px;
+    }
+
+    &-header {
+      width: 180px;
+      @media (max-width: 1020px) {
+        width: auto !important;
       }
     }
-  }
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: auto;
-    gap: 20px;
-    padding: 80px;
-    align-items: center;
-    justify-content: center;
-    justify-items: end;
 
-    .product-card {
-      text-align: center;
-      position: relative;
-      height: 390px;
-      display: flex;
-      flex-direction: column;
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
+      gap: 20px;
+      padding: 80px;
       align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
+      justify-content: center;
+      justify-items: end;
 
-      .product-img_container {
+      @media (max-width: 1020px) {
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: stretch;
+        padding: 0;
+      }
+      @media (max-width: 675px) {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+
+    &-product {
+      &-card {
+        text-align: center;
+        position: relative;
+        height: 390px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+      &-img-wrapper {
         width: 320px;
         height: 320px;
 
@@ -234,7 +240,7 @@ body {
       }
     }
 
-    .featured {
+    &-featured {
       grid-column: span 2;
       grid-row: span 2;
       position: relative;
@@ -245,147 +251,116 @@ body {
         height: 100%;
         object-fit: contain;
       }
+    }
 
-      .pionies-label {
-        display: flex;
-        flex-direction: column;
+    &-pionies-label {
+      display: flex;
+      flex-direction: column;
+      border-radius: 2px;
+      background-color: $color-white;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      padding: 20px;
+      gap: 10px;
+    }
+
+    &-pionies-button-wrapper {
+      display: flex;
+      flex-direction: row-reverse;
+      button {
+        width: 130px;
+        height: 40px;
+        background-color: $color-primary-pink;
+        border: 1px $color-primary-pink solid;
         border-radius: 2px;
-        background-color: $color-white;
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        padding: 20px;
-        gap: 10px;
-        .pionies_button-container {
-          display: flex;
-          flex-direction: row-reverse;
-          button {
-            width: 130px;
-            height: 40px;
-            background-color: $color-primary-pink;
-            border: 1px $color-primary-pink solid;
-            border-radius: 2px;
-            span {
-              font-weight: 275;
-              font-size: 18px;
-              text-align: center;
-              color: $color-white;
-            }
-            &:hover {
-              background-color: $color-white;
-              span {
-                color: $color-primary-pink;
-              }
-            }
+        span {
+          font-weight: 275;
+          font-size: 18px;
+          text-align: center;
+          color: $color-white;
+        }
+        &:hover {
+          background-color: $color-white;
+          span {
+            color: $color-primary-pink;
           }
         }
       }
     }
-
-    .featured-content {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      text-align: right;
-    }
-
-    .right-column {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
   }
-  @media (max-width: 1020px) {
-    .main_saled_plants_header_container{
-      h2{
-        width: auto !important;
-      }
-    }
-    .grid-container {
-      grid-template-columns: repeat(2, 1fr);
-      justify-items: stretch;
-      padding: 0;
-    }
-  }
-  @media (max-width: 675px) {
-    .grid-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-     
-    }
 
-  }
-}
-
-.main_promo {
-  background-image: url('../../assets/Main/bg.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $color-white;
-
-  .main_promo_content {
-    height: 100%;
-    width: 90vw;
+  &__promo {
+    background-image: url('../../assets/Main/bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: $color-white;
 
-    gap: 20px;
+    &-content {
+      height: 100%;
+      width: 90vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    .main_promo_header_container {
+      gap: 20px;
+
+      svg {
+        overflow: visible;
+      }
+    }
+
+    &-header-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .main_promo_text {
+
+    &-text {
       max-width: 600px;
       text-align: justify;
     }
-    svg {
-      overflow: visible;
-    }
   }
 
-  @media (max-width: 420px) {
-    .main_promo_text {
-      h3 {
-        font-size: 24px;
+  &__flowers {
+    min-height: 800px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-dark-green;
+
+    &-content {
+      display: flex;
+    }
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      padding: 40px;
+
+      @media (max-width: 800px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (max-width: 560px) {
+        display: flex;
+        flex-direction: column;
       }
     }
-  }
-}
 
-.main_flowers-category {
-  min-height: 800px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $color-dark-green;
-
-  .main_flowers-category_content {
-    display: flex;
-  }
-
-  .flower-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    padding: 40px;
-
-    .left-text {
+    &-intro {
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding: 20px;
     }
 
-    .flower-card {
+    &-card {
       text-align: center;
       cursor: pointer;
 
@@ -404,18 +379,4 @@ body {
       }
     }
   }
- 
-  @media (max-width: 800px) {
-    .flower-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-   @media (max-width: 560px) {
-    .flower-grid {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
 }
