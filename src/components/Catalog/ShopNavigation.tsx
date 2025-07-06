@@ -40,12 +40,12 @@ export const ShopNavigation = ({
 
   return (
     <>
-      <div className='shop_navigation'>
+      <div className='shop-nav'>
         <div className='_container'>
-          <div className='shop_navigation_content'>
-            <div className='nav_text_container'>
+          <div className='shop-nav__content'>
+            <div className='shop-nav__text-container'>
               <h1>Shop</h1>
-              <div className='nav-links_container'>
+              <div className='shop-nav__links'>
                 <p className='extra-light' onClick={() => navigate('/')}>
                   home-
                 </p>

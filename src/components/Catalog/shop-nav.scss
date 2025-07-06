@@ -1,38 +1,42 @@
 @use '../../styles/variables' as *;
 
-.shop_navigation {
+.shop-nav {
   color: $color-dark-green;
   min-height: 165px;
 
-  .shop_navigation_content {
+  &__content {
     min-height: 165px;
     background-image: url('../../assets/Catalog/shop.png');
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    .nav_text_container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 500px;
-      .nav-links_container {
-        display: flex;
-        p {
-          cursor: pointer;
-          &:hover {
-            color: $color-primary-pink;
-          }
-        }
+
+    @media (max-width: 520px) {
+      justify-content: flex-start;
+    }
+  }
+  &__text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50%;
+    @media (max-width: 520px) {
+      color: $color-white;
+    }
+  }
+  &__links {
+    display: flex;
+    p {
+      cursor: pointer;
+      &:hover {
+        color: $color-primary-pink;
       }
-      @media (max-width: 520px) {
-        width: auto;
-        min-width: unset;
-        .nav-links_container{
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-      }
+    }
+
+    @media (max-width: 520px) {
+      flex-wrap: wrap;
+      justify-content: center;
     }
   }
 }

@@ -65,7 +65,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
   const [loadingProductId, setLoadingProductId] = useState<string | null>(null);
 
   const [isShowFilters, setIsShowFilters] = useState(
-    () => window.innerWidth > 550,
+    () => window.innerWidth > 600,
   );
   const navigate = useNavigate();
   const location = useLocation();
@@ -252,17 +252,23 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
         <div className='catalog__card__img'>
           <img src={item.image} alt='' />
           {item.discountedPrice && (
-            <div className='sale-tag_container'>
+            <div className='catalog__card__sale-tag'>
               <span>sale</span>
             </div>
           )}
 
-          <div className='show-cart_container'>
+          <div
+            className={
+              size < 1000
+                ? 'catalog__card__cart-controls catalog__card__cart-controls--mobile'
+                : 'catalog__card__cart-controls'
+            }
+          >
             <Eye />
-            <span className='separator' />
+            <span className='catalog__card__separator' />
             {checkIfProductInCart(item.id, item.masterVariantId) ? (
               <button
-                className='add-to-cart-button-in-catalog added'
+                className='catalog__card__cart-button catalog__card__cart-button--added'
                 onClick={(event) => {
                   event.stopPropagation();
                   if (item.masterVariantId) {
@@ -279,7 +285,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
               </button>
             ) : (
               <button
-                className='add-to-cart-button-in-catalog'
+                className='catalog__card__cart-button'
                 onClick={(event) => {
                   event.stopPropagation();
                   if (item.masterVariantId) {
@@ -337,30 +343,32 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
         <div className='_container'>
           <div
             className={
-              isShowFilters ? 'catalog_content' : 'catalog_content six'
+              isShowFilters
+                ? 'catalog__content'
+                : 'catalog__content catalog__content--six'
             }
           >
-            <div className='configur_container'>
-              <div className='first'>
+            <div className='catalog__controls'>
+              <div className='catalog__filters-header'>
                 <button
                   onClick={() => {
                     setIsShowFilters((previous) => !previous);
                   }}
                 >
                   <span>
-                    <FiltersIcon className='conf-icon' />
+                    <FiltersIcon className='catalog-icon' />
                     <p>{isShowFilters ? 'hide filters' : 'show filters'}</p>
                   </span>
                 </button>
-                <div className='search-container'>
+                <div className='catalog__search-container'>
                   <Search
                     searchKeyword={searchKeyword}
                     setSearchKeyword={setSearchKeyword}
                     setIsFiltered={setIsFiltered}
                   />
-                  <button className='search-button'>
-                    <SearchIcon className='conf-icon' />
-                  </button>
+                  <div className='catalog__search-icon-container'>
+                    <SearchIcon className='catalog-icon' />
+                  </div>
                 </div>
               </div>
 
@@ -372,12 +380,12 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             </div>
 
             {category && (
-              <div className='categories-container'>
+              <div className='catalog__subcategories'>
                 <h3>{categoryName}</h3>
-                <div className='sub-categories-list'>
+                <div className='catalog__subcategories-list'>
                   {allSubcategories?.map((subcat) => (
                     <p
-                      className='extra-light sub-category'
+                      className='extra-light catalog__subcategories-item'
                       key={subcat.id}
                       onClick={() => {
                         setSubcategory(subcat.id);
@@ -394,21 +402,21 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             <div
               className={
                 isShowFilters
-                  ? 'cards_with_filtres_container'
-                  : 'cards_with_filtres_container six'
+                  ? 'catalog__layout'
+                  : 'catalog__layout catalog__layout--six'
               }
             >
               {isShowFilters && (
                 <div
                   className={
-                    size <= 540
-                      ? 'filters-wrapper-overlay active'
-                      : 'filters-wrapper-overlay'
+                    size <= 640
+                      ? 'catalog__filters-overlay--active'
+                      : 'catalog__filters-overlay'
                   }
                 >
-                  <div className='filters_container'>
-                    {size <= 540 && (
-                      <div className='button_container'>
+                  <div className='catalog__filters-container'>
+                    {size <= 640 && (
+                      <div className='catalog__filters-container-button'>
                         <button
                           className='icon'
                           onClick={() => setIsShowFilters(false)}
@@ -439,20 +447,22 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                 <div
                   className={
                     isShowFilters
-                      ? 'cards_flex_container'
-                      : 'cards_flex_container six'
+                      ? 'catalog__cards-wrapper'
+                      : 'catalog__cards-wrapper catalog__cards-wrapper--six'
                   }
                 >
                   <div
                     className={
-                      isShowFilters ? 'catalog__cards' : 'catalog__cards six'
+                      isShowFilters
+                        ? 'catalog__grid'
+                        : 'catalog__grid catalog__grid--six'
                     }
                   >
                     {cards}
                   </div>
                 </div>
               ) : (
-                <div className='no-products_container'>
+                <div className='catalog__no-products'>
                   <p className='extra-light'>
                     There are no products according to the specified filters,
                     try other search parameters
@@ -460,9 +470,9 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                 </div>
               )}
             </div>
-            <div className='pagination-container'>
+            <div className='catalog__pagination'>
               <button
-                className='pagination-button'
+                className='catalog__pagination-button'
                 onClick={() =>
                   setCurrentPage((previous) => Math.max(previous - 1, 1))
                 }
@@ -476,7 +486,11 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={page === currentPage ? 'active-page' : 'page'}
+                    className={
+                      page === currentPage
+                        ? 'catalog__pagination-page catalog__pagination-page--active'
+                        : 'catalog__pagination-page'
+                    }
                   >
                     {page}
                   </button>
@@ -484,7 +498,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
               )}
 
               <button
-                className='pagination-button'
+                className='catalog__pagination-button'
                 onClick={() =>
                   setCurrentPage((previous) =>
                     Math.min(previous + 1, totalPages),

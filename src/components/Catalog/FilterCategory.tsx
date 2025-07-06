@@ -1,5 +1,4 @@
 import { useEffect, useState, type ReactElement } from 'react';
-import type { Product } from '../../types/catalog';
 import { fetchCategories } from '../../services/categories/categories';
 import type { Category } from '../../types/categories';
 
@@ -57,12 +56,12 @@ export const FilterCategory = ({
   };
 
   return (
-    <div className='catalog__bread'>
-      <h3> Category:</h3>
+    <div className='catalog__category'>
+      <p className='regular'>Category:</p>
       <div className='custom-select' onClick={() => setIsOpen(!isOpen)}>
-        <div className='custom-select__selected'>{title}</div>
+        <div className='custom-select--selected'>{title}</div>
         {isOpen && (
-          <ul className='custom-select__dropdown'>
+          <ul className='custom-select-dropdown'>
             <li
               className={!category ? 'active' : ''}
               onClick={() => handleSelect('', 'All')}

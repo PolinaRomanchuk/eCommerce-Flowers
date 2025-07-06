@@ -54,11 +54,23 @@ export const FilterAttributes = ({
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (): void => {
+      setTypeDropdownOpen(false);
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return (): void => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className='catalog__filter'>
       <div className='catalog__filter__properties'>
         <div className='catalog__filter__price'>
-          <h3>Price:</h3>
+          <p className='regular'>Price:</p>
           <div className='catalog__filter__price-options'>
             <button
               className={!filterAttributes.price ? 'active' : ''}
@@ -109,7 +121,7 @@ export const FilterAttributes = ({
         </div>
 
         <div className='catalog__filter__color'>
-          <h3>Color:</h3>
+          <p className='regular'>Color:</p>
           <div className='catalog__filter__color-options'>
             <button
               className={!filterAttributes.color ? 'active' : ''}
@@ -136,7 +148,7 @@ export const FilterAttributes = ({
         </div>
 
         <div className='catalog__filter__occasions'>
-          <h3>Occasions:</h3>
+          <p className='regular'>Occasions:</p>
           <div className='catalog__filter__occasions-options'>
             <button
               className={!filterAttributes.occasion ? 'active' : ''}
@@ -171,18 +183,24 @@ export const FilterAttributes = ({
         </div>
 
         <div className='catalog__filter__type'>
-          <h3>Type:</h3>
+          <p className='regular'>Type:</p>
 
           <div
             className='custom-select'
-            onClick={() => setTypeDropdownOpen((previous) => !previous)}
+            onClick={(event) => {
+              event.stopPropagation();
+              setTypeDropdownOpen((previous) => !previous);
+            }}
           >
-            <div className='custom-select__selected'>
+            <div className='custom-select--selected'>
               {types?.find((t) => t.id === filterAttributes.type)?.name ||
                 'All'}
             </div>
             {typeDropdownOpen && (
-              <ul className='custom-select__dropdown'>
+              <ul
+                className='custom-select-dropdown'
+                onClick={(event) => event.stopPropagation()}
+              >
                 <li
                   className={!filterAttributes.type ? 'active' : ''}
                   onClick={() => {

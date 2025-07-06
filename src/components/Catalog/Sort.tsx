@@ -34,7 +34,7 @@ export const Sort = ({
         onClick={() => setIsOpen((previous) => !previous)}
       >
         <span>
-          <SortIcon className='conf-icon' />
+          <SortIcon className='catalog-icon' />
           <p>
             {' '}
             {sortAttributes === 'price asc' || sortAttributes === 'price desc'

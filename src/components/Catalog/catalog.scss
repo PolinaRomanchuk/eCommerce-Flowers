@@ -5,32 +5,73 @@
   display: flex;
   flex-direction: column;
 
-  .catalog_content {
+  &-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  &__content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
     justify-content: space-evenly;
     align-items: center;
-    min-height: 1900px;
-    width: 1000px;
-    @media (max-width: 1020px) {
-      width: auto;
-    }
-    @media (max-width: 1020px) {
-      width: auto;
-      height: auto;
-      min-height: unset;
-      margin: 20px;
-    }
-    &.six {
-      min-height: 1500px;
+    margin: 40px;
+    width: auto;
+
+    @media (max-width: 380px) {
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 
-  &__bread {
+  &__category {
     display: flex;
     flex-direction: column;
     gap: 20px;
+
+    &-select {
+      position: relative;
+      width: 200px;
+      border: 1px solid $color-dark-green;
+      border-radius: 2px;
+      background-color: $color-white;
+      cursor: pointer;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &--selected {
+        padding: 10px;
+      }
+
+      &-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: $color-white;
+        border: 1px solid $color-dark-green;
+        border-top: none;
+        z-index: 10;
+
+        li {
+          padding: 10px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: $color-primary-pink;
+            color: $color-white;
+          }
+
+          &.active {
+            background-color: $color-primary-pink;
+            color: $color-white;
+          }
+        }
+      }
+    }
   }
 
   &__header {
@@ -42,6 +83,7 @@
   &__search {
     &__input {
       border: 1px solid $color-dark-green;
+      border-radius: 12px;
     }
   }
 
@@ -49,11 +91,6 @@
     display: flex;
     flex-direction: column;
     width: 200px;
-
-    &__title {
-      font-size: 25px;
-      padding-bottom: 12px;
-    }
 
     &__properties {
       display: flex;
@@ -117,25 +154,6 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-
-      .custom-select__dropdow {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        margin-top: 4px;
-        border: 1px solid $color-dark-green;
-        background: $color-white;
-        z-index: 10;
-        list-style: none;
-        padding: 0;
-
-        li {
-          &:hover {
-            background-color: $color-primary-pink;
-          }
-        }
-      }
     }
 
     &__occasions {
@@ -195,54 +213,76 @@
       list-style: none;
       padding: 0;
 
-      .catalog__sort-option {
-        padding: 8px 12px;
-        cursor: pointer;
-
-        &.active,
-        &:hover {
-          background-color: $color-primary-pink;
-        }
-      }
-
       @media (max-width: 840px) {
         left: -30px;
         width: 150%;
       }
     }
-  }
 
-  &__search {
-    input {
-      padding: 10px;
-      border-radius: 12px;
+    &-option {
+      padding: 8px 12px;
+      cursor: pointer;
+
+      &.active,
+      &:hover {
+        background-color: $color-primary-pink;
+      }
     }
   }
 
-  .cards_flex_container {
+  &__search {
+    &-container {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    &-icon-container {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: unset;
+      right: 10px;
+
+      &:hover {
+        background-color: unset;
+      }
+    }
+  }
+
+  &__cards-wrapper {
     display: flex;
     width: 80%;
     align-items: flex-start;
     justify-content: flex-end;
 
-    &.six {
+    &--six {
       width: auto;
     }
   }
 
-  &__cards {
+  &__grid {
     display: grid;
     justify-content: space-between;
     grid-template: auto/repeat(2, 1fr);
-    gap: 25px;
+    gap: 50px;
 
-    @media (max-width: 900px) {
+    @media (max-width: 1050px) {
       display: flex;
       flex-direction: column;
     }
 
-    &.six {
+    &--six {
       grid-template: auto / repeat(3, 1fr);
+
+      @media (max-width: 1050px) {
+        grid-template: auto / repeat(2, 1fr) !important;
+        display: grid;
+      }
+      @media (max-width: 720px) {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 
@@ -261,12 +301,7 @@
         .catalog__card__img img {
           transform: scale(1.2);
         }
-
-        .sale-tag_container {
-          top: 15px;
-        }
-
-        .show-cart_container {
+        .catalog__card__cart-controls {
           display: flex;
         }
       }
@@ -285,60 +320,6 @@
         object-fit: fill;
         width: 100%;
         height: 100%;
-      }
-
-      .sale-tag_container {
-        position: absolute;
-        top: 20px;
-        background-color: $color-primary-pink;
-        padding: 10px;
-
-        span {
-          color: $color-white;
-        }
-      }
-
-      .show-cart_container {
-        position: absolute;
-        padding: 10px;
-        width: 40px;
-        height: 80px;
-        background-color: $color-primary-pink;
-        bottom: 10px;
-        right: 5px;
-        display: none;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .separator {
-          width: 20px;
-          height: 2px;
-          background-color: $color-white;
-        }
-
-        .add-to-cart-button-in-catalog {
-          background-color: unset;
-          padding: 0;
-          width: 18px;
-          height: 18px;
-          border: unset;
-
-          svg {
-            width: 18px;
-            height: 18px;
-            fill: $color-white;
-
-            &:hover {
-              transform: none !important;
-            }
-          }
-
-          &:hover {
-            transform: unset;
-            background-color: unset;
-            border: unset;
-          }
-        }
       }
     }
 
@@ -373,26 +354,160 @@
         }
       }
     }
+
+    &__sale-tag {
+      position: absolute;
+      top: 20px;
+      background-color: $color-primary-pink;
+      padding: 10px;
+
+      span {
+        color: $color-white;
+      }
+    }
+
+    &__cart-controls {
+      position: absolute;
+      padding: 10px;
+      width: 40px;
+      height: 80px;
+      background-color: $color-primary-pink;
+      bottom: 10px;
+      right: 5px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+
+      &--mobile {
+        display: flex;
+      }
+    }
+
+    &__separator {
+      width: 20px;
+      height: 2px;
+      background-color: $color-white;
+    }
+
+    &__cart-button {
+      background-color: unset;
+      padding: 0;
+      width: 18px;
+      height: 18px;
+      border: unset;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        fill: $color-white;
+      }
+
+      &:hover {
+        transform: unset;
+        background-color: unset;
+        border: unset;
+      }
+    }
   }
-}
 
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  margin-top: 20px;
+  &__controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 
-  button {
+    button {
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+      }
+      &:hover {
+        svg {
+          fill: $color-white;
+        }
+        path {
+          fill: $color-white;
+        }
+      }
+      @media (max-width: 840px) {
+        width: 60px;
+        span {
+          p {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  &__filters {
+    &-header {
+      display: flex;
+      gap: 20px;
+
+      svg {
+        fill: $color-dark-green;
+      }
+
+      @media (max-width: 405px) {
+        gap: 0;
+      }
+    }
+  }
+
+  &__subcategories {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin: 40px;
+    height: 80px;
+
+    &-list {
+      display: flex;
+      gap: 10px;
+    }
+
+    &-item {
+      cursor: pointer;
+      &:hover {
+        color: $color-primary-pink;
+      }
+    }
+
+    @media (max-width: 470px) {
+      margin: 0;
+    }
+  }
+
+  &__no-products {
+    width: 50%;
+  }
+
+  &__pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border: unset;
+    gap: 5px;
+    margin-top: 20px;
 
-    &.pagination-button {
+    @media (max-width: 340px) {
+      gap: 0;
+    }
+
+    &-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border: unset;
       border: 1px solid $color-dark-green;
 
       svg {
@@ -410,156 +525,58 @@
           }
         }
       }
-    }
 
-    &.active-page {
-      font-weight: bold;
-      cursor: default;
+      &:disabled {
+        cursor: default;
 
-      &:hover {
-        color: $color-dark-green;
-        background-color: unset;
+        &:hover {
+          background-color: unset;
+
+          svg {
+            path {
+              fill: $color-dark-green;
+            }
+          }
+        }
       }
     }
 
-    .active-page,
-    .page {
+    &-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border: unset;
       color: $color-dark-green;
 
       &:hover {
         color: $color-primary-pink;
         background-color: unset;
       }
-    }
-
-    &:disabled {
-      cursor: default;
-
-      &:hover {
-        background-color: unset;
-
-        svg {
-          path {
-            fill: $color-dark-green;
-          }
-        }
-      }
-    }
-  }
-}
-
-.configur_container {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-
-  button {
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-    }
-    &:hover {
-      svg {
-        fill: $color-white;
-      }
-      path {
-        fill: $color-white;
-      }
-    }
-    @media (max-width: 840px) {
-      width: 60px;
-      span {
-        p {
-          display: none;
-        }
-      }
-    }
-  }
-
-  .first {
-    display: flex;
-    gap: 20px;
-
-    .search-container {
-      display: flex;
-      align-items: center;
-      position: relative;
-
-      .search-button {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        border: unset;
-        right: 10px;
+      &--active {
+        font-weight: bold;
+        cursor: default;
 
         &:hover {
+          color: $color-dark-green;
           background-color: unset;
         }
       }
     }
-    svg {
-      fill: $color-dark-green;
-    }
-
-    @media (max-width: 350px) {
-      gap: 0;
-    }
   }
 
-  .conf-icon {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-.categories-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  margin: 40px;
-  height: 80px;
-
-  .sub-categories-list {
+  &__layout {
     display: flex;
-    gap: 10px;
-    p {
-      cursor: pointer;
-      &:hover {
-        color: $color-primary-pink;
-      }
-    }
-  }
-  @media (max-width: 470px) {
-    margin: 0;
+    justify-content: space-evenly;
+    height: auto;
+    width: 100%;
+    gap: 40px;
   }
 
-  @media (max-width: 400px) {
-    .sub-category {
-      font-size: 10px;
-    }
-  }
-}
-
-.no-products_container {
-  width: 50%;
-}
-
-.cards_with_filtres_container {
-  display: flex;
-  justify-content: space-evenly;
-  height: auto;
-  width: 100%;
-
-  .filters-wrapper-overlay {
-    
-    &.active {
+  &__filters-overlay {
+    &--active {
       height: 100vh;
       width: 100vw;
       background-color: $overlay-background;
@@ -572,71 +589,77 @@
       opacity: 1;
       z-index: 10;
     }
-    .filters_container {
-      display: flex;
+  }
+
+  &__filters-container {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    gap: 20px;
+
+    @media (max-width: 640px) {
       flex-direction: column;
-      width: 200px;
-      gap: 20px;
-      @media (max-width: 540px) {
-        flex-direction: column;
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 100;
-        background-color: $color-white;
-        height: 100vh;
-        overflow: scroll;
-        width: 300px;
-        align-items: center;
-        padding: 20px;
-        .button_container {
-          display: flex;
-          justify-content: flex-end;
-          width: 100%;
-        }
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 100;
+      background-color: $color-white;
+      height: 100vh;
+      overflow: scroll;
+      width: 300px;
+      align-items: center;
+      padding: 20px;
+    }
+    &-button {
+      @media (max-width: 640px) {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
       }
     }
   }
 }
 
-.custom-select {
-  position: relative;
-  width: 200px;
-  border: 1px solid $color-dark-green;
-  border-radius: 2px;
-  background-color: $color-white;
-  cursor: pointer;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &__selected {
-    padding: 10px;
-  }
-
-  &__dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: $color-white;
+.custom {
+  &-select {
+    position: relative;
+    width: 200px;
     border: 1px solid $color-dark-green;
-    border-top: none;
-    z-index: 10;
+    border-radius: 2px;
+    background-color: $color-white;
+    cursor: pointer;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    li {
+    &--selected {
       padding: 10px;
-      cursor: pointer;
+    }
 
-      &:hover {
-        background-color: $color-primary-pink;
-        color: $color-white;
-      }
+    &-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: $color-white;
+      border: 1px solid $color-dark-green;
+      border-top: none;
+      z-index: 10;
 
-      &.active {
-        background-color: $color-primary-pink;
-        color: $color-white;
+      li {
+        padding: 10px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $color-primary-pink;
+          color: $color-white;
+        }
+
+        &.active {
+          background-color: $color-primary-pink;
+          color: $color-white;
+        }
       }
     }
   }
