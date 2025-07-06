@@ -55,24 +55,25 @@ export const Login = ({ size }: LoginProps): ReactElement => {
   return (
     <>
       <Header size={size} />
-      <div className='login-container'>
+      <div className='login'>
         <div className='_container'>
-          <div className='login-content'>
-            <div className='login-header-container'>
-              <h1>Login</h1>
-              <Branch />
+          <div className='login__content'>
+            <div className='login__header'>
+              <h1 className='login__title'>Login</h1>
+              <Branch className='login__branch-icon' />
             </div>
-            <span className='separator'></span>
-            <div className='form_container'>
-              <form className='login-form-container' onSubmit={handleLogin}>
-                <div className='login-input-container'>
-                  <div className='input-name'>
-                    <h3>Email</h3>
-                  </div>
+            <span className='login__separator'></span>
+            <div className='login__form-container'>
+              <form className='login__form' onSubmit={handleLogin}>
+                <div className='login__field'>
+                  <label className='login__label' htmlFor='email'>
+                    Email
+                  </label>
+
                   <input
+                    id='email'
                     autoComplete='off'
-                    name='email'
-                    className='login-input'
+                    className='login__input'
                     type='text'
                     required
                     placeholder='user@example.com'
@@ -83,17 +84,21 @@ export const Login = ({ size }: LoginProps): ReactElement => {
                     }}
                   />
                   {emailValidError && (
-                    <p className='extra-light'>{emailValidError}</p>
+                    <p className='login__valid-error extra-light'>
+                      {emailValidError}
+                    </p>
                   )}
                 </div>
 
-                <div className='password-input-container'>
-                  <div className='input-name'>
-                    <h3>Password</h3>
-                  </div>
-                  <div className='pass-with-eye-container'>
+                <div className='login__field'>
+                  <label className='login__label' htmlFor='password'>
+                    Password
+                  </label>
+
+                  <div className='login__password-wrapper'>
                     <input
-                      className='password-input'
+                      id='password'
+                      className='login__input login__input--password'
                       type={showPassword ? 'text' : 'password'}
                       required
                       placeholder='password'
@@ -106,31 +111,36 @@ export const Login = ({ size }: LoginProps): ReactElement => {
                       }}
                     />
                     <div
-                      className='password-visibility-icon-container'
+                      className='login__password-toggle'
                       onClick={() => setShowPassword((previous) => !previous)}
                     >
                       {showPassword ? (
-                        <EyeOpen className='eye' />
+                        <EyeOpen className='login__password-toggle-icon'  />
                       ) : (
-                        <EyeClose className='eye' />
+                        <EyeClose className='login__password-toggle-icon' />
                       )}
                     </div>
                   </div>
 
                   {passwordValidError && (
-                    <p className='extra-light'>{passwordValidError}</p>
+                    <p className='login__valid-error extra-light'>
+                      {passwordValidError}
+                    </p>
                   )}
                 </div>
-                <div className='login-button-container'>
-                  <button type='submit'>
+                <div className='login__button-container'>
+                  <button type='submit' className='login__button'>
                     <span>Login</span>
                   </button>
                 </div>
-                <div className='missing-account-message'>
+                <div className='login__register'>
                   <p className='extra-light'>Don't you have an account yet?</p>
-                  <p className='create-account-link medium'>
-                    <Link to={'/registration'}>Create</Link>
-                  </p>
+                  <Link
+                    to='/registration'
+                    className='login__register-link medium'
+                  >
+                    Create
+                  </Link>
                 </div>
               </form>
             </div>
@@ -138,8 +148,8 @@ export const Login = ({ size }: LoginProps): ReactElement => {
         </div>
         {modalActive && (
           <Modal active={modalActive} setActive={setModalActive}>
-            <div className='login-error-container'>
-              <div className='login-error-text'> {loginErrorMessage}</div>
+            <div className='login__modal'>
+              <div className='login__modal-text'> {loginErrorMessage}</div>
             </div>
           </Modal>
         )}
