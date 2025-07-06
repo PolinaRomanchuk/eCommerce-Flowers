@@ -182,20 +182,12 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
     navigate(`/product/${id}`);
   };
 
-  async function handleAddToCart(
-    productId: string,
-    productVariant: number,
-  ): Promise<void> {
+  async function handleAddToCart(productId: string): Promise<void> {
     setLoadingProductId(productId);
 
     try {
       if (cart) {
-        await addProductToCart(
-          cart.id,
-          cart.version,
-          productId,
-          productVariant,
-        );
+        await addProductToCart(cart.id, cart.version, productId);
       } else {
         const newCartData = await createNewCart();
         if (newCartData.data) {
@@ -203,7 +195,6 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
             newCartData.data.id,
             newCartData.data.version,
             productId,
-            productVariant,
           );
         }
       }
@@ -289,7 +280,7 @@ export const Catalog = ({ size }: CatalogProps): ReactElement => {
                 onClick={(event) => {
                   event.stopPropagation();
                   if (item.masterVariantId) {
-                    handleAddToCart(item.id, item.masterVariantId);
+                    handleAddToCart(item.id);
                   }
                 }}
                 disabled={loadingProductId === item.id}

@@ -27,6 +27,7 @@ import Spinner from '../../assets/spinner.gif';
 
 export const Product = ({ size }: ProductProps): ReactElement => {
   const { id } = useParams<{ id: string }>();
+
   const swiperReference = useRef<SwiperClass | null>(null);
   const swiperLargeReference = useRef<SwiperClass | null>(null);
   const [modalActive, setModalActive] = useState(false);
@@ -34,83 +35,55 @@ export const Product = ({ size }: ProductProps): ReactElement => {
 
   const [priceWithDiscount, setPriceWithDiscount] = useState('');
   const [procent, setProcent] = useState('');
-  const [currency, setCurrency] = useState('');
-  const [currentVariantId, setCurrentVariantId] = useState(0);
   const navigate = useNavigate();
 
   const [productData, setProductData] = useState<ProductInfo>();
   const [isInCart, setIsInCart] = useState(false);
-  let [isExistCart, setIsExistCart] = useState(false);
+  const [isExistCart, setIsExistCart] = useState(false);
   const [cart, setCart] = useState<CartInfo>();
   const [category, setCategory] = useState('');
   const [subcategory, setSubcategory] = useState('');
 
   useEffect(() => {
-    async function fetchProduct(): Promise<void> {
+    (async function fetchProduct(): Promise<void> {
       if (id) {
-        const productData = await getProductById(id);
+        const { data, error } = await getProductById(id);
 
-        const cat = productData.data?.categories[0].id;
-        const subcategory = productData.data?.categories[1].id;
-
-        if (cat && subcategory) {
-          const suborcat = await fetchCategoryOrSubcategory(cat);
-
-          if (suborcat === 'category') {
-            setCategory(cat);
-            setSubcategory(subcategory);
-          } else {
-            setCategory(subcategory);
-            setSubcategory(cat);
-          }
-        }
-
-        if (productData.error) {
+        if (error) {
           navigate('*');
           return;
         }
 
-        if (productData && productData.data) {
-          setProductData(productData.data);
-
-          setCurrency(
-            productData.data.currency === 'USD'
-              ? '$'
-              : productData.data.currency,
+        if (data) {
+          const suborcat = await fetchCategoryOrSubcategory(
+            data.categories[0].id,
           );
 
-          if (
-            productData.data.priceWithDiscount &&
-            productData.data.discountProcent
-          ) {
-            setPriceWithDiscount(productData.data.priceWithDiscount);
-            setProcent(productData.data.discountProcent);
+          if (suborcat === 'category') {
+            setCategory(data.categories[0].id);
+            setSubcategory(data.categories[1].id);
+          } else {
+            setCategory(data.categories[1].id);
+            setSubcategory(data.categories[0].id);
           }
-
-          setCurrentVariantId(productData.data.masterVariant.id);
+          setProductData(data);
+          if (data.priceWithDiscount && data.discountProcent) {
+            setPriceWithDiscount(data.priceWithDiscount);
+            setProcent(data.discountProcent);
+          }
+          const cartInfo = await fetchCartIfExists();
+          if (cartInfo) {
+            const isInCart = cartInfo.lineItems?.some(
+              (item) => item.productId === data.id,
+            );
+            setIsInCart(!!isInCart);
+          }
         }
       }
-    }
-    fetchProduct();
-  }, [id, navigate]);
+    })();
+  }, []);
 
-  useEffect(() => {
-    checkCartAndSetProductStatus();
-  }, [currentVariantId]);
-
-  async function checkCartAndSetProductStatus(): Promise<void> {
-    const cartInfo = await getExistingCart();
-    if (cartInfo) {
-      const isInCart = checkIfCurrentProductInCart(cartInfo);
-      if (isInCart) {
-        setIsInCart(true);
-      } else {
-        setIsInCart(false);
-      }
-    }
-  }
-
-  const getExistingCart = async (): Promise<CartInfo | undefined> => {
+  const fetchCartIfExists = async (): Promise<CartInfo | undefined> => {
     const isExists = (await checkIfCartExists()).success;
     if (!isExists) {
       return;
@@ -121,8 +94,8 @@ export const Product = ({ size }: ProductProps): ReactElement => {
     return cartResult.data;
   };
 
-  async function handleAddToCart(): Promise<void> {
-    const existingCart = await getExistingCart();
+  async function addToCartHandler(): Promise<void> {
+    const existingCart = await fetchCartIfExists();
 
     if (existingCart && productData) {
       const isAlreadyInCart = checkIfCurrentProductInCart(existingCart);
@@ -134,9 +107,11 @@ export const Product = ({ size }: ProductProps): ReactElement => {
         existingCart.id,
         existingCart.version,
         productData.id,
-        currentVariantId,
       );
+      const updatedCart = await getCart();
+      setCart(updatedCart.data);
       setIsInCart(true);
+      setIsExistCart(true);
     } else {
       const newCartData = await createNewCart();
       if (newCartData.data && productData) {
@@ -144,34 +119,32 @@ export const Product = ({ size }: ProductProps): ReactElement => {
           newCartData.data.id,
           newCartData.data.version,
           productData.id,
-          currentVariantId,
         );
+        const updatedCart = await getCart();
+        setCart(updatedCart.data);
         setIsInCart(true);
+        setIsExistCart(true);
       }
     }
   }
 
   function checkIfCurrentProductInCart(cart: CartInfo | undefined): boolean {
-    if (cart) {
-      return cart.lineItems?.some(
-        (item) =>
-          item.productId === productData?.id &&
-          item.variant.id === currentVariantId,
-      );
+    if (cart && productData) {
+      return cart.lineItems?.some((item) => item.productId === productData?.id);
     }
     return false;
   }
 
-  async function handleRemoveFromCart(): Promise<void> {
-    const cart = await getExistingCart();
+  async function removeFromCartHandler(): Promise<void> {
+    const cart = await fetchCartIfExists();
     if (cart && productData) {
       const lineItemId = cart.lineItems.find(
-        (item) =>
-          item.productId === productData.id &&
-          item.variant.id === currentVariantId,
+        (item) => item.productId === productData.id,
       )?.id;
       if (lineItemId) {
         await removeProduct(cart?.id, cart?.version, lineItemId);
+        const updatedCart = await getCart();
+        setCart(updatedCart.data);
         setIsInCart(false);
       }
     }
@@ -245,9 +218,7 @@ export const Product = ({ size }: ProductProps): ReactElement => {
                   <div className='product__discount'>
                     <div className='product__old-price'>
                       <p className='extra-light'>
-                        {priceWithDiscount
-                          ? `${productData.price} ${currency}`
-                          : ''}
+                        {priceWithDiscount ? `${productData.price} $` : ''}
                       </p>
                     </div>
                     <div className='product__discount-value'>{procent}</div>
@@ -256,8 +227,8 @@ export const Product = ({ size }: ProductProps): ReactElement => {
                 <div className='product__price'>
                   <h2>
                     {priceWithDiscount
-                      ? `${priceWithDiscount} ${currency}`
-                      : `${productData.price} ${currency}`}
+                      ? `${priceWithDiscount} $`
+                      : `${productData.price} $`}
                   </h2>
                 </div>
                 <div className='product__description'>
@@ -269,9 +240,7 @@ export const Product = ({ size }: ProductProps): ReactElement => {
                   <div className='product__attributes'>
                     <div className='product__attribute'>
                       <p className='regular'> Color: </p>
-                      <p className='regular'>
-                        {productData.colorAttribute}
-                      </p>
+                      <p className='regular'>{productData.colorAttribute}</p>
                     </div>
                     {productData.occasionAttribute && (
                       <div className='product__attribute'>
@@ -285,21 +254,14 @@ export const Product = ({ size }: ProductProps): ReactElement => {
                 </div>
 
                 <div className='product__cart'>
-                  {!isInCart ? (
-                    <button
-                      className='product__cart-button'
-                      onClick={handleAddToCart}
-                    >
-                      Add to cart
-                    </button>
-                  ) : (
-                    <button
-                      className='product__cart-button'
-                      onClick={handleRemoveFromCart}
-                    >
-                      Remove from cart
-                    </button>
-                  )}
+                  <button
+                    className='product__cart-button'
+                    onClick={
+                      isInCart ? removeFromCartHandler : addToCartHandler
+                    }
+                  >
+                    {isInCart ? 'Remove from cart' : 'Add to cart'}
+                  </button>
                 </div>
               </div>
             </div>

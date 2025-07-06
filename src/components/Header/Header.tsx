@@ -14,7 +14,6 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [cartCounter, setCartCounter] = useState(0);
-  let [isExistCart, setIsExistCart] = useState(false);
 
   useEffect(() => {
     (async function checkCart(): Promise<void> {
@@ -23,22 +22,24 @@ const Header = ({ size, newCounter }: HeaderProps): ReactElement => {
         localStorage.getItem('anonymous-token');
       if (token) {
         try {
-          setIsExistCart((await checkIfCartExists()).success);
+          const result = (await checkIfCartExists()).success;
 
-          if (isExistCart) {
+          if (result) {
             const cartResult = (await getCart()).data;
             if (cartResult) {
               setCartCounter(cartResult.totalLineItemQuantity);
             } else {
               setCartCounter(0);
             }
+          } else {
+            setCartCounter(0);
           }
         } catch (error) {
           void error;
         }
       }
     })();
-  }, [isExistCart, newCounter]);
+  }, [newCounter]);
 
   let access = (
     <div className='header__menu__access'>

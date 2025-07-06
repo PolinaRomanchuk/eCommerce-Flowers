@@ -6,6 +6,7 @@ import EmptyCart from '../Cart/EmptyCart';
 import ProductCard from './ProductCard';
 import {
   addPromo,
+  checkIfCartExists,
   getCart,
   removeCart,
   removePromo,
@@ -40,41 +41,44 @@ export const Cart = ({ size }: CartProps): ReactElement => {
 
   useEffect(() => {
     async function fetchCart(): Promise<void> {
-      const result = await getCart();
-      if (result.data) {
-        if (result.data?.lineItems.length === 0) {
-          setCartIsEmpty(true);
-          return;
-        }
-        setCartIsEmpty(false);
-        setCartItems(result.data?.lineItems);
-        setTotalCartPrice(getFormatPrice(result.data.totalPrice.centAmount));
-        setCartVersion(result.data.version);
-        setCartId(result.data.id);
-        setCart(result.data);
+      const isExist = (await checkIfCartExists()).success;
+      if (isExist) {
+        const result = await getCart();
+        if (result.data) {
+          if (result.data?.lineItems.length === 0) {
+            setCartIsEmpty(true);
+            return;
+          }
+          setCartIsEmpty(false);
+          setCartItems(result.data?.lineItems);
+          setTotalCartPrice(getFormatPrice(result.data.totalPrice.centAmount));
+          setCartVersion(result.data.version);
+          setCartId(result.data.id);
+          setCart(result.data);
 
-        if (result.data.discountOnTotalPrice) {
-          const discountAmount =
-            result.data.discountOnTotalPrice.discountedAmount.centAmount;
-          const total = result.data.totalPrice.centAmount;
-          const oldTotal = discountAmount + total;
+          if (result.data.discountOnTotalPrice) {
+            const discountAmount =
+              result.data.discountOnTotalPrice.discountedAmount.centAmount;
+            const total = result.data.totalPrice.centAmount;
+            const oldTotal = discountAmount + total;
 
-          setDiscount(getFormatPrice(discountAmount));
-          setFullPrice(getFormatPrice(oldTotal));
-          setPromodata(result.data.discountCodes);
-          const cachedPromoName = localStorage.getItem('promo-code-name');
-          if (cachedPromoName) {
-            setPromoName(cachedPromoName);
-          } else {
-            setPromoName('');
-            localStorage.removeItem('promo-code-name');
-            setDiscount('');
-            await handleRemovePromo();
+            setDiscount(getFormatPrice(discountAmount));
+            setFullPrice(getFormatPrice(oldTotal));
+            setPromodata(result.data.discountCodes);
+            const cachedPromoName = localStorage.getItem('promo-code-name');
+            if (cachedPromoName) {
+              setPromoName(cachedPromoName);
+            } else {
+              setPromoName('');
+              localStorage.removeItem('promo-code-name');
+              setDiscount('');
+              await handleRemovePromo();
+            }
           }
         }
-      }
-      if (result.error) {
-        setCartIsEmpty(true);
+        if (result.error) {
+          setCartIsEmpty(true);
+        }
       }
     }
     fetchCart();
@@ -142,7 +146,7 @@ export const Cart = ({ size }: CartProps): ReactElement => {
 
   return (
     <>
-      <Header size={size} newCounter={cart?.totalLineItemQuantity} />
+      <Header size={size} newCounter={cart?.totalLineItemQuantity|| 0} />
       <div className='cart'>
         <div className='_container'>
           <div className='cart__content'>
