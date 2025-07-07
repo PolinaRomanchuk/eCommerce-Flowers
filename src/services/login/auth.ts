@@ -15,6 +15,9 @@ export const getAnonymousToken = async (): Promise<{
     'manage_my_profile',
     'manage_my_quotes',
     'manage_my_orders',
+    'manage_my_shopping_lists',
+    'view_discount_codes',
+    'view_products',
   ];
   const scopeString = scopes
     .map((scope) => `${scope}:${process.env.REACT_APP_CT_PROJECT_KEY}`)
@@ -92,6 +95,9 @@ export const getAuthenticationToken = async (
     'manage_my_profile',
     'manage_my_quotes',
     'manage_my_orders',
+    'manage_my_shopping_lists',
+    'view_discount_codes',
+    'view_products',
   ];
   const scopeString = scopes
     .map((scope) => `${scope}:${process.env.REACT_APP_CT_PROJECT_KEY}`)

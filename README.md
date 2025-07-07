@@ -1,8 +1,13 @@
 # eCommerce-Application
 
-# ctrl+alt+wear
+# FloralMuse
 
-Welcome to our eCommerce application! This platform replicates real-world shopping experiences in a digital environment. It's a comprehensive online shopping portal that provides an interactive and seamless experience to users. From product discovery to checkout, the application ensures a smooth journey for the user, enhancing their engagement and boosting their purchasing confidence. `ctrl+alt+wear` is a headless eCommerce web application for clothing retail built with ReactJS and integrated with the Commercetools platform. This project is designed to provide a seamless online shopping experience for end users.
+Welcome to FloralMuse – Your Digital Garden of Elegance!
+FloralMuse is an eCommerce platform designed to bring the beauty of nature into your home with just a few clicks. Our online flower and plant boutique offers a seamless, visually enchanting shopping experience, where every bloom and leaf is just a tap away.
+Built with ReactJS and powered by a robust eCommerce backend, FloralMuse combines aesthetic elegance with intuitive functionality. Discover a curated selection of fresh flowers, exotic plants, handcrafted bouquets.
+Shop effortlessly. Let FloralMuse inspire your space. 🌿🌸
+
+https://floral-muse.netlify.app/
 
 ## Table of Contents
 
@@ -15,17 +20,18 @@ Welcome to our eCommerce application! This platform replicates real-world shoppi
 * [Git Hooks (Husky)](#git-hooks-husky)
 * [Project Structure](#project-structure)
 * [License](#license)
+* [Links](#links)
 
 ## Features
 
-* Browse a catalog of apparel
+* Browse a catalog of flowers
 * Add products to the shopping cart
 * Place orders via Commercetools
 * Responsive design for desktop and mobile
 
 ## Tech Stack
 
-* **Language:** TypeScript, JavaScript (ESNext)
+* **Language:** TypeScript
 * **Library:** ReactJS (v19)
 * **Bundler:** Webpack
 * **Styling:** Sass (SCSS)
@@ -67,10 +73,11 @@ Welcome to our eCommerce application! This platform replicates real-world shoppi
 Set up environment variables in a `.env` file at the project root:
 
 ```env
-CT_PROJECT_KEY=<your_project_key>
-CT_CLIENT_ID=<your_client_id>
-CT_CLIENT_SECRET=<your_client_secret>
-CT_API_URL=<commercetools_api_url>
+REACT_APP_CT_PROJECT_KEY=<your>
+REACT_APP_CT_CLIENT_ID=<your>
+REACT_APP_CT_CLIENT_SECRET=<your>
+REACT_APP_CT_API_URL=<your>
+REACT_APP_CT_AUTH_URL=<your>
 ```
 
 ## Available Scripts
@@ -81,7 +88,7 @@ CT_API_URL=<commercetools_api_url>
 | `npm run start`  | Launch development server with hot-reloading (Webpack Dev Server on port 3500)             |
 | `npm run lint`   | Run ESLint on all files (`eslint .`) and auto-fix issues                                   |
 | `npm run format` | Format code with Prettier (`prettier --write "src/**/*.{ts,tsx,js,jsx,json,css,scss,md}"`) |
-| `npm test`       | Run Jest test                                                                              |
+| `npm run test`       | Run Jest test                                                                              |
 
 ## Git Hooks (Husky)
 
@@ -116,24 +123,22 @@ Example in `.husky/pre-commit`:
 │   │   ├── App               # Main app component
 │   │   ├── Cart              # Cart page
 │   │   ├── Catalog           # Catalog page
-│   │   ├── context           # Login context
 │   │   ├── Error             # Error page
 │   │   ├── Footer            # Footer component
 │   │   ├── Header            # Header component
-│   │   ├── login             # Login page
+│   │   ├── LoginPage         # Login page
 │   │   ├── MainPage          # Main page of app
-│   │   ├── modal             # Modal windows implementation
 │   │   ├── Product           # Product page
-│   │   ├── registrationForm  # Registration page
-│   │   ├── userProfile       # Client profile page
+│   │   ├── Registration      # Registration page
+│   │   ├── User              # Client profile page
 │   │   └── index.tsx         # Application entry point
+│   ├── context               # Login context
 │   ├── services              # App services
 │   ├── styles                # Global styles of app
 │   ├── types                 # TypeScript types
 │   ├── utils                 # Project utils
 │   ├── declaration.d.ts      # File with modules for correct work with React
 │   └── index.html            # HTML template for HtmlWebpackPlugin
-
 ├── .env.example              # Example of env file
 ├── .gitignore                # Git configuration
 ├── .prettierrc               # Prettier configuration
@@ -149,4 +154,15 @@ Example in `.husky/pre-commit`:
 
 ## License
 
-This project is licensed under the MIT License.
+This is a non-commercial, educational project only. No real transactions, payments, or deliveries occur. All product images and descriptions are placeholders for demonstration purposes.
+
+## Links
+
+Design & Inspiration:
+* Color schemes & UI references: [webflow](https://webflow.com/templates/category/retail-and-e-commerce-websites)
+* Wireframing: [firma](https://www.figma.com/design/IipuMMeEIXSz5jh2Hm7IVO/Untitled?node-id=14-150&t=MOxCOHiQbsyCs51N-0)
+
+Media & Assets:
+* Icons: [flaticon](https://www.flaticon.com/)
+* Product data: [bloomandwild](https://www.bloomandwild.com/) and [beardsanddaisies](https://www.beardsanddaisies.co.uk/)
+* Images: [freepik](https://ru.freepik.com/)

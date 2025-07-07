@@ -18,7 +18,6 @@ export const UserMainInfo = ({
   userData,
   setProfile,
 }: UserMainInfoProps): ReactElement => {
-
   const [modalActive, setModalActive] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalContent, setModalContent] = useState<
@@ -111,30 +110,34 @@ export const UserMainInfo = ({
 
   return (
     <>
-      <h1>User Profile</h1>
-      <button
-        type='button'
-        className='edit-profile-btn'
-        onClick={() => openModal('profile')}
-      >
-        Edit Profile
-      </button>
+      <div className='user-profile__section'>
+        <h2 className='user-profile__title'>Main info</h2>
 
-      <div className='profile-summary'>
-        <p>
-          <strong>Name:</strong> {userData.firstName} {userData.lastName}
-        </p>
-        <p>
-          <strong>Email:</strong> {userData.email}
-        </p>
-        <p>
-          <strong>Date of Birth:</strong>{' '}
-          {userData.dateOfBirth
-            ? new Date(userData.dateOfBirth).toLocaleDateString()
-            : '-'}
-        </p>
+        <div className='user-profile__summary'>
+          <div className='user-profile__summary-item'>
+            <p className='medium'>
+              Name: {userData.firstName} {userData.lastName}
+            </p>
+          </div>
+          <div className='user-profile__summary-item'>
+            <p className='medium'>Email: {userData.email}</p>
+          </div>
+          <div className='user-profile__summary-item'>
+            <p className='medium'>
+              Date of Birth:
+              {userData.dateOfBirth
+                ? new Date(userData.dateOfBirth).toLocaleDateString()
+                : '-'}
+            </p>
+          </div>
+        </div>
+
+        <div className='user-profile__button-container'>
+          <button type='button' onClick={() => openModal('profile')}>
+            Edit Profile
+          </button>
+        </div>
       </div>
-
       {modalActive && (
         <Modal
           active={modalActive}
@@ -142,9 +145,9 @@ export const UserMainInfo = ({
           onClose={handleReset}
         >
           {modalContent === 'profile' && (
-            <div className='modal-profile-container'>
+            <div className='user-modal__container'>
               <form
-                className='modal-profile-form'
+                className='user-modal__form'
                 onSubmit={handleSubmitMainInfo}
               >
                 <label>
@@ -161,7 +164,7 @@ export const UserMainInfo = ({
                     required
                   />
                   {firstNameValidError && (
-                    <span className='firstName input-validation-span'>
+                    <span className='user-profile__form-error'>
                       {firstNameValidError}
                     </span>
                   )}
@@ -181,7 +184,7 @@ export const UserMainInfo = ({
                     required
                   />
                   {lastNameValidError && (
-                    <span className='lastName input-validation-span'>
+                    <span className='user-profile__form-error'>
                       {lastNameValidError}
                     </span>
                   )}
@@ -200,7 +203,7 @@ export const UserMainInfo = ({
                     required
                   />
                   {emailValidError && (
-                    <span className='email input-validation-span'>
+                    <span className='user-profile__form-error'>
                       {emailValidError}
                     </span>
                   )}
@@ -223,19 +226,19 @@ export const UserMainInfo = ({
                     max={new Date().toISOString().split('T')[0]}
                   />
                   {dateOfBirthValidError && (
-                    <span className='dateOfBirth input-validation-span'>
+                    <span className='user-profile__form-error'>
                       {dateOfBirthValidError}
                     </span>
                   )}
                 </label>
-                <button type='submit'>Save</button>
+                <div className='user-profile__button-container'>
+                  <button type='submit'>Save</button>
+                </div>
               </form>
             </div>
           )}
           {modalContent === 'modal-message' && (
-            <div className='update-modal-message-container'>
-              <div className='update-modal-message-text'>{modalMessage}</div>
-            </div>
+            <div className='user-modal__message'>{modalMessage}</div>
           )}
         </Modal>
       )}

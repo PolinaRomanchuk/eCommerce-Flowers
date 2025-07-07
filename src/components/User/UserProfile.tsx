@@ -12,12 +12,19 @@ import UserMainInfo from './UserMainInfo';
 import UserAddressesInfo from './UserAddresses';
 import UserPassword from './UserPassword';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../Footer/Footer';
+import Spinner from '../../assets/spinner.gif';
+
+import { ReactComponent as Branch } from './../../assets/Main/branch3.svg';
 
 export const UserProfilePage = ({ size }: UserProps): ReactElement => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const [showMain, setShowMain] = useState(true);
+  const [showAddresses, setShowAddresses] = useState(false);
 
   useEffect(() => {
     fetchCustomerProfile()
@@ -44,8 +51,8 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
     return (
       <>
         <Header size={size} />
-        <div className='user-profile-page'>
-          <p className='error'>{errorMessage}</p>
+        <div className='user-profile'>
+          <p className='user-profile__error'>{errorMessage}</p>
         </div>
       </>
     );
@@ -55,9 +62,12 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
     return (
       <>
         <Header size={size} />
-        <div className='user-profile-page'>
-          <p>Loading...</p>
+        <div className='user-profile__spinner'>
+          <div className='user-profile__spinner-image'>
+            <img src={Spinner} alt='Loading...' />
+          </div>
         </div>
+        <Footer />
       </>
     );
   }
@@ -65,11 +75,46 @@ export const UserProfilePage = ({ size }: UserProps): ReactElement => {
   return (
     <>
       <Header size={size} />
-      <div className='user-profile-page'>
-        <UserMainInfo userData={profile} setProfile={setProfile} />
-        <UserAddressesInfo userData={profile} setProfile={setProfile} />
-        <UserPassword userData={profile} setProfile={setProfile} />
+      <div className='user-profile'>
+        <div className='_container'>
+          <div className='user-profile__content'>
+            <div className='user-profile__menu'>
+              <button
+                className='user-profile__menu-button'
+                onClick={() => {
+                  setShowAddresses((previous) => !previous);
+                  setShowMain((previous) => !previous);
+                }}
+              >
+                <p className='user-profile__menu-label medium'>Main</p>
+              </button>
+              <button
+                className='user-profile__menu-button'
+                onClick={() => {
+                  setShowAddresses((previous) => !previous);
+                  setShowMain((previous) => !previous);
+                }}
+              >
+                <p className='user-profile__menu-label medium'>Addresses</p>
+              </button>
+
+              <div className='user-profile__password medium'>
+                <UserPassword userData={profile} setProfile={setProfile} />
+              </div>
+              <Branch className='user-profile__branch' />
+            </div>
+            <div className='user-profile__data'>
+              {showAddresses && (
+                <UserAddressesInfo userData={profile} setProfile={setProfile} />
+              )}
+              {showMain && (
+                <UserMainInfo userData={profile} setProfile={setProfile} />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
+      <Footer />
     </>
   );
 };

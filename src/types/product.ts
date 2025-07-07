@@ -81,8 +81,7 @@ export type ProductInfo = {
   currency: string;
   imageUrls?: string[];
   colorAttribute?: string;
-  modelAttribute?: string;
-  sizes: string[];
+  occasionAttribute?: string;
   masterVariant: {
     id: number;
     key?: string;
@@ -98,5 +97,9 @@ export type ProductInfo = {
       value: string | AttributeEnum;
     }[];
     key: string;
+  }[];
+  categories: {
+    typeId: 'category';
+    id: string;
   }[];
 };

@@ -3,8 +3,8 @@ export type Product = {
   name: string;
   description: string;
   image: string;
-  prices: string | number;
-  discountedPrice?: number;
+  prices: string;
+  discountedPrice?: string;
   masterVariantId: number;
 };
 export type Price = {

@@ -30,11 +30,9 @@ const Modal = ({
         className={active ? 'modal-container active' : 'modal-container'}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className='close-window-button-container'>
-          <button className='close-window-button' onClick={handleClose}>
-            x
-          </button>
-        </div>
+        <button className='close-window-button icon' onClick={handleClose}>
+          x
+        </button>
 
         {children}
       </div>

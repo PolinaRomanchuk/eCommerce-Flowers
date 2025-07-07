@@ -6,8 +6,9 @@ import type {
   ProductProjectionsResponse,
 } from '../../types/catalog';
 import { generalAuthFetch } from '../../utils/auth/general-fetch';
+import { getFormatPrice } from '../../utils/format-attributes';
 
-export async function fetchProducts(
+export async function fetchAllProducts(
   page: number,
   limit: number = LIMIT_PRODUCTS_PER_PAGE,
 ): Promise<{ products: Product[]; total: number }> {
@@ -25,26 +26,15 @@ export async function fetchProducts(
     throw error;
   }
 }
-export function transformResponse(data: ProductProjectionsResponse): Product[] {
-  return data.results.map((item: ProductProjection) => {
-    const priceEntry = item.masterVariant?.prices?.[0];
 
-    const originalPrice = priceEntry?.value.centAmount ?? 0;
-    const discountedPrice = priceEntry?.discounted?.value.centAmount;
-
-    return {
-      id: item.id,
-      name: item.name?.['en-US'] ?? 'No name',
-      description: item.description?.['en-US'] ?? '',
-      image: item.masterVariant?.images?.[0]?.url ?? '',
-      prices: (originalPrice / 100).toFixed(2),
-      discountedPrice: discountedPrice && discountedPrice / 100,
-      masterVariantId: item.masterVariant?.id,
-    };
-  });
-}
-export async function fetchProductsAttributes(
-  filter: { color?: string; size?: string; price?: string; type?: string },
+export async function fetchFilteredProducts(
+  filter: {
+    color?: string;
+    occasion?: string;
+    price?: string;
+    type?: string;
+    categoryId?: string;
+  },
   sort: string,
   search: string,
   page: number = 1,
@@ -58,17 +48,16 @@ export async function fetchProductsAttributes(
   const url = new URL(
     `${apiUrl}/${projectKey}/product-projections/search?limit=${limit}&offset=${offset}`,
   );
-  url.searchParams.append('limit', '30');
   if (filter.color) {
     url.searchParams.append(
       'filter',
       `variants.attributes.color:"${filter.color}"`,
     );
   }
-  if (filter.size) {
+  if (filter.occasion) {
     url.searchParams.append(
       'filter',
-      `variants.attributes.size.key:"${filter.size}"`,
+      `variants.attributes.occasion.key:"${filter.occasion}"`,
     );
   }
   if (filter.price) {
@@ -91,6 +80,12 @@ export async function fetchProductsAttributes(
   if (sort) {
     url.searchParams.append('sort', `${sort}`);
   }
+  if (filter.categoryId) {
+    url.searchParams.append(
+      'filter.query',
+      `categories.id:"${filter.categoryId}"`,
+    );
+  }
   const response = await generalAuthFetch(url.toString(), { method: 'GET' });
 
   if (!response.ok) {
@@ -105,23 +100,22 @@ export async function fetchProductsAttributes(
   return { products: result, total: data.total };
 }
 
-export async function getCategories(
-  id: string,
-  page: number = 1,
-  limit: number = LIMIT_PRODUCTS_PER_PAGE,
-): Promise<{ products: Product[]; total: number }> {
-  const offset = (page - 1) * limit;
-  const projectKey = process.env.REACT_APP_CT_PROJECT_KEY;
-  const apiUrl = process.env.REACT_APP_CT_API_URL;
-  const url = new URL(
-    `${apiUrl}/${projectKey}/product-projections/search?limit=${limit}&offset=${offset}`,
-  );
-  if (id) {
-    url.searchParams.append('filter.query', `categories.id:"${id}"`);
-  }
-  const response = await generalAuthFetch(url.toString(), { method: 'GET' });
-  let result = await response.json();
-  let transformed = transformResponse(result);
+export function transformResponse(data: ProductProjectionsResponse): Product[] {
+  return data.results.map((item: ProductProjection) => {
+    const priceEntry = item.masterVariant?.prices?.[0];
+    let fullPrice = '';
+    const originalPrice = priceEntry?.value.centAmount ?? 0;
+    fullPrice = getFormatPrice(originalPrice);
+    const discountedPrice = priceEntry?.discounted?.value.centAmount;
 
-  return { products: transformed, total: result.total };
+    return {
+      id: item.id,
+      name: item.name?.['en-US'] ?? 'No name',
+      description: item.description?.['en-US'] ?? '',
+      image: item.masterVariant?.images?.[0]?.url ?? '',
+      prices: fullPrice,
+      discountedPrice: getFormatPrice(discountedPrice),
+      masterVariantId: item.masterVariant?.id,
+    };
+  });
 }

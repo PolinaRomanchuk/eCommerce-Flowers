@@ -8,6 +8,7 @@ export const getCart = async (): Promise<{
   const token =
     localStorage.getItem('customer-token') ||
     localStorage.getItem('anonymous-token');
+
   if (token) {
     try {
       const response = await fetch(url, {
@@ -272,7 +273,6 @@ export const addProductToCart = async (
   id: string,
   version: number,
   productId: string,
-  variantId: number,
 ): Promise<{
   data?: CartInfo;
   error?: string;
@@ -286,7 +286,6 @@ export const addProductToCart = async (
     {
       action: 'addLineItem',
       productId: productId,
-      variantId: variantId,
       quantity: 1,
     },
   ];

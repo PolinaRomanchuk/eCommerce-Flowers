@@ -10,6 +10,7 @@ import { AuthContext, AuthProvider } from '../../context/AuthContext';
 import Login from '../LoginPage/LoginPage';
 import { Registration } from '../Registration/Registration';
 import Product from '../Product/Product';
+import ScrollToTop from '../../utils/ScrollToTop';
 
 export const App = (): ReactElement => {
   let [size, setSize] = useState(document.documentElement.clientWidth);
@@ -37,17 +38,21 @@ export const App = (): ReactElement => {
   return (
     <div className='wrapper'>
       <BrowserRouter>
+        <ScrollToTop />
         <AuthProvider>
           <Routes>
-            <Route path='/login' element={<Login />} />
-            <Route path='/registration' element={<Registration />} />
+            <Route path='/login' element={<Login size={size} />} />
+            <Route
+              path='/registration'
+              element={<Registration size={size} />}
+            />
             <Route path='/cart' element={<Cart size={size} />} />
             <Route path='/profile' element={<UserProfilePage size={size} />} />
             <Route path='/about' element={<About size={size} />} />
             <Route path='/catalog' element={<Catalog size={size} />} />
             <Route path='/product/:id' element={<Product size={size} />} />
             <Route path='/' element={<MainPage size={size} />} />
-            <Route path='*' element={<Error />} />
+            <Route path='*' element={<Error size={size} />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

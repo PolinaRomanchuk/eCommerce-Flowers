@@ -1,30 +1,26 @@
+@use '../../styles/variables' as *;
+
 .header {
-  padding: 20px 0 15px 0;
-  background-color: rgb(156, 96, 247);
-  color: rgb(255, 255, 255);
-  font-size: 18px;
+  padding: 20px;
+  color: $color-dark-green;
+  height: 80px;
 
   &__menu {
     display: flex;
     align-items: center;
-    column-gap: 20px;
 
-    @media (max-width: 511px) {
+    @media (max-width: 590px) {
       justify-content: space-between;
     }
 
     &__logo {
       display: flex;
       align-items: center;
-      column-gap: 5px;
-      font-size: 25px;
-      padding: 5px;
+      gap: 5px;
 
       &__img {
-        background-color: white;
         width: 40px;
         height: 40px;
-        border-radius: 50%;
         cursor: pointer;
 
         @media (any-hover: hover) {
@@ -36,39 +32,20 @@
         }
 
         img {
-          transition: all 0.5s ease 0s;
           max-width: 100%;
         }
       }
 
       &__text {
+        display: flex;
+        align-items: center;
+        height: 40px;
         cursor: pointer;
         align-self: start;
-        height: 40px;
-        width: 150px;
         position: relative;
 
-        img {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 18px;
-        }
-      }
-
-      &__cart {
-        width: 25px;
-        height: 25px;
-        transition: all 0.5s ease 0s;
-        cursor: pointer;
-
-        @media (any-hover: hover) {
-          &:hover {
-            fill: white;
-          }
+        &-title:hover {
+          color: $color-primary-pink;
         }
       }
     }
@@ -86,10 +63,8 @@
         top: 0;
         right: 100%;
         overflow: auto;
-        transition: all 0.8s ease 0s;
-        padding-bottom: 25px;
         z-index: 10;
-        background: rgba(0, 0, 0, 0.75);
+        background: $overlay-background;
       }
 
       .menu-open & {
@@ -100,39 +75,34 @@
     &__list {
       display: flex;
       justify-self: center;
-      column-gap: 25px;
+      gap: 25px;
 
       @media (max-width: 880px) {
         display: flex;
         flex-direction: column;
-        row-gap: 15px;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
         position: absolute;
-        justify-content: space-between;
-        width: 56.23%;
+        width: 50%;
         min-height: 100%;
         top: 0;
         right: 0;
         opacity: 1;
-        background: #454354;
-        padding: 30px 0 20px 30px;
-
-        li {
-          text-decoration: underline;
-        }
+        background: $color-dark-green;
       }
 
       @media (max-width: 640px) {
-        width: 72.23%;
+        width: 70%;
       }
 
       &__items {
         display: flex;
-        column-gap: 15px;
+        gap: 15px;
 
         @media (max-width: 880px) {
-          display: flex;
           flex-direction: column;
-          row-gap: 15px;
+          align-items: center;
         }
       }
 
@@ -140,135 +110,208 @@
         display: inline-block;
         position: relative;
         text-decoration: none;
-        color: #fbfafa;
+        color: $color-dark-green;
+
+        @media (max-width: 880px) {
+          color: $color-white;
+        }
       }
 
       &__link {
-        transition: color 0.3s ease;
-        
         &:hover {
-          color: #000000;
+          color: $color-primary-pink;
         }
       }
     }
 
     &__access {
       display: flex;
-      column-gap: 15px;
+      gap: 15px;
       justify-content: end;
+      align-items: center;
+
+      &__separator {
+        display: block;
+        @media (max-width: 590px) {
+          display: none;
+        }
+      }
+
+      &__cart {
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        position: relative;
+
+        svg {
+          width: 100%;
+          height: 100%;
+          fill: $color-dark-green;
+        }
+
+        &-counter {
+          background-color: $color-dark-green;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          top: -8px;
+          right: -10px;
+
+          &-value {
+            font-size: 10px;
+            color: $color-white;
+            text-align: center;
+          }
+        }
+
+        @media (any-hover: hover) {
+          &:hover {
+            color: $color-primary-pink;
+            svg {
+              fill: $color-primary-pink;
+            }
+          }
+        }
+
+        @media (max-width: 590px) {
+          width: auto;
+          height: auto;
+          padding: 0;
+        }
+      }
+
+      &__profile {
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+
+        svg {
+          width: 100%;
+          height: 100%;
+          fill: $color-dark-green;
+        }
+
+        @media (any-hover: hover) {
+          &:hover {
+            color: $color-primary-pink;
+            svg {
+              fill: $color-primary-pink;
+            }
+          }
+        }
+
+        @media (max-width: 590px) {
+          width: auto;
+          height: auto;
+          padding: 0;
+        }
+      }
+
+      &__login {
+        padding: 10px;
+        max-height: 60px;
+
+        :hover {
+          color: $color-primary-pink;
+        }
+
+        @media (max-width: 590px) {
+          padding: 0;
+        }
+      }
+
+      &__registration {
+        padding: 10px;
+        max-height: 60px;
+
+        :hover {
+          color: $color-primary-pink;
+        }
+
+        @media (max-width: 590px) {
+          padding: 0;
+        }
+      }
 
       @media (max-width: 880px) {
         flex: 1 1 auto;
         text-align: end;
       }
 
-      @media (max-width: 511px) {
-        max-height: 50px;
-        justify-content: start;
+      @media (max-width: 590px) {
+        flex-direction: column;
+        color: $color-white;
       }
+    }
 
-      &__profile {
-        width: 25px;
-        height: 25px;
-        transition: all 0.5s ease 0s;
-        cursor: pointer;
-        fill: black;
+    &__button {
+      &__icon {
+        display: none;
+        background-color: unset;
+        border: unset;
 
-        @media (any-hover: hover) {
-          &:hover {
-            fill: white;
-          }     
+        &:hover {
+          background-color: unset;
         }
 
-        &__link {
-          color: #fff;
-          text-decoration: none;
-          font-weight: 600;
+        @media (max-width: 880px) {
+          display: block;
+          position: relative;
+          width: 20px;
+          height: 10px;
           cursor: pointer;
-        }
-      }
+          z-index: 10;
 
-      &__login {
-        padding: 10px;
-        border-radius: 12px;
-        background-color: rgb(60, 70, 255);
-        max-height: 60px;
+          span,
+          &::before,
+          &::after {
+            content: '';
+            transition: all 0.3s ease 0s;
+            right: 0;
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: $color-dark-green;
+          }
 
-        &__link {
-        }
-      }
+          &::before {
+            top: 0;
+          }
 
-      &__registration {
-        padding: 10px;
-        border-radius: 12px;
-        background-color: rgb(0, 115, 6);
-        max-height: 60px;
+          &::after {
+            bottom: 0;
+          }
 
-        &__link {
+          span {
+            top: calc(50% - 1px);
+          }
+
+          .menu-open & {
+            span {
+              width: 0;
+            }
+
+            &::before {
+              top: calc(50% - 1px);
+              transform: rotate(-45deg);
+            }
+
+            &::after {
+              bottom: calc(50% - 1px);
+              transform: rotate(45deg);
+            }
+            span,
+            &::before,
+            &::after {
+              background-color: $color-white;
+            }
+          }
         }
       }
     }
   }
-}
-
-.icon-menu {
-  display: none;
-  background-color: unset;
-
-  @media (max-width: 880px) {
-    display: block;
-    position: relative;
-    width: 20px;
-    height: 10px;
-    cursor: pointer;
-    z-index: 10;
-
-    span,
-    &::before,
-    &::after {
-      content: '';
-      transition: all 0.3s ease 0s;
-      right: 0;
-      position: absolute;
-      width: 100%;
-      height: 2px;
-      background-color: #ffffff;
-    }
-
-    &::before {
-      top: 0;
-    }
-
-    &::after {
-      bottom: 0;
-    }
-
-    span {
-      top: calc(50% - 1px);
-    }
-
-    .menu-open & {
-      span {
-        width: 0;
-      }
-
-      &::before,
-      &::after {
-      }
-
-      &::before {
-        top: calc(50% - 1px);
-        transform: rotate(-45deg);
-      }
-
-      &::after {
-        bottom: calc(50% - 1px);
-        transform: rotate(45deg);
-      }
-    }
-  }
-}
-
-.cart-counter{
-  font-size: 10px;
 }

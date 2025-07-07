@@ -1,5 +1,10 @@
+@use './variables' as *;
+* {
+  transition: all 0.5s ease 0s;
+}
+
 html {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 button,
 select,
@@ -7,9 +12,90 @@ input {
   font-family: inherit;
 }
 
-input {
-  padding: 0.4rem 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.95rem;
+input,
+select {
+  border-radius: 5px;
+  width: 100%;
+  height: 45px;
+  background-color: $color-white;
+  color: $color-dark-green;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  font-size: $font-label;
+}
+
+button {
+  border-radius: 12px;
+  width: 220px;
+  height: 60px;
+  background-color: unset;
+  border: 1px $color-dark-green solid;
+  color: $color-dark-green;
+
+  span {
+    font-weight: 275;
+    font-size: $font-button;
+    text-align: center;
+  }
+
+  &:hover {
+    background-color: $color-dark-green;
+    color: $color-white;
+  }
+
+  &.icon {
+    width: 20px;
+    height: 20px;
+    border: unset;
+
+    &:hover {
+      background-color: unset;
+      color: $color-primary-pink;
+    }
+  }
+}
+
+h1 {
+  font-weight: 500;
+  font-size: $font-h1;
+  line-height: 140%;
+  text-align: justify;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: $font-h2;
+  font-style: normal;
+
+  text-align: center;
+}
+
+h3 {
+  font-weight: 500;
+  font-size: $font-h3;
+}
+
+.medium {
+  font-weight: 500;
+  font-size: $font-medium;
+}
+
+.light {
+  font-weight: 300;
+  font-size: $font-light;
+}
+
+.extra-light {
+  font-weight: 275;
+  font-size: $font-extra-light;
+  text-align: center;
+}
+
+.regular {
+  font-weight: 400;
+  font-size: $font-regular;
 }
